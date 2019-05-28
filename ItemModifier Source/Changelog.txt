@@ -1,0 +1,5 @@
+﻿Update 1.0.0
+Added Item Modification Commands(CreateTile, HealLife, HealMana, Shoot, ShootSpeed, UseTime, UseAnimation)
+Added Utilities
+Added EnterWorld Message
+Added Settings

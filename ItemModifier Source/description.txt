@@ -1,0 +1,15 @@
+The ItemModifier Mod, modify items and or generate them.
+
+Features:
+Generate Items with Custom Properties
+Modify properties of an existing item
+View Properties of an Item
+
+Credits:
+KryptonIon - Developer
+
+
+Planned:
+Generation UI
+Code Generation
+Saving Values
