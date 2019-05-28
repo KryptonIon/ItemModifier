@@ -9,3 +9,6 @@ Updated Description
 
 Update 1.0.2
 Changed Mod Homepage from Github Repository to Terraria Forums
+
+Update 1.0.3
+Changed Description

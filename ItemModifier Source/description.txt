@@ -1,4 +1,4 @@
-The ItemModifier Mod, modify items and or generate them. It is highly suggested to check out the mod's homepage for a detailed documentation
+The ItemModifier Mod, modify items and or generate them. It is highly suggested to check out the mod's wiki for a detailed documentation. You can send feedback in the Thread itself, Discord, or Github
 
 Features:
 Generate Items with Custom Properties
