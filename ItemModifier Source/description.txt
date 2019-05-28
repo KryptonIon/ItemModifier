@@ -1,4 +1,4 @@
-The ItemModifier Mod, modify items and or generate them.
+The ItemModifier Mod, modify items and or generate them. It is highly suggested to check out the mod's homepage for a detailed documentation
 
 Features:
 Generate Items with Custom Properties

@@ -1,6 +1,6 @@
 displayName = Item Modifier
 author = KryptonIon
-version = 1.0.0
+version = 1.0.1
 includeSource = true
 buildIgnore = *.sln, */bin, */.vs, */obj
 homepage = https://github.com/KryptonIon/ItemModifier/wiki

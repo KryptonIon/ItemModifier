@@ -3,3 +3,6 @@ Added Item Modification Commands(CreateTile, HealLife, HealMana, Shoot, ShootSpe
 Added Utilities
 Added EnterWorld Message
 Added Settings
+
+Update 1.0.1
+Updated Description
