@@ -12,3 +12,8 @@ Changed Mod Homepage from Github Repository to Terraria Forums
 
 Update 1.0.3
 Changed Description
+
+Update 1.0.4
+Added another EnterWorld Message
+Added EnterWorld Messages Toggle
+Changed Description
