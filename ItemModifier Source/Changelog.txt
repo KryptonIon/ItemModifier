@@ -27,3 +27,6 @@ Added Reset Command
 Changed Properties Command executor from "p" to "properties"
 Changed Description
 Fixed EnterWorld Message 2 being white
+
+Update 1.0.6
+Updated Parameters of /gi params and /set params (Sorry, forgot to do so last update)

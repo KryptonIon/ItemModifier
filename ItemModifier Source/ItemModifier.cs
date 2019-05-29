@@ -14,8 +14,8 @@ namespace ItemModifier
         public static Color errorColor = new Color(255, 0, 0);
         public static Color helpColor = new Color(255, 255, 0);
         public static Color replyColor = new Color(0, 100, 255);
-        public static string parameters = "Parameters: shoot or s, shootspeed or ss, createtile or ct, usetime or ut, useanimation or ua, healmana or hm, heallife or hl" +
-                    "\nParameters are caps insensitive meaning, you can do /gi 757 ShOoT 5 and it will still shoot a jester's arrow" +
+        public static string parameters = "Parameters: shoot or s, shootspeed or ss, createtile or ct, usetime or ut, useanimation or ua, healmana or hm, heallife or hl, axe or a, pick or p, hammer or h, autoreuse or au, critical or c, damage or d, knockback or kb, tileboost or tb" +
+                    "\nParameters are caps insensitive meaning, you can do /gi 757 ShOoT 5 and it will still shoot a Jester's Arrow" +
                     "\nParameters have shortcuts, eg /gi 757 s 5, they're listed above";
         public static string settings = "Current Settings are: ShowUnnecessary or shun, ShowProperties or shpr, ShowPID or shpid, ShowEWMessage or shewmsg" +
                 "\nSettings are caps insensitive. shun, shpr, and etc are the Setting Name shortcuts.";
