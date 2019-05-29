@@ -1,4 +1,5 @@
-﻿using Terraria.ModLoader;
+﻿using ItemModifier.Utilities;
+using Terraria.ModLoader;
 
 namespace ItemModifier.Commands
 {
@@ -24,12 +25,12 @@ namespace ItemModifier.Commands
                 {
                     if (MouseItem.healLife > 0)
                     {
-                        caller.Reply($"{MouseItem.Name}([i/s{MouseItem.stack}:{MouseItem.type}]) heals {MouseItem.healLife} HP", replyColor);
+                        caller.Reply($"{Modifier.GetItem2(MouseItem)} heals {MouseItem.healLife} HP", replyColor);
                         return;
                     }
                     else
                     {
-                        caller.Reply($"{MouseItem.Name}([i/s{MouseItem.stack}:{MouseItem.type}]) doesn't heal", errorColor);
+                        caller.Reply($"{Modifier.GetItem2(MouseItem)} doesn't heal", errorColor);
                         return;
                     }
                 }
@@ -44,7 +45,7 @@ namespace ItemModifier.Commands
                     else
                     {
                         MouseItem.healLife = hl;
-                        caller.Reply($"Set [i/s{MouseItem.stack}p{MouseItem.prefix}:{MouseItem.type}]'s HealLife property to {args[0]}", replyColor);
+                        caller.Reply($"Set {Modifier.GetItem2(MouseItem)}'s HealLife property to {args[0]}", replyColor);
                         return;
                     }
                 }

@@ -1,15 +1,11 @@
 The ItemModifier Mod, modify items and or generate them. It is highly suggested to check out the mod's wiki for a detailed documentation. You can send feedback in the Thread itself, Discord, or Github.
 
+The Changelog can be seen in the Github Wiki, check the Terraria Forums Thread.
+
 Features:
 Generate Items with Custom Properties
 Modify properties of an existing item
 View Properties of an Item
 
-Credits:
-KryptonIon - Developer
-
-
 Planned:
 Generation UI
-Code Generation
-Saving Values

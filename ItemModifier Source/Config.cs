@@ -1,9 +1,8 @@
-﻿using Terraria;
+﻿using ItemModifier.Utilities;
+using System.IO;
+using Terraria;
 using Terraria.IO;
 using Terraria.ModLoader;
-using System.IO;
-using System.Collections.Generic;
-using ItemModifier.Utilities;
 
 namespace ItemModifier
 {
@@ -25,7 +24,7 @@ namespace ItemModifier
                 CreateConfig();
             }
         }
-        
+
         static bool ReadConfig()
         {
             if (Configuration.Load())
@@ -38,7 +37,7 @@ namespace ItemModifier
             }
             return false;
         }
-        
+
         static void CreateConfig()
         {
             Configuration.Clear();
@@ -55,25 +54,53 @@ namespace ItemModifier
             bool v;
             if ("showunnecessary".Contains(sn) || sn == "shun")
             {
-                if(!bool.TryParse(value, out v)) return false;
-                else ShowUnnecessary = v;
+                if (!bool.TryParse(value, out v))
+                {
+                    return false;
+                }
+                else
+                {
+                    ShowUnnecessary = v;
+                }
             }
             else if ("showproperties".Contains(sn) || sn == "shpr")
             {
-                if(!bool.TryParse(value, out v)) return false;
-                else ShowProperties = v;
+                if (!bool.TryParse(value, out v))
+                {
+                    return false;
+                }
+                else
+                {
+                    ShowProperties = v;
+                }
             }
             else if ("showpid".Contains(sn) || sn == "shpid")
             {
-                if (!bool.TryParse(value, out v)) return false;
-                else ShowPID = v;
+                if (!bool.TryParse(value, out v))
+                {
+                    return false;
+                }
+                else
+                {
+                    ShowPID = v;
+                }
             }
             else if ("showewmessage".Contains(sn) || sn == "shewmsg")
             {
-                if (!bool.TryParse(value, out v)) return false;
-                else ShowEWMessage = v;
+                if (!bool.TryParse(value, out v))
+                {
+                    return false;
+                }
+                else
+                {
+                    ShowEWMessage = v;
+                }
             }
-            else return false;
+            else
+            {
+                return false;
+            }
+
             CreateConfig();
             return true;
         }
@@ -81,10 +108,22 @@ namespace ItemModifier
         public static bool GetSettingInfo(string SettingName, out SettingInfo result)
         {
             var sn = SettingName.ToLower();
-            if ("showunnecessary".Contains(sn) || sn == "shun") result = new SettingInfo("ShowUnnecessary", ShowUnnecessary);
-            else if ("showproperties".Contains(sn) || sn == "shpr") result = new SettingInfo("ShowProperties", ShowProperties);
-            else if ("showpid".Contains(sn) || sn == "shpid") result = new SettingInfo("ShowPID", ShowPID);
-            else if ("showewmessage".Contains(sn) || sn == "shewmsg") result = new SettingInfo("ShowEWMessage", ShowEWMessage);
+            if ("showunnecessary".Contains(sn) || sn == "shun")
+            {
+                result = new SettingInfo("ShowUnnecessary", ShowUnnecessary);
+            }
+            else if ("showproperties".Contains(sn) || sn == "shpr")
+            {
+                result = new SettingInfo("ShowProperties", ShowProperties);
+            }
+            else if ("showpid".Contains(sn) || sn == "shpid")
+            {
+                result = new SettingInfo("ShowPID", ShowPID);
+            }
+            else if ("showewmessage".Contains(sn) || sn == "shewmsg")
+            {
+                result = new SettingInfo("ShowEWMessage", ShowEWMessage);
+            }
             else
             {
                 result = new SettingInfo("Error", null);

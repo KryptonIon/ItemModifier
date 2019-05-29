@@ -3,15 +3,15 @@ using Terraria.ModLoader;
 
 namespace ItemModifier.Commands
 {
-    public class ShootSpeed : ModCommand
+    public class AutoReuse : ModCommand
     {
         public override CommandType Type => CommandType.Chat;
 
-        public override string Command => "ss";
+        public override string Command => "au";
 
-        public override string Description => "Gets the data of an Item(item.shootSpeed) or modifies it";
+        public override string Description => "Gets the data of an Item(item.autoReuse) or modifies it";
 
-        public override string Usage => "/ss [Optional]<ShootSpeed>";
+        public override string Usage => "/au [Optional]<AutoReuse>";
 
         public override void Action(CommandCaller caller, string input, string[] args)
         {
@@ -23,19 +23,19 @@ namespace ItemModifier.Commands
             {
                 if (args.Length <= 0)
                 {
-                    caller.Reply($"{Modifier.GetItem2(MouseItem)}'s ShootSpeed is {MouseItem.shootSpeed}", replyColor);
+                    caller.Reply($"{Modifier.GetItem2(MouseItem)}'s AutoReuse is {MouseItem.autoReuse}", replyColor);
                 }
                 else
                 {
-                    int ss;
-                    if (!int.TryParse(args[0], out ss))
+                    bool au;
+                    if (!bool.TryParse(args[0], out au))
                     {
-                        caller.Reply($"Error, ShootSpeed({args[0]}) must be a number", errorColor);
+                        caller.Reply($"Error, AutoReuse({args[0]}) must be a bool(true/false)", errorColor);
                     }
                     else
                     {
-                        MouseItem.shootSpeed = ss;
-                        caller.Reply($"Set {Modifier.GetItem2(MouseItem)}'s ShootSpeed to {args[0]}", replyColor);
+                        MouseItem.autoReuse = au;
+                        caller.Reply($"Set {Modifier.GetItem2(MouseItem)}'s AutoReuse to {args[0]}", replyColor);
                         return;
                     }
                 }

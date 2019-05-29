@@ -1,5 +1,6 @@
-﻿using Terraria.ModLoader;
+﻿using ItemModifier.Utilities;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace ItemModifier.Commands
 {
@@ -25,12 +26,12 @@ namespace ItemModifier.Commands
                 {
                     if (MouseItem.createTile > -1)
                     {
-                        caller.Reply($"{MouseItem.Name}([i/s{MouseItem.stack}:{MouseItem.type}]) creates Tile {MouseItem.createTile}", replyColor);
+                        caller.Reply($"{Modifier.GetItem2(MouseItem)} creates Tile {MouseItem.createTile}", replyColor);
                         return;
                     }
                     else
                     {
-                        caller.Reply($"{MouseItem.Name}([i/s{MouseItem.stack}:{MouseItem.type}]) doesn't create any tiles", errorColor);
+                        caller.Reply($"{Modifier.GetItem2(MouseItem)} doesn't create any tiles", errorColor);
                         return;
                     }
                 }
@@ -61,7 +62,7 @@ namespace ItemModifier.Commands
                         else
                         {
                             MouseItem.createTile = t;
-                            caller.Reply($"Set [i/s{MouseItem.stack}p{MouseItem.prefix}:{MouseItem.type}]'s CreateTile property to {args[0]}", replyColor);
+                            caller.Reply($"Set {Modifier.GetItem2(MouseItem)}'s CreateTile property to {args[0]}", replyColor);
                             return;
                         }
                     }

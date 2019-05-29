@@ -1,8 +1,9 @@
 ﻿Update 1.0.0
-Added Item Modification Commands(CreateTile, HealLife, HealMana, Shoot, ShootSpeed, UseTime, UseAnimation)
+Added Item Modification Commands(CreateTile, HealLife, HealMana, Shoot, ShootSpeed, UseTime, UseAnimation, GenerateItem, Set, Properties)
+Added Settings Command
 Added Utilities
 Added EnterWorld Message
-Added Settings
+Added Settings(ShowProperties, ShowUnnecessary, ShowPID)
 
 Update 1.0.1
 Updated Description
@@ -15,5 +16,14 @@ Changed Description
 
 Update 1.0.4
 Added another EnterWorld Message
-Added EnterWorld Messages Toggle
+Added EnterWorld Messages Toggle(Setting)
 Changed Description
+
+Update 1.0.5
+Added More Properties(TileBoost(+Range), Pickaxe/Axe/Hammer Power, Knockback, Damage, Critical Strike Chance, AutoReuse)
+Added Item Modification Commands(TileBoost(+Range), Pickaxe/Axe/Hammer Power, Knockback, Damage, Critical Strike Chance, AutoReuse)
+Added Settings List
+Added Reset Command
+Changed Properties Command executor from "p" to "properties"
+Changed Description
+Fixed EnterWorld Message 2 being white

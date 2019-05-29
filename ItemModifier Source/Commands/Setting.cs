@@ -1,7 +1,5 @@
-﻿using Terraria.ModLoader;
-using ItemModifier.Utilities;
-using Microsoft.Xna.Framework;
-using ItemModifier;
+﻿using ItemModifier.Utilities;
+using Terraria.ModLoader;
 
 namespace ItemModifier.Commands
 {
@@ -11,21 +9,43 @@ namespace ItemModifier.Commands
 
         public override string Command => "setting";
 
-        public override string Description => "Modify internal settings/preferences";
+        public override string Description => "Modify internal settings/preferences. Do /setting settings to see a list of settings";
 
         public override string Usage => "/setting <SettingName> [Optional]<Value>";
 
         public override void Action(CommandCaller caller, string input, string[] args)
         {
             var errorColor = ItemModifier.errorColor;
+            var helpColor = ItemModifier.helpColor;
             var replyColor = ItemModifier.replyColor;
 
             string help = Description +
                 $"\nUsage: {Usage}, examples:" +
                 "\n/setting ShowUnnecessary, Shows the current value of ShowUnnecessary setting" +
-                "'n/setting ShowUnnecessary true, changes ShowUnnecessary to true";
+                "\n/setting ShowUnnecessary true, changes ShowUnnecessary to true" +
+                "\n/setting sHuN false, changes ShowUnnecessary to true. Setting names are caps insensitive as demonstrated.";
+            string settings = ItemModifier.settings;
 
-            if (!CommandHelper.ValidifySyntax(caller, args, 1, help)) return;
+            if (args.Length <= 0)
+            {
+                caller.Reply(help, helpColor);
+                return;
+            }
+            else if (args.Length < 1)
+            {
+                caller.Reply(help, helpColor);
+                return;
+            }
+            else if (args[0].ToLower() == "help")
+            {
+                caller.Reply(help, helpColor);
+                return;
+            }
+            else if (args[0].ToLower() == "settings")
+            {
+                caller.Reply(settings, helpColor);
+                return;
+            }
 
             if (args.Length >= 2)
             {
@@ -44,7 +64,7 @@ namespace ItemModifier.Commands
             }
             else
             {
-                if(args[0] == "reset")
+                if (args[0] == "reset")
                 {
                     Config.Reset();
                     caller.Reply("Settings Reseted", replyColor);

@@ -1,6 +1,6 @@
 displayName = Item Modifier
 author = KryptonIon
-version = 1.0.4
+version = 1.0.5
 hideCode = false
 hideResources = false
 includeSource = true

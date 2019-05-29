@@ -1,4 +1,5 @@
-﻿using Terraria.ModLoader;
+﻿using ItemModifier.Utilities;
+using Terraria.ModLoader;
 
 namespace ItemModifier.Commands
 {
@@ -22,7 +23,7 @@ namespace ItemModifier.Commands
             {
                 if (args.Length <= 0)
                 {
-                    caller.Reply($"{MouseItem.Name}([i/s{MouseItem.stack}:{MouseItem.type}])'s UseTime is {MouseItem.useTime}", replyColor);
+                    caller.Reply($"{Modifier.GetItem2(MouseItem)}'s UseTime is {MouseItem.useTime}", replyColor);
                 }
                 else
                 {
@@ -41,7 +42,7 @@ namespace ItemModifier.Commands
                         else
                         {
                             MouseItem.useTime = ut;
-                            caller.Reply($"Set [i/s{MouseItem.stack}p{MouseItem.prefix}:{MouseItem.type}]'s UseTime to {args[0]}", replyColor);
+                            caller.Reply($"Set {Modifier.GetItem2(MouseItem)}'s UseTime to {args[0]}", replyColor);
                             return;
                         }
                     }

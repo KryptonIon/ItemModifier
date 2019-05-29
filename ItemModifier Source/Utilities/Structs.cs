@@ -1,19 +1,5 @@
-﻿using Microsoft.Xna.Framework;
-
-namespace ItemModifier.Utilities
+﻿namespace ItemModifier.Utilities
 {
-    public struct Identifier
-    {
-        public string name, value;
-        public Color color;
-        public Identifier(string Name, string Value, Color Color)
-        {
-            name = Name;
-            value = Value;
-            color = Color;
-        }
-    }
-
     public struct SettingInfo
     {
         public string name;
