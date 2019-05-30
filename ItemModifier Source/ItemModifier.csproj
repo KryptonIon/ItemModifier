@@ -98,6 +98,7 @@
     <Compile Include="Commands\TileBoost.cs" />
     <Compile Include="Commands\UseAnimation.cs" />
     <Compile Include="Commands\UseTime.cs" />
+    <Compile Include="Commands\Wiki.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="IMModPlayer.cs" />
     <Compile Include="Commands\GenerateItem.cs" />

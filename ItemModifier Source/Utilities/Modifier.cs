@@ -281,14 +281,14 @@ namespace ItemModifier.Utilities
 
             if (!item.accessory || !ogitem.accessory || Config.ShowUnnecessary)
             {
-                string ut = $"UseTime {item.useTime}";
+                string ut = $"UseTime: {item.useTime}";
                 if (item.useTime != ogitem.useTime)
                 {
                     ut += $"(Normal: {ogitem.useTime})";
                 }
                 Properties.Add(ut);
 
-                string ua = $"UseAnimation {item.useAnimation}";
+                string ua = $"UseAnimation: {item.useAnimation}";
                 if (item.useAnimation != ogitem.useAnimation)
                 {
                     ua += $"(Normal: {ogitem.useAnimation})";
@@ -298,13 +298,7 @@ namespace ItemModifier.Utilities
 
             if (item.shoot != 0 || ogitem.shoot != 0 || Config.ShowUnnecessary)
             {
-                string s = "Shoot";
-                if (Config.ShowPID)
-                {
-                    s += "(ProjectileID)";
-                }
-
-                s += $" {item.shoot}";
+                string s = $"Shoot: {item.shoot}";
                 if (item.shoot != ogitem.shoot)
                 {
                     s += $"(Normal: {ogitem.shoot})";
@@ -314,7 +308,7 @@ namespace ItemModifier.Utilities
 
             if (item.shootSpeed != 0 || ogitem.shootSpeed != 0 || Config.ShowUnnecessary)
             {
-                string ss = $"ShootSpeed {item.shootSpeed}";
+                string ss = $"ShootSpeed: {item.shootSpeed}";
                 if (item.shootSpeed != ogitem.shootSpeed)
                 {
                     ss += $"(Normal: {ogitem.shootSpeed})";
@@ -354,7 +348,7 @@ namespace ItemModifier.Utilities
 
             if (item.tileBoost != 0 || ogitem.tileBoost != 0 || Config.ShowUnnecessary)
             {
-                string tb = $"+Range: {item.tileBoost}";
+                string tb = $"+Range/TileBoost: {item.tileBoost}";
                 if (item.tileBoost != ogitem.tileBoost)
                 {
                     tb += $"(Normal: {ogitem.tileBoost})";
@@ -463,13 +457,7 @@ namespace ItemModifier.Utilities
                 {
                     case "s":
                     case "shoot":
-                        string s = "Shoot";
-                        if (Config.ShowPID)
-                        {
-                            s += "(ProjectileID)";
-                        }
-
-                        s += $" {item.shoot}";
+                        string s = $"Shoot: {item.shoot}";
                         if (item.shoot != umitem.shoot)
                         {
                             s += $"(Normal: {umitem.shoot})";
@@ -478,8 +466,7 @@ namespace ItemModifier.Utilities
                         break;
                     case "ss":
                     case "shootspeed":
-                        string ss = "ShootSpeed";
-                        ss += $" {item.shootSpeed}";
+                        string ss = $"ShootSpeed: {item.shootSpeed}";
                         if (item.shootSpeed != umitem.shootSpeed)
                         {
                             ss += $"(Normal: {umitem.shootSpeed})";
@@ -488,8 +475,7 @@ namespace ItemModifier.Utilities
                         break;
                     case "ct":
                     case "createtile":
-                        string ct = "CreateTile";
-                        ct += $" {item.createTile}";
+                        string ct = $"CreateTile: {item.createTile}";
                         if (item.createTile != umitem.createTile)
                         {
                             ct += $"(Normal: {umitem.createTile})";
@@ -498,8 +484,7 @@ namespace ItemModifier.Utilities
                         break;
                     case "ut":
                     case "usetime":
-                        string ut = "UseTime";
-                        ut += $" {item.useTime}";
+                        string ut = $"UseTime: {item.useTime}";
                         if (item.useTime != umitem.useTime)
                         {
                             ut += $"(Normal: {umitem.useTime})";
@@ -508,8 +493,7 @@ namespace ItemModifier.Utilities
                         break;
                     case "ua":
                     case "useanimation":
-                        string ua = "UseAnimation";
-                        ua += $" {item.useAnimation}";
+                        string ua = $"UseAnimation: {item.useAnimation}";
                         if (item.useAnimation != umitem.useAnimation)
                         {
                             ua += $"(Normal: {umitem.useAnimation})";
@@ -518,8 +502,7 @@ namespace ItemModifier.Utilities
                         break;
                     case "hl":
                     case "heallife":
-                        string hl = "HealLife";
-                        hl += $" {item.healLife}";
+                        string hl = $"HealLife: {item.healLife}";
                         if (item.healLife != umitem.healLife)
                         {
                             hl += $"(Normal: {umitem.healLife})";
@@ -528,8 +511,7 @@ namespace ItemModifier.Utilities
                         break;
                     case "hm":
                     case "healmana":
-                        string hm = "HealMana";
-                        hm += $" {item.healMana}";
+                        string hm = $"HealMana: {item.healMana}";
                         if (item.healMana != umitem.healMana)
                         {
                             hm += $"(Normal: {umitem.healMana})";
@@ -538,8 +520,7 @@ namespace ItemModifier.Utilities
                         break;
                     case "tb":
                     case "tileboost":
-                        string tb = "tileboost";
-                        tb += $" {item.tileBoost}";
+                        string tb = $"+Range/TileBoost: {item.tileBoost}";
                         if (item.tileBoost != umitem.tileBoost)
                         {
                             tb += $"(Normal: {umitem.tileBoost})";
@@ -549,8 +530,7 @@ namespace ItemModifier.Utilities
                     case "p":
                     case "pick":
                     case "pickaxe":
-                        string p = "Pickaxe Power";
-                        p += $" {item.pick}";
+                        string p = $"Pickaxe Power: {item.pick}";
                         if (item.pick != umitem.pick)
                         {
                             p += $"(Normal: {umitem.pick})";
@@ -559,8 +539,7 @@ namespace ItemModifier.Utilities
                         break;
                     case "a":
                     case "axe":
-                        string a = "Axe Power";
-                        a += $" {item.axe}";
+                        string a = $"Axe Power: {item.axe}";
                         if (item.axe != umitem.axe)
                         {
                             a += $"(Normal: {umitem.axe})";
@@ -569,8 +548,7 @@ namespace ItemModifier.Utilities
                         break;
                     case "h":
                     case "hammer":
-                        string h = "Hammer Power";
-                        h += $" {item.hammer}";
+                        string h = $"Hammer Power: {item.hammer}";
                         if (item.hammer != umitem.hammer)
                         {
                             h += $"(Normal: {umitem.hammer})";
@@ -579,8 +557,7 @@ namespace ItemModifier.Utilities
                         break;
                     case "kb":
                     case "knockback":
-                        string kb = "Knockback";
-                        kb += $" {item.knockBack}";
+                        string kb = $"Knockback: {item.knockBack}";
                         if (item.knockBack != umitem.knockBack)
                         {
                             kb += $"(Normal: {umitem.knockBack})";
@@ -589,8 +566,7 @@ namespace ItemModifier.Utilities
                         break;
                     case "d":
                     case "damage":
-                        string d = "Damage";
-                        d += $" {item.damage}";
+                        string d = $"Damage: {item.damage}";
                         if (item.damage != umitem.damage)
                         {
                             d += $"(Normal: {umitem.damage})";
@@ -600,8 +576,7 @@ namespace ItemModifier.Utilities
                     case "c":
                     case "crit":
                     case "critical":
-                        string c = "Critical Strike Chance";
-                        c += $" {item.crit}";
+                        string c = $"Critical Strike Chance: {item.crit}";
                         if (item.crit != umitem.crit)
                         {
                             c += $"(Normal: {umitem.crit})";
@@ -610,8 +585,7 @@ namespace ItemModifier.Utilities
                         break;
                     case "au":
                     case "autoreuse":
-                        string au = "AutoReuse";
-                        au += $" {item.autoReuse}";
+                        string au = $"AutoReuse: {item.autoReuse}";
                         if (item.autoReuse != umitem.autoReuse)
                         {
                             au += $"(Normal: {umitem.autoReuse})";

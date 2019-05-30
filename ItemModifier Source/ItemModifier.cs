@@ -17,7 +17,7 @@ namespace ItemModifier
         public static string parameters = "Parameters: shoot or s, shootspeed or ss, createtile or ct, usetime or ut, useanimation or ua, healmana or hm, heallife or hl, axe or a, pick or p, hammer or h, autoreuse or au, critical or c, damage or d, knockback or kb, tileboost or tb" +
                     "\nParameters are caps insensitive meaning, you can do /gi 757 ShOoT 5 and it will still shoot a Jester's Arrow" +
                     "\nParameters have shortcuts, eg /gi 757 s 5, they're listed above";
-        public static string settings = "Current Settings are: ShowUnnecessary or shun, ShowProperties or shpr, ShowPID or shpid, ShowEWMessage or shewmsg" +
+        public static string settings = "Current Settings are: ShowUnnecessary or shun, ShowProperties or shpr, ShowEWMessage or shewmsg" +
                 "\nSettings are caps insensitive. shun, shpr, and etc are the Setting Name shortcuts.";
 
         public static int FindSlot(Item[] Inventory)

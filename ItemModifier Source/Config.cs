@@ -10,7 +10,6 @@ namespace ItemModifier
     {
         public static bool ShowProperties = true;
         public static bool ShowUnnecessary = false;
-        public static bool ShowPID = true;
         public static bool ShowEWMessage = true;
 
         static string ConfigPath = Path.Combine(Main.SavePath, "Mod Configs", "ItemModifier.json");
@@ -31,7 +30,6 @@ namespace ItemModifier
             {
                 Configuration.Get("ShowProperties", ref ShowProperties);
                 Configuration.Get("ShowUnnecessary", ref ShowUnnecessary);
-                Configuration.Get("ShowPID", ref ShowPID);
                 Configuration.Get("ShowEWMessage", ref ShowEWMessage);
                 return true;
             }
@@ -43,7 +41,6 @@ namespace ItemModifier
             Configuration.Clear();
             Configuration.Put("ShowProperties", ShowProperties);
             Configuration.Put("ShowUnnecessary", ShowUnnecessary);
-            Configuration.Put("ShowPID", ShowPID);
             Configuration.Put("ShowEWMessage", ShowEWMessage);
             Configuration.Save();
         }
@@ -72,17 +69,6 @@ namespace ItemModifier
                 else
                 {
                     ShowProperties = v;
-                }
-            }
-            else if ("showpid".Contains(sn) || sn == "shpid")
-            {
-                if (!bool.TryParse(value, out v))
-                {
-                    return false;
-                }
-                else
-                {
-                    ShowPID = v;
                 }
             }
             else if ("showewmessage".Contains(sn) || sn == "shewmsg")
@@ -116,10 +102,6 @@ namespace ItemModifier
             {
                 result = new SettingInfo("ShowProperties", ShowProperties);
             }
-            else if ("showpid".Contains(sn) || sn == "shpid")
-            {
-                result = new SettingInfo("ShowPID", ShowPID);
-            }
             else if ("showewmessage".Contains(sn) || sn == "shewmsg")
             {
                 result = new SettingInfo("ShowEWMessage", ShowEWMessage);
@@ -136,7 +118,6 @@ namespace ItemModifier
         {
             ShowProperties = true;
             ShowUnnecessary = false;
-            ShowPID = true;
             ShowEWMessage = true;
             CreateConfig();
         }

@@ -30,3 +30,13 @@ Fixed EnterWorld Message 2 being white
 
 Update 1.0.6
 Updated Parameters of /gi params and /set params (Sorry, forgot to do so last update)
+
+Update 1.0.7 Wiki Update
+Added Wiki Command, opens up the wiki
+Changed Enter World Messages
+Now Properties will refer to TileBoost as both +Range and TileBoost
+From now on, the description will contain the changelog of the current mod version
+Removed ShowPID Setting
+Fixed Properties not having colons when Requesting Properties
+Fixed Properties not having colons when using Properties Command
+Fixed TileBoost not being properly Capitalized when Requesting Properties
