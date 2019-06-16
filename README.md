@@ -1,5 +1,7 @@
 # Item Modifier
 This is a mod for tModLoader, used for modifying existing or generated modified items, currently modified values won't save upon exiting the world.
+![GitHub release](https://img.shields.io/github/release/KryptonIon/ItemModifier.svg?style=flat-square)
+
 
 # Releases
 Releases are available via Mod Browser or in the [Releases](https://github.com/KryptonIon/ItemModifier/releases).
