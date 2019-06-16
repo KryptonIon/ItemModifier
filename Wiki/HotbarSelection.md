@@ -1,0 +1,1 @@
+![HotbarSelection](../blob/master/Wiki/Images/HotbarSelection.png)
