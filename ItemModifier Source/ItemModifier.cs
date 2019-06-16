@@ -1,35 +1,31 @@
-﻿using Microsoft.Xna.Framework;
-using Terraria;
+﻿using Terraria;
 using Terraria.ModLoader;
 
 namespace ItemModifier
 {
     public class ItemModifier : Mod
     {
-        public ItemModifier()
-        {
-
-        }
-
-        public static Color errorColor = new Color(255, 0, 0);
-        public static Color helpColor = new Color(255, 255, 0);
-        public static Color replyColor = new Color(0, 100, 255);
-        public static string parameters = "Parameters: shoot or s, shootspeed or ss, createtile or ct, usetime or ut, useanimation or ua, healmana or hm, heallife or hl, axe or a, pick or p, hammer or h, autoreuse or au, critical or c, damage or d, knockback or kb, tileboost or tb" +
+        public static string PropParams = "Parameters: shoot or s, shootspeed or ss, createtile or ct, usetime or ut, useanimation or ua, healmana or hm, heallife or hl, axe or a, pick or p, hammer or h, autoreuse or au, critical or c, damage or d, knockback or kb, tileboost or tb, buff or b, bufftime or bt, stack or st(amount or amt)" +
                     "\nParameters are caps insensitive meaning, you can do /gi 757 ShOoT 5 and it will still shoot a Jester's Arrow" +
                     "\nParameters have shortcuts, eg /gi 757 s 5, they're listed above";
         public static string settings = "Current Settings are: ShowUnnecessary or shun, ShowProperties or shpr, ShowEWMessage or shewmsg" +
                 "\nSettings are caps insensitive. shun, shpr, and etc are the Setting Name shortcuts.";
+        public static string TypeIDParams = "Parameters: item or i, tile or t, projectile or p, buff or b";
+        public static int ItemId = 0;
 
-        public static int FindSlot(Item[] Inventory)
+        public static bool FindSlot(Item[] Inventory, out int slot)
         {
             for (int i = 0; i < 49; i++)
             {
                 if (Inventory[i].IsAir && Inventory[i].type == 0)
                 {
-                    return i;
+                    slot = i;
+                    return true;
                 }
             }
-            return -1;
+
+            slot = -1;
+            return false;
         }
 
         public override void Load()

@@ -16,12 +16,14 @@ namespace ItemModifier.Commands
         {
             var MouseItem = caller.Player.HeldItem;
             int stack = MouseItem.stack;
-            var errorColor = ItemModifier.errorColor;
+            var errorColor = Config.errorColor;
+            var replyColor = Config.replyColor;
 
             if (MouseItem.type != 0)
             {
                 MouseItem.SetDefaults(MouseItem.type);
                 MouseItem.stack = stack;
+                caller.Reply("Resetted item", replyColor);
             }
             else
             {

@@ -16,23 +16,18 @@ namespace ItemModifier.Commands
 
         public override void Action(CommandCaller caller, string input, string[] args)
         {
-            var errorColor = ItemModifier.errorColor;
-            var helpColor = ItemModifier.helpColor;
-            var replyColor = ItemModifier.replyColor;
+            var errorColor = Config.errorColor;
+            var helpColor = Config.helpColor;
+            var replyColor = Config.replyColor;
             var MouseItem = caller.Player.HeldItem;
 
             string help = Description +
                 $"\nUsage: {Usage}, examples" +
                 "\n/set ct 26, Modifies the CreateTile property of the selected item(yellow box) to 26" +
                 "\n/set ct 26 s 5, Modifies CreateTile to 26 and Shoot to 5";
-            string parameters = ItemModifier.parameters;
+            string parameters = ItemModifier.PropParams;
 
             if (args.Length <= 0)
-            {
-                caller.Reply(help, helpColor);
-                return;
-            }
-            else if (args.Length < 1)
             {
                 caller.Reply(help, helpColor);
                 return;

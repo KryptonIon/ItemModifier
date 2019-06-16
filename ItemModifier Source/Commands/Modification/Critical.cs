@@ -1,50 +1,43 @@
 ﻿using ItemModifier.Utilities;
 using Terraria.ModLoader;
 
-namespace ItemModifier.Commands
+namespace ItemModifier.Commands.Modification
 {
     public class Critical : ModCommand
     {
         public override CommandType Type => CommandType.Chat;
 
-        public override string Command => "c";
+        public override string Command => "critical";
 
         public override string Description => "Gets the data of an Item(item.crit) or modifies it";
 
-        public override string Usage => "/c [Optional]<Critical Strike Chance>";
+        public override string Usage => "/crit (Optional)[Critical Strike Chance]";
 
         public override void Action(CommandCaller caller, string input, string[] args)
         {
-            var errorColor = ItemModifier.errorColor;
-            var replyColor = ItemModifier.replyColor;
+            var errorColor = Config.errorColor;
+            var replyColor = Config.replyColor;
             var MouseItem = caller.Player.HeldItem;
 
             if (MouseItem.type > 0)
             {
-                if (args.Length <= 0)
+                if (args.Length == 0)
                 {
                     if (MouseItem.crit != 0)
                     {
                         caller.Reply($"{Modifier.GetItem2(MouseItem)}'s Critical Strike Chance is {MouseItem.crit}", replyColor);
+                        return;
                     }
                     else
                     {
-                        caller.Reply($"{Modifier.GetItem2(MouseItem)} doesn't have any critical strike chance", replyColor);
+                        caller.Reply($"{Modifier.GetItem2(MouseItem)} doesn't have any critical strike chance", errorColor);
+                        return;
                     }
                 }
                 else
                 {
-                    int c;
-                    if (!int.TryParse(args[0], out c))
-                    {
-                        caller.Reply($"Error, Critical Strike Chance({args[0]}) must be a number", errorColor);
-                    }
-                    else
-                    {
-                        MouseItem.crit = c;
-                        caller.Reply($"Set {Modifier.GetItem2(MouseItem)}'s Critical Strike Chance to {args[0]}", replyColor);
-                        return;
-                    }
+                    Modifier.ModifyCritical(caller, MouseItem, args[0]);
+                    return;
                 }
             }
             else
@@ -53,5 +46,12 @@ namespace ItemModifier.Commands
                 return;
             }
         }
+    }
+
+    public class CriticalA1 : Critical
+    {
+        public override string Command => "crit";
+
+        public override string Description => "Command Alias";
     }
 }

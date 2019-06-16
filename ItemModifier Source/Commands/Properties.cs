@@ -12,12 +12,12 @@ namespace ItemModifier.Commands
 
         public override string Description => "Gets the data of an Item";
 
-        public override string Usage => "/properties (Optional Parameters)<Property>";
+        public override string Usage => "/properties (Optional Parameters)[Property]";
 
         public override void Action(CommandCaller caller, string input, string[] args)
         {
-            var errorColor = ItemModifier.errorColor;
-            var replyColor = ItemModifier.replyColor;
+            var errorColor = Config.errorColor;
+            var replyColor = Config.replyColor;
             var MouseItem = caller.Player.HeldItem;
             Item umitem = new Item();
             umitem.SetDefaults(MouseItem.type);
@@ -26,7 +26,7 @@ namespace ItemModifier.Commands
             {
                 if (args.Length <= 0)
                 {
-                    string Reply = Modifier.GetProperties(MouseItem);
+                    string Reply = Modifier.GetProperties(MouseItem, false);
                     caller.Reply(Reply, replyColor);
                 }
                 else
@@ -44,5 +44,12 @@ namespace ItemModifier.Commands
                 return;
             }
         }
+    }
+
+    public class PropertiesA1 : Properties
+    {
+        public override string Command => "prop";
+
+        public override string Description => "Command Alias";
     }
 }

@@ -1,6 +1,6 @@
-﻿using Terraria.ModLoader;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Net;
+using Terraria.ModLoader;
 
 namespace ItemModifier.Commands
 {
@@ -12,13 +12,13 @@ namespace ItemModifier.Commands
 
         public override string Description => "Opens up the wiki";
 
-        public override string Usage => "/wiki";
+        public override string Usage => "/wiki (Optional)[Search]";
 
         public override void Action(CommandCaller caller, string input, string[] args)
         {
-            var replyColor = ItemModifier.replyColor;
+            var replyColor = Config.replyColor;
 
-            if(args.Length <= 0)
+            if (args.Length == 0)
             {
                 caller.Reply("Opening wiki... expect minor lag", replyColor);
                 Process.Start("https://github.com/KryptonIon/ItemModifier/wiki");
@@ -30,7 +30,7 @@ namespace ItemModifier.Commands
                 for (int i = 0; i < args.Length; i++)
                 {
                     temp += args[i];
-                    if(i < args.Length - 1)
+                    if (i < args.Length - 1)
                     {
                         temp += " ";
                     }

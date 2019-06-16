@@ -10,12 +10,49 @@ View Properties of an Item
 Planned:
 Generation UI
 
-Updates 1.0.7 Wiki Update
-Added Wiki Command, opens up the wiki
-Changed Enter World Messages
-Now Properties will refer to TileBoost as both +Range and TileBoost
-From now on, the description will contain the changelog of the current mod version
-Removed ShowPID Setting
-Fixed Properties not having colons when Requesting Properties
-Fixed Properties not having colons when using Properties Command
-Fixed TileBoost not being properly Capitalized when Requesting Properties
+
+Update 1.0.8
+# Additions
+> Settings:
+* AlwaysUseID
+* ShowResultList
+* GetRandomItem
+* ShowMaxStack
+> Commands:
+* SetItem
+* ID
+* Buff
+* BuffTime
+* Stack
+* Potion
+* Consumable
+* MaxStack
+> Item Modification Properties:
+* Buff
+* BuffTime
+* Stack or Amount
+* Potion
+* Consumable
+* MaxStack
+> Others:
+* New error message(0 shootspeed)(/shootspeed)
+* Assigned Codes to most errors(Current Code Count: 5)
+* Added Command Aliases
+
+# Changes
+* Changed Changelog Format
+* Changed GenerateItem Command behavior
+* The ShootSpeed and Knockback Modifier now uses Float instead of Ints, which means decimals can now be used
+* Changed (most)Error Messages
+* Changed All Command Example Usages, Fields are now indicated with Brackets[] instead of Angular Brackets<>, Notes are now indicated with Parentheses() instead of Brackets[]
+* Changed Settings Command trigger from "setting" to "settings"
+* CSProj file is now removed from the mod(can still be acquired via Github)
+* Settings Parameter in `/settings settings` to "list"
+* Settings Success Message Changed from "Success! {SettingName} is now {SettingValue}" to "{SettingName} set to {SettingValue}"
+* Unified modification processes(fixes some inconsistency between commands eg /set and /shoot).
+* Killed("Changed") Settings Command's AutoCorrect
+
+# Fixes
+* Fixed Damage Property showing unnecessarily
+* Fixed Shoot Command saying tile count rather than projectile count
+* Fixed Errors having Reply Color

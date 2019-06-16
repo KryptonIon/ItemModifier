@@ -79,30 +79,41 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\AutoReuse.cs" />
-    <Compile Include="Commands\Axe.cs" />
-    <Compile Include="Commands\CreateTile.cs" />
-    <Compile Include="Commands\Critical.cs" />
-    <Compile Include="Commands\Damage.cs" />
-    <Compile Include="Commands\Hammer.cs" />
-    <Compile Include="Commands\HealLife.cs" />
-    <Compile Include="Commands\HealMana.cs" />
-    <Compile Include="Commands\Knockback.cs" />
-    <Compile Include="Commands\Pick.cs" />
+    <Compile Include="Commands\Modification\AutoReuse.cs" />
+    <Compile Include="Commands\Modification\Axe.cs" />
+    <Compile Include="Commands\Modification\BuffID.cs" />
+    <Compile Include="Commands\Modification\BuffTime.cs" />
+    <Compile Include="Commands\Modification\Consumable.cs" />
+    <Compile Include="Commands\Modification\CreateTile.cs" />
+    <Compile Include="Commands\Modification\Critical.cs" />
+    <Compile Include="Commands\Modification\Damage.cs" />
+    <Compile Include="Commands\Modification\Hammer.cs" />
+    <Compile Include="Commands\Modification\HealLife.cs" />
+    <Compile Include="Commands\Modification\HealMana.cs" />
+    <Compile Include="Commands\ID.cs" />
+    <Compile Include="Commands\Modification\Knockback.cs" />
+    <Compile Include="Commands\Modification\MaxStack.cs" />
+    <Compile Include="Commands\Modification\Pick.cs" />
+    <Compile Include="Commands\Modification\Potion.cs" />
+    <Compile Include="Commands\Modification\Stack.cs" />
     <Compile Include="Commands\Properties.cs" />
     <Compile Include="Commands\Reset.cs" />
     <Compile Include="Commands\Set.cs" />
+    <Compile Include="Commands\SetItem.cs" />
     <Compile Include="Commands\Setting.cs" />
-    <Compile Include="Commands\Shoot.cs" />
-    <Compile Include="Commands\ShootSpeed.cs" />
-    <Compile Include="Commands\TileBoost.cs" />
-    <Compile Include="Commands\UseAnimation.cs" />
-    <Compile Include="Commands\UseTime.cs" />
+    <Compile Include="Commands\Modification\Shoot.cs" />
+    <Compile Include="Commands\Modification\ShootSpeed.cs" />
+    <Compile Include="Commands\Modification\TileBoost.cs" />
+    <Compile Include="Commands\Modification\UseAnimation.cs" />
+    <Compile Include="Commands\Modification\UseTime.cs" />
     <Compile Include="Commands\Wiki.cs" />
     <Compile Include="Config.cs" />
-    <Compile Include="IMModPlayer.cs" />
+    <Compile Include="MPlayer.cs" />
     <Compile Include="Commands\GenerateItem.cs" />
+    <Compile Include="Utilities\ErrorHandler.cs" />
+    <Compile Include="Utilities\ItemName.cs" />
     <Compile Include="Utilities\Modifier.cs" />
+    <Compile Include="Utilities\Parser.cs" />
     <Compile Include="Utilities\Structs.cs" />
     <Compile Include="ItemModifier.cs" />
   </ItemGroup>
