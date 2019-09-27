@@ -1,0 +1,88 @@
+﻿Update 1.0.0
+Added Item Modification Commands(CreateTile, HealLife, HealMana, Shoot, ShootSpeed, UseTime, UseAnimation, GenerateItem, Set, Properties)
+Added Settings Command
+Added Utilities
+Added EnterWorld Message
+Added Settings(ShowProperties, ShowUnnecessary, ShowPID)
+
+Update 1.0.1
+Updated Description
+
+Update 1.0.2
+Changed Mod Homepage from Github Repository to Terraria Forums
+
+Update 1.0.3
+Changed Description
+
+Update 1.0.4
+Added another EnterWorld Message
+Added EnterWorld Messages Toggle(Setting)
+Changed Description
+
+Update 1.0.5
+Added More Properties(TileBoost(+Range), Pickaxe/Axe/Hammer Power, Knockback, Damage, Critical Strike Chance, AutoReuse)
+Added Item Modification Commands(TileBoost(+Range), Pickaxe/Axe/Hammer Power, Knockback, Damage, Critical Strike Chance, AutoReuse)
+Added Settings List
+Added Reset Command
+Changed Properties Command executor from "p" to "properties"
+Changed Description
+Fixed EnterWorld Message 2 being white
+
+Update 1.0.6
+Updated Parameters of /gi params and /set params (Sorry, forgot to do so last update)
+
+Update 1.0.7 Wiki Update
+Added Wiki Command, opens up the wiki
+Changed Enter World Messages
+Now Properties will refer to TileBoost as both +Range and TileBoost
+From now on, the description will contain the changelog of the current mod version
+Removed ShowPID Setting
+Fixed Properties not having colons when Requesting Properties
+Fixed Properties not having colons when using Properties Command
+Fixed TileBoost not being properly Capitalized when Requesting Properties
+
+Update 1.0.8
+# Additions
+> Settings:
+* AlwaysUseID
+* ShowResultList
+* GetRandomItem
+* ShowMaxStack
+> Commands:
+* SetItem
+* ID
+* Buff
+* BuffTime
+* Stack
+* Potion
+* Consumable
+* MaxStack
+> Item Modification Properties:
+* Buff
+* BuffTime
+* Stack or Amount
+* Potion
+* Consumable
+* MaxStack
+> Others:
+* New error message(0 shootspeed)(/shootspeed)
+* Assigned Codes to most errors(Current Code Count: 5)
+* Added Command Aliases
+
+# Changes
+* Changed Changelog Format
+* Changed GenerateItem Command behavior
+* The ShootSpeed and Knockback Modifier now uses Float instead of Ints, which means decimals can now be used
+* Changed (most)Error Messages
+* Changed All Command Example Usages, Fields are now indicated with Brackets[] instead of Angular Brackets<>, Notes are now indicated with Parentheses() instead of Brackets[]
+* Changed Settings Command trigger from "setting" to "settings"
+* CSProj file is now removed from the mod(can still be acquired via Github)
+* Settings Parameter in `/settings settings` to "list"
+* Settings Success Message Changed from "Success! {SettingName} is now {SettingValue}" to "{SettingName} set to {SettingValue}"
+* Unified modification processes(fixes some inconsistency between commands eg /set and /shoot).
+* Killed("Changed") Settings Command's AutoCorrect
+
+# Fixes
+* Fixed Damage Property showing unnecessarily
+* Fixed Shoot Command saying tile count rather than projectile count
+* Fixed Errors having Reply Color
