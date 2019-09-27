@@ -1,5 +1,4 @@
 * **[Home](Home)**
 * **[Commands](Commands)**
 * **[Changelog](Changelog)**
-* **[Errors](Errors)**
-* **[Search](Search)**
+* **[Search Wiki](https://github.com/KryptonIon/ItemModifier/search?type=Wikis)**

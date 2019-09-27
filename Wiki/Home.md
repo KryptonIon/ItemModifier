@@ -8,8 +8,8 @@ While the [Issues](https://github.com/KryptonIon/ItemModifier/issues) page is ma
 ### [Terraria Forums Thread](https://forums.terraria.org/index.php?threads/item-modifier-mod.79985)
 
 # Mod
-### Commands
-This [page](Commands), breaks down commands and details them to provide ease to the user.
+### UI Guide
+Simplifies the UI to provide ease. Available [here](UI)
 
 ### Releases
 Releases are available via the mod browser or directly from [GitHub](https://github.com/KryptonIon/ItemModifier/releases).
@@ -28,7 +28,7 @@ Updates daily, the "Last Updated" field is not very accurate and should not be u
 ![Statistics](http://javid.ddns.net/tModLoader/widget/widgetimage/ItemModifier.png)
 
 ### Development & Redistribution
-The mod's source can be easily accessed via Extract in-game, certain parts of the mod are in C#6 while Terraria uses C#4, it is recommended to check out [Tmodloader's Page](https://github.com/blushiemagic/tModLoader/wiki/Intermediate-modding-with-C%236) on C#6 before redistributing the mod.
+The mod's source can be easily accessed via Extract in-game.
 
 ### FAQ
 >Q: Is the mod for Survival?
@@ -38,8 +38,3 @@ The mod's source can be easily accessed via Extract in-game, certain parts of th
 >Q: Will it ever be?
 >
 >A: Maybe soon(though it will be a separate mod, and probably a rebalancing one)?
-
-### Random Facts
-The Inspiration leading to the mod's development was TerrariaPatcher's Item Config Plugin.
-
-If you look at [Settings](Settings) the default values alternate between True and False.
