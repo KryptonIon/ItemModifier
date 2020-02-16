@@ -1,0 +1,8 @@
+title: "Item Modifier"
+remote_theme: pmarsceill/just-the-docs
+color_scheme: "dark"
+footer_content: "Copyright &copy; 2019-2020 KryptonIon."
+aux_links:
+  "View ItemModifier on GitHub":
+    - "//github.com/kryptonion/itemmodifier"
+markdown: kramdown
