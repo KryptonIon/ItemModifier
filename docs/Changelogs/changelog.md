@@ -2,7 +2,6 @@
 title: Changelog
 nav_order: 4
 has_children: true
-permalink: docs/changelogs
 ---
 # Changelogs
 Changes in each update.
