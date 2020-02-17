@@ -1,8 +1,19 @@
 title: "Item Modifier"
+description: "A TModLoader mod for item modification"
 remote_theme: pmarsceill/just-the-docs
+baseurl: "/ItemModifier"
+url: "https://kryptonion.github.io"
 color_scheme: "dark"
 footer_content: "Copyright &copy; 2019-2020 KryptonIon."
 aux_links:
   "View ItemModifier on GitHub":
     - "//github.com/kryptonion/itemmodifier"
 markdown: kramdown
+permalink: pretty
+compress_html:
+  clippings: all
+  comments: all
+  endings: all
+  startings: []
+  blanklines: false
+  profile: false
