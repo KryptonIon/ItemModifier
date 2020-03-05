@@ -1,0 +1,1 @@
+Item Modifier aims to provide ease in editing the various properties of an item. Whether it's for building, testing or tweaking.

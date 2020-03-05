@@ -1,9 +1,0 @@
-displayName = Item Modifier
-author = KryptonIon
-version = 1.0.8
-hideCode = false
-hideResources = false
-includeSource = true
-buildIgnore = *.sln, */bin, */.vs, */obj, *.csproj
-homepage = https://forums.terraria.org/index.php?threads/item-modifier-mod.79985/
-languageVersion = 6
