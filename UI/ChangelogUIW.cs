@@ -81,11 +81,9 @@ namespace ItemModifier.UI
             ChangelogWebsite.OnLeftClick += (source, e) => Process.Start(Website);
             ChangelogWebsite.WhileMouseHover += (source, e) => ItemModifier.Instance.Tooltip = "Open On Wiki";
 
-            NextButton = new UIImageButton(ItemModifier.Textures.RightArrow, new Color(255, 100, 0))
-            {
-                Left = new StyleDimension(Width.Pixels - NextButton.Width.Pixels),
-                Parent = this
-            };
+            NextButton = new UIImageButton(ItemModifier.Textures.RightArrow, new Color(255, 100, 0));
+            NextButton.Left = new StyleDimension(Width.Pixels - NextButton.Width.Pixels);
+            NextButton.Parent = this;
             NextButton.OnLeftClick += (source, e) => ChangelogIndex += 1;
             NextButton.OnRightClick += (source, e) => ChangelogIndex -= 1;
             NextButton.WhileMouseHover += (source, e) => ItemModifier.Instance.Tooltip = "Next Changelog";
@@ -96,10 +94,10 @@ namespace ItemModifier.UI
             {
                 InheritVisibility = false,
                 ColorTint = new Color(50, 50, 200),
-                Top = new StyleDimension(ChangelogVersion.Height.Pixels),
-                Left = new StyleDimension((Width.Pixels - UpArrowScroll.Width.Pixels) * 0.5f),
-                Parent = this
+                Top = new StyleDimension(ChangelogVersion.Height.Pixels)
             };
+            UpArrowScroll.Left = new StyleDimension((Width.Pixels - UpArrowScroll.Width.Pixels) * 0.5f);
+            UpArrowScroll.Parent = this;
             UpArrowScroll.OnLeftClick += (source, e) =>
             {
                 updelay += 5;
@@ -143,11 +141,11 @@ namespace ItemModifier.UI
             DownArrowScroll = new UIImage(ItemModifier.Textures.DownArrowShort)
             {
                 InheritVisibility = false,
-                ColorTint = new Color(50, 50, 200),
-                Top = new StyleDimension(Height.Pixels - DownArrowScroll.Height.Pixels),
-                Left = new StyleDimension((Width.Pixels - DownArrowScroll.Width.Pixels) * 0.5f),
-                Parent = this
+                ColorTint = new Color(50, 50, 200)
             };
+            DownArrowScroll.Top = new StyleDimension(Height.Pixels - DownArrowScroll.Height.Pixels);
+            DownArrowScroll.Left = new StyleDimension((Width.Pixels - DownArrowScroll.Width.Pixels) * 0.5f);
+            DownArrowScroll.Parent = this;
             DownArrowScroll.OnLeftClick += (source, e) =>
             {
                 downdelay += 5;

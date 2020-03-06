@@ -159,11 +159,9 @@ namespace ItemModifier.UI
             base.OnInitialize();
             var MouseItem = Main.LocalPlayer.HeldItem;
 
-            CategoryName = new UIText("")
-            {
-                Left = new StyleDimension((Width.Pixels - CategoryName.Width.Pixels) * 0.5f),
-                Parent = this
-            };
+            CategoryName = new UIText("");
+            CategoryName.Left = new StyleDimension((Width.Pixels - CategoryName.Width.Pixels) * 0.5f);
+            CategoryName.Parent = this;
 
             PreviousCategory = new UIImageButton(ItemModifier.Textures.LeftArrow)
             {
@@ -176,10 +174,10 @@ namespace ItemModifier.UI
 
             NextCategory = new UIImageButton(ItemModifier.Textures.RightArrow)
             {
-                ColorTint = new Color(255, 100, 0),
-                Left = new StyleDimension(Width.Pixels - NextCategory.Width.Pixels),
-                Parent = this
+                ColorTint = new Color(255, 100, 0)
             };
+            NextCategory.Left = new StyleDimension(Width.Pixels - NextCategory.Width.Pixels);
+            NextCategory.Parent = this;
             NextCategory.OnLeftClick += (source, e) => CategoryIndex += 1;
             NextCategory.OnRightClick += (source, e) => CategoryIndex -= 1;
             NextCategory.WhileMouseHover += (source, e) => ItemModifier.Instance.Tooltip = "Next Category";
@@ -188,66 +186,66 @@ namespace ItemModifier.UI
             {
                 Top = new StyleDimension(22f),
                 Width = new StyleDimension(Width.Pixels),
-                Height = new StyleDimension(Height.Pixels - AllCategory.Top.Pixels),
                 InheritVisibility = false,
-                Visible = false,
-                Parent = this
+                Visible = false
             };
+            AllCategory.Height = new StyleDimension(Height.Pixels - AllCategory.Top.Pixels);
+            AllCategory.Parent = this;
             Categories.Add(AllCategory);
 
             ToolsCategory = new UICategory("Tools")
             {
                 Top = new StyleDimension(22f),
                 Width = new StyleDimension(InnerDimensions.Width),
-                Height = new StyleDimension(InnerDimensions.Height - ToolsCategory.Top.Pixels),
                 InheritVisibility = false,
-                Visible = false,
-                Parent = this
+                Visible = false
             };
+            ToolsCategory.Height = new StyleDimension(InnerDimensions.Height - ToolsCategory.Top.Pixels);
+            ToolsCategory.Parent = this;
             Categories.Add(ToolsCategory);
 
             WeaponsCategory = new UICategory("Weapons")
             {
                 Top = new StyleDimension(22f),
                 Width = new StyleDimension(Width.Pixels),
-                Height = new StyleDimension(Height.Pixels - WeaponsCategory.Top.Pixels),
                 InheritVisibility = false,
-                Visible = false,
-                Parent = this
+                Visible = false
             };
+            WeaponsCategory.Height = new StyleDimension(Height.Pixels - WeaponsCategory.Top.Pixels);
+            WeaponsCategory.Parent = this;
             Categories.Add(WeaponsCategory);
 
             PotionsCategory = new UICategory("Potions")
             {
                 Top = new StyleDimension(22f),
                 Width = new StyleDimension(Width.Pixels),
-                Height = new StyleDimension(Height.Pixels - PotionsCategory.Top.Pixels),
                 InheritVisibility = false,
-                Visible = false,
-                Parent = this
+                Visible = false
             };
+            PotionsCategory.Parent = this;
+            PotionsCategory.Height = new StyleDimension(Height.Pixels - PotionsCategory.Top.Pixels);
             Categories.Add(PotionsCategory);
 
             ArmorCategory = new UICategory("Armor")
             {
                 Top = new StyleDimension(22f),
                 Width = new StyleDimension(Width.Pixels),
-                Height = new StyleDimension(Height.Pixels - ArmorCategory.Top.Pixels),
                 InheritVisibility = false,
-                Visible = false,
-                Parent = this
+                Visible = false
             };
+            ArmorCategory.Height = new StyleDimension(Height.Pixels - ArmorCategory.Top.Pixels);
+            ArmorCategory.Parent = this;
             Categories.Add(ArmorCategory);
 
             AccessoryCategory = new UICategory("Accessories")
             {
                 Top = new StyleDimension(22f),
                 Width = new StyleDimension(Width.Pixels),
-                Height = new StyleDimension(Height.Pixels - AccessoryCategory.Top.Pixels),
                 InheritVisibility = false,
-                Visible = false,
-                Parent = this
+                Visible = false
             };
+            AccessoryCategory.Height = new StyleDimension(Height.Pixels - AccessoryCategory.Top.Pixels);
+            AccessoryCategory.Parent = this;
             Categories.Add(AccessoryCategory);
 
             AutoReuse = new UIBool();
@@ -562,10 +560,10 @@ namespace ItemModifier.UI
             {
                 Width = new StyleDimension(16f),
                 Height = new StyleDimension(16f),
-                Left = new StyleDimension(Width.Pixels - 22f - ToggleLiveSync.Width.Pixels), // -16 for CloseButton, -3 for spacing before close button, -3 for spacing between this button and close button
-                Top = new StyleDimension(-19f),
-                Parent = this
+                Top = new StyleDimension(-19f)
             };
+            ToggleLiveSync.Left = new StyleDimension(Width.Pixels - 22f - ToggleLiveSync.Width.Pixels); // -16 for CloseButton, -3 for spacing before close button, -3 for spacing between this button and close button
+            ToggleLiveSync.Parent = this;
             ToggleLiveSync.OnLeftClick += (source, e) => { LiveSync = !LiveSync; if (!LiveSync) GrayBG.Visible = false; };
 
             GrayBG = new UIContainer(new Color(47, 79, 79, 150), new Vector2(InnerDimensions.Width, InnerDimensions.Height))
@@ -575,12 +573,10 @@ namespace ItemModifier.UI
             };
             GrayBG.OnVisibilityChanged += (source, value) => LockImage.Visible = value;
 
-            LockImage = new UIImage(ItemModifier.Textures.Lock)
-            {
-                Left = new StyleDimension((GrayBG.Width.Pixels - LockImage.Width.Pixels) * 0.5f),
-                Top = new StyleDimension((GrayBG.Height.Pixels - LockImage.Height.Pixels) * 0.5f),
-                Parent = GrayBG
-            };
+            LockImage = new UIImage(ItemModifier.Textures.Lock);
+            LockImage.Left = new StyleDimension((GrayBG.Width.Pixels - LockImage.Width.Pixels) * 0.5f);
+            LockImage.Top = new StyleDimension((GrayBG.Height.Pixels - LockImage.Height.Pixels) * 0.5f);
+            LockImage.Parent = GrayBG;
 
             AllCategory.Visible = true;
             UpdateCategory();

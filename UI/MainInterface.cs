@@ -48,46 +48,46 @@ namespace ItemModifier.UI
 
             ModifyWB = new UIImageButton(ItemModifier.Textures.ModifyItem)
             {
-                Top = new StyleDimension(Main.screenHeight - ModifyWB.Height.Pixels - 5f),
-                Left = new StyleDimension(12f),
-                ParentInterface = this
+                Left = new StyleDimension(12f)
             };
+            ModifyWB.Top = new StyleDimension(Main.screenHeight - ModifyWB.Height.Pixels - 5f);
+            ModifyWB.ParentInterface = this;
             ModifyWB.OnLeftClick += (source, e) => ModifyWindow.Visible = !ModifyWindow.Visible;
             ModifyWB.WhileMouseHover += (source, e) => ItemModifier.Instance.Tooltip = "Modify Items";
 
             NewItemWB = new UIImageButton(ItemModifier.Textures.NewItem)
             {
-                Top = new StyleDimension(ModifyWB.Top.Pixels - NewItemWB.Height.Pixels - 5f),
-                Left = new StyleDimension(12f),
-                ParentInterface = this
+                Left = new StyleDimension(12f)
             };
+            NewItemWB.Top = new StyleDimension(ModifyWB.Top.Pixels - NewItemWB.Height.Pixels - 5f);
+            NewItemWB.ParentInterface = this;
             NewItemWB.OnLeftClick += (source, e) => GenerateItemWindow.Visible = !GenerateItemWindow.Visible;
             NewItemWB.WhileMouseHover += (source, e) => ItemModifier.Instance.Tooltip = "New Item";
 
             WikiWB = new UIImageButton(ItemModifier.Textures.Wiki)
             {
-                Top = new StyleDimension(NewItemWB.Top.Pixels - WikiWB.Height.Pixels - 12f),
-                Left = new StyleDimension(20f),
-                ParentInterface = this
+                Left = new StyleDimension(20f)
             };
+            WikiWB.Top = new StyleDimension(NewItemWB.Top.Pixels - WikiWB.Height.Pixels - 12f);
+            WikiWB.ParentInterface = this;
             WikiWB.OnLeftClick += (source, e) => new Thread(() => Process.Start("https://kryptonion.github.io/ItemModifier/")).Start();
             WikiWB.WhileMouseHover += (source, e) => ItemModifier.Instance.Tooltip = "Open Wiki";
 
             ChangelogWB = new UIImageButton(ItemModifier.Textures.ChangelogIcon)
             {
-                Top = new StyleDimension(WikiWB.Top.Pixels - ChangelogWB.Height.Pixels - 12f),
-                Left = new StyleDimension(20f),
-                ParentInterface = this
+                Left = new StyleDimension(20f)
             };
+            ChangelogWB.Top = new StyleDimension(WikiWB.Top.Pixels - ChangelogWB.Height.Pixels - 12f);
+            ChangelogWB.ParentInterface = this;
             ChangelogWB.OnLeftClick += (source, e) => ChangelogWindow.Visible = !ChangelogWindow.Visible;
             ChangelogWB.WhileMouseHover += (source, e) => ItemModifier.Instance.Tooltip = "Changelog";
 
             DiscordLink = new UIImageButton(ItemModifier.Textures.DiscordIcon, ActiveTransparency: 1.5f, InactiveTransparency: 0.6f)
             {
-                Top = new StyleDimension(ChangelogWB.Top.Pixels - DiscordLink.Height.Pixels - 13.5f),
-                Left = new StyleDimension(17f),
-                ParentInterface = this
+                Left = new StyleDimension(17f)
             };
+            DiscordLink.Top = new StyleDimension(ChangelogWB.Top.Pixels - DiscordLink.Height.Pixels - 13.5f);
+            DiscordLink.ParentInterface = this;
             DiscordLink.OnLeftClick += (source, e) => new Thread(() => Process.Start("https://discord.gg/UjQWNC2")).Start();
             DiscordLink.WhileMouseHover += (source, e) => ItemModifier.Instance.Tooltip = "Discord";
 
