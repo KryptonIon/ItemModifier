@@ -46,40 +46,50 @@ namespace ItemModifier.UI
                 ParentInterface = this
             };
 
-            ModifyWB = new UIImageButton(ItemModifier.Textures.ModifyItem);
-            ModifyWB.Top = new StyleDimension(Main.screenHeight - ModifyWB.Height.Pixels - 5f);
-            ModifyWB.Left = new StyleDimension(12f);
+            ModifyWB = new UIImageButton(ItemModifier.Textures.ModifyItem)
+            {
+                Top = new StyleDimension(Main.screenHeight - ModifyWB.Height.Pixels - 5f),
+                Left = new StyleDimension(12f),
+                ParentInterface = this
+            };
             ModifyWB.OnLeftClick += (source, e) => ModifyWindow.Visible = !ModifyWindow.Visible;
             ModifyWB.WhileMouseHover += (source, e) => ItemModifier.Instance.Tooltip = "Modify Items";
-            ModifyWB.ParentInterface = this;
 
-            NewItemWB = new UIImageButton(ItemModifier.Textures.NewItem);
-            NewItemWB.Top = new StyleDimension(ModifyWB.Top.Pixels - NewItemWB.Height.Pixels - 5f);
-            NewItemWB.Left = new StyleDimension(12f);
+            NewItemWB = new UIImageButton(ItemModifier.Textures.NewItem)
+            {
+                Top = new StyleDimension(ModifyWB.Top.Pixels - NewItemWB.Height.Pixels - 5f),
+                Left = new StyleDimension(12f),
+                ParentInterface = this
+            };
             NewItemWB.OnLeftClick += (source, e) => GenerateItemWindow.Visible = !GenerateItemWindow.Visible;
             NewItemWB.WhileMouseHover += (source, e) => ItemModifier.Instance.Tooltip = "New Item";
-            NewItemWB.ParentInterface = this;
 
-            WikiWB = new UIImageButton(ItemModifier.Textures.Wiki);
-            WikiWB.Top = new StyleDimension(NewItemWB.Top.Pixels - WikiWB.Height.Pixels - 12f);
-            WikiWB.Left = new StyleDimension(20f);
+            WikiWB = new UIImageButton(ItemModifier.Textures.Wiki)
+            {
+                Top = new StyleDimension(NewItemWB.Top.Pixels - WikiWB.Height.Pixels - 12f),
+                Left = new StyleDimension(20f),
+                ParentInterface = this
+            };
             WikiWB.OnLeftClick += (source, e) => new Thread(() => Process.Start("https://kryptonion.github.io/ItemModifier/")).Start();
             WikiWB.WhileMouseHover += (source, e) => ItemModifier.Instance.Tooltip = "Open Wiki";
-            WikiWB.ParentInterface = this;
 
-            ChangelogWB = new UIImageButton(ItemModifier.Textures.ChangelogIcon);
-            ChangelogWB.Top = new StyleDimension(WikiWB.Top.Pixels - ChangelogWB.Height.Pixels - 12f);
-            ChangelogWB.Left = new StyleDimension(20f);
+            ChangelogWB = new UIImageButton(ItemModifier.Textures.ChangelogIcon)
+            {
+                Top = new StyleDimension(WikiWB.Top.Pixels - ChangelogWB.Height.Pixels - 12f),
+                Left = new StyleDimension(20f),
+                ParentInterface = this
+            };
             ChangelogWB.OnLeftClick += (source, e) => ChangelogWindow.Visible = !ChangelogWindow.Visible;
             ChangelogWB.WhileMouseHover += (source, e) => ItemModifier.Instance.Tooltip = "Changelog";
-            ChangelogWB.ParentInterface = this;
 
-            DiscordLink = new UIImageButton(ItemModifier.Textures.DiscordIcon, ActiveTransparency: 1.5f, InactiveTransparency: 0.6f);
-            DiscordLink.Top = new StyleDimension(ChangelogWB.Top.Pixels - DiscordLink.Height.Pixels - 13.5f);
-            DiscordLink.Left = new StyleDimension(17f);
+            DiscordLink = new UIImageButton(ItemModifier.Textures.DiscordIcon, ActiveTransparency: 1.5f, InactiveTransparency: 0.6f)
+            {
+                Top = new StyleDimension(ChangelogWB.Top.Pixels - DiscordLink.Height.Pixels - 13.5f),
+                Left = new StyleDimension(17f),
+                ParentInterface = this
+            };
             DiscordLink.OnLeftClick += (source, e) => new Thread(() => Process.Start("https://discord.gg/UjQWNC2")).Start();
             DiscordLink.WhileMouseHover += (source, e) => ItemModifier.Instance.Tooltip = "Discord";
-            DiscordLink.ParentInterface = this;
 
             if (KRConfig.Instance.HelpMessage)
             {

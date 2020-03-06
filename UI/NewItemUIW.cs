@@ -26,9 +26,12 @@ namespace ItemModifier.UI
             {
                 Width = new StyleDimension(20f);
                 Height = new StyleDimension(20f);
-                ItemDisplay = new UIItemDisplay(new Vector2(20f), ItemID) { Center = true };
+                ItemDisplay = new UIItemDisplay(new Vector2(20f), ItemID)
+                {
+                    Center = true,
+                    Parent = this
+                };
                 WhileMouseHover += (source, e) => ItemModifier.Instance.Tooltip = Lang.GetItemName(Item.type).Value;
-                ItemDisplay.Parent = this;
             }
         }
 
@@ -61,13 +64,7 @@ namespace ItemModifier.UI
         private int maxColumnIndex;
         private List<int> matchIDs;
 
-        public NewItemUIW() : base("New Item")
-        {
-            InheritVisibility = false;
-            Visible = false;
-            Width = new StyleDimension(425f);
-            Height = new StyleDimension(100f);
-        }
+        public NewItemUIW() : base("New Item") => (InheritVisibility, Visible, Width, Height) = (false, false, new StyleDimension(425f), new StyleDimension(100f));
 
         public override void OnInitialize()
         {
@@ -75,9 +72,14 @@ namespace ItemModifier.UI
             ItemDisplay = new UIItemDisplay(new Vector2(20f)) { Center = true };
             ItemDisplay.Parent = this;
 
-            ItemNameTextbox = new UITextbox() { Text = "Air", Box = false };
-            ItemNameTextbox.Width = new StyleDimension(320f);
-            ItemNameTextbox.Left = new StyleDimension(ItemDisplay.Width.Pixels + 4f);
+            ItemNameTextbox = new UITextbox()
+            {
+                Text = "Air",
+                Box = false,
+                Width = new StyleDimension(320f),
+                Left = new StyleDimension(ItemDisplay.Width.Pixels + 4f),
+                Parent = this
+            };
             ItemNameTextbox.WhileMouseHover += (source, e) => ItemModifier.Instance.Tooltip = "Item Name";
             ItemNameTextbox.OnTextChangedByUser += (source, value) =>
             {
@@ -110,11 +112,16 @@ namespace ItemModifier.UI
                     Matches.Visible = true;
                 }
             };
-            ItemNameTextbox.Parent = this;
 
-            ItemIDTextbox = new UIIntTextbox(0, ItemLoader.ItemCount - 1) { Sign = false, Box = false, LimitType = UITextbox.CharacterLimitType.DynamicLimit };
-            ItemIDTextbox.Width = new StyleDimension(51f);
-            ItemIDTextbox.Left = new StyleDimension(ItemNameTextbox.Left.Pixels + ItemNameTextbox.Width.Pixels + 4f);
+            ItemIDTextbox = new UIIntTextbox(0, ItemLoader.ItemCount - 1)
+            {
+                Sign = false,
+                Box = false,
+                LimitType = UITextbox.CharacterLimitType.DynamicLimit,
+                Width = new StyleDimension(51f),
+                Left = new StyleDimension(ItemNameTextbox.Left.Pixels + ItemNameTextbox.Width.Pixels + 4f),
+                Parent = this
+            };
             ItemIDTextbox.WhileMouseHover += (source, e) => ItemModifier.Instance.Tooltip = "Item ID";
             ItemIDTextbox.OnValueChanged += (source, value) =>
             {
@@ -122,11 +129,13 @@ namespace ItemModifier.UI
                 Matches.Visible = false;
                 ItemDisplay.DisplayItem.SetDefaults(value);
             };
-            ItemIDTextbox.Parent = this;
 
-            Label1 = new UIText("Use Modified Properties:") { SkipDescenderCheck = true };
-            Label1.Top = new StyleDimension(ItemNameTextbox.Height.Pixels);
-            Label1.Parent = this;
+            Label1 = new UIText("Use Modified Properties:")
+            {
+                SkipDescenderCheck = true,
+                Top = new StyleDimension(ItemNameTextbox.Height.Pixels),
+                Parent = this
+            };
 
             UseModifiedProperties = new UICheckbox
             {
@@ -141,10 +150,10 @@ namespace ItemModifier.UI
                 Visible = false,
                 OverflowHidden = true,
                 Left = new StyleDimension(ItemNameTextbox.Left.Pixels),
-                Top = new StyleDimension(ItemNameTextbox.Height.Pixels)
+                Top = new StyleDimension(ItemNameTextbox.Height.Pixels),
+                Parent = this
             };
             Matches.OnScrollWheel += (source, e) => ColumnIndex += e.ScrollWheelValue / -120;
-            Matches.Parent = this;
 
             int column = 0;
             int row = 0;
@@ -175,7 +184,8 @@ namespace ItemModifier.UI
             {
                 Width = new StyleDimension(22f),
                 Height = new StyleDimension(22f),
-                Left = new StyleDimension(ItemIDTextbox.Left.Pixels + ItemIDTextbox.Width.Pixels + 4f)
+                Left = new StyleDimension(ItemIDTextbox.Left.Pixels + ItemIDTextbox.Width.Pixels + 4f),
+                Parent = this
             };
             Generate.WhileMouseHover += (source, e) => ItemModifier.Instance.Tooltip = "Generate Item";
             Generate.OnLeftClick += (source, e) =>
@@ -183,7 +193,6 @@ namespace ItemModifier.UI
                 int itemIndex = Item.NewItem(Main.LocalPlayer.getRect(), ItemIDTextbox.Value, 1, true);
                 if (UseModifiedProperties.Value) Main.item[itemIndex].CopyItemProperties(ItemModifier.Instance.MainUI.ModifyWindow.ModifiedItem);
             };
-            Generate.Parent = this;
         }
 
         private void MatchClick(UIElement source, UIMouseEventArgs e)

@@ -110,8 +110,6 @@ namespace ItemModifier.UIKit
             this.Draggable = Draggable;
             Width = new StyleDimension(300f);
             Height = new StyleDimension(200f);
-            OnLeftDown += MDown;
-            OnLeftUp += MUp;
             OnVisibilityChanged += (source, value) => Main.PlaySound(value ? SoundID.MenuOpen : SoundID.MenuClose);
         }
 
@@ -148,19 +146,21 @@ namespace ItemModifier.UIKit
             }
         }
 
-        private void MDown(UIElement element, UIMouseEventArgs e)
+        public override void LeftMouseDown(UIMouseEventArgs e)
         {
             if (Draggable && e.MousePosition.X == 2 + TitleBarHeight)
             {
                 DragPos = new Vector2(e.MousePosition.X - Left.Pixels, e.MousePosition.Y - Top.Pixels);
                 Dragging = true;
             }
+            base.LeftMouseDown(e);
         }
 
-        private void MUp(UIElement element, UIMouseEventArgs e)
+        public override void LeftMouseUp(UIMouseEventArgs e)
         {
             Dragging = false;
             Recalculate();
+            base.LeftMouseUp(e);
         }
 
         public override void OnInitialize()

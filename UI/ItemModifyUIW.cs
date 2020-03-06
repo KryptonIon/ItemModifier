@@ -1,5 +1,6 @@
 ﻿using ItemModifier.UIKit;
 using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
@@ -9,9 +10,8 @@ namespace ItemModifier.UI
     public class ItemModifyUIW : UIWindow
     {
         public event UIEventHandler<int> OnSelectedIndexChanged;
-        internal List<UICategory> Categories;
-        private Item MouseItem;
-        private Item DefaultItem;
+        internal List<UICategory> Categories = new List<UICategory>();
+        private Item DefaultItem = new Item();
         internal Item ModifiedItem
         {
             get
@@ -152,37 +152,37 @@ namespace ItemModifier.UI
             }
         }
 
-        public ItemModifyUIW() : base("Item Modifier")
-        {
-            InheritVisibility = false;
-            Visible = false;
-            Width = new StyleDimension(740f);
-            Height = new StyleDimension(325f);
-        }
+        public ItemModifyUIW() : base("Item Modifier") => (InheritVisibility, Visible, Width, Height) = (false, false, new StyleDimension(740f), new StyleDimension(325f));
 
         public override void OnInitialize()
         {
             base.OnInitialize();
-            MouseItem = new Item();
-            DefaultItem = new Item();
-            Categories = new List<UICategory>();
+            var MouseItem = Main.LocalPlayer.HeldItem;
 
-            CategoryName = new UIText("");
-            CategoryName.Left = new StyleDimension((Width.Pixels - CategoryName.Width.Pixels) * 0.5f);
-            CategoryName.Parent = this;
+            CategoryName = new UIText("")
+            {
+                Left = new StyleDimension((Width.Pixels - CategoryName.Width.Pixels) * 0.5f),
+                Parent = this
+            };
 
-            PreviousCategory = new UIImageButton(ItemModifier.Textures.LeftArrow) { ColorTint = new Color(0, 100, 255) };
+            PreviousCategory = new UIImageButton(ItemModifier.Textures.LeftArrow)
+            {
+                ColorTint = new Color(0, 100, 255),
+                Parent = this
+            };
             PreviousCategory.OnLeftClick += (source, e) => CategoryIndex -= 1;
             PreviousCategory.OnRightClick += (source, e) => CategoryIndex += 1;
             PreviousCategory.WhileMouseHover += (source, e) => ItemModifier.Instance.Tooltip = "Previous Category";
-            PreviousCategory.Parent = this;
 
-            NextCategory = new UIImageButton(ItemModifier.Textures.RightArrow) { ColorTint = new Color(255, 100, 0) };
-            NextCategory.Left = new StyleDimension(Width.Pixels - NextCategory.Width.Pixels);
+            NextCategory = new UIImageButton(ItemModifier.Textures.RightArrow)
+            {
+                ColorTint = new Color(255, 100, 0),
+                Left = new StyleDimension(Width.Pixels - NextCategory.Width.Pixels),
+                Parent = this
+            };
             NextCategory.OnLeftClick += (source, e) => CategoryIndex += 1;
             NextCategory.OnRightClick += (source, e) => CategoryIndex -= 1;
             NextCategory.WhileMouseHover += (source, e) => ItemModifier.Instance.Tooltip = "Next Category";
-            NextCategory.Parent = this;
 
             AllCategory = new UICategory("All")
             {
@@ -570,16 +570,17 @@ namespace ItemModifier.UI
 
             GrayBG = new UIContainer(new Color(47, 79, 79, 150), new Vector2(InnerDimensions.Width, InnerDimensions.Height))
             {
-                InheritVisibility = false
+                InheritVisibility = false,
+                Parent = this
             };
             GrayBG.OnVisibilityChanged += (source, value) => LockImage.Visible = value;
-            GrayBG.Parent = this;
 
-            LockImage = new UIImage(ItemModifier.Textures.Lock);
-            LockImage.Left = new StyleDimension((GrayBG.Width.Pixels - LockImage.Width.Pixels) * 0.5f);
-            LockImage.Top = new StyleDimension((GrayBG.Height.Pixels - LockImage.Height.Pixels) * 0.5f);
-            GrayBG.InheritVisibility = false;
-            LockImage.Parent = GrayBG;
+            LockImage = new UIImage(ItemModifier.Textures.Lock)
+            {
+                Left = new StyleDimension((GrayBG.Width.Pixels - LockImage.Width.Pixels) * 0.5f),
+                Top = new StyleDimension((GrayBG.Height.Pixels - LockImage.Height.Pixels) * 0.5f),
+                Parent = GrayBG
+            };
 
             AllCategory.Visible = true;
             UpdateCategory();
@@ -588,7 +589,7 @@ namespace ItemModifier.UI
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            MouseItem = Main.LocalPlayer.HeldItem;
+            var MouseItem = Main.LocalPlayer.HeldItem;
             if (DefaultItem.type != MouseItem.type) DefaultItem.SetDefaults(MouseItem.type);
             if (LiveSync)
             {
@@ -622,13 +623,13 @@ namespace ItemModifier.UI
                 if (!Defense.Focused) Defense.Value = MouseItem.defense;
                 if (!FishingPower.Focused) FishingPower.Value = MouseItem.fishingPole;
                 if (!Scale.Focused) Scale.Value = MouseItem.scale;
-                if (MouseItem.useStyle == 0)
-                {
-                    UseStyle.DeselectAll();
-                }
-                else
+                try
                 {
                     UseStyle.Select(MouseItem.useStyle - 1);
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    UseStyle.DeselectAll();
                 }
                 GrayBG.Visible = MouseItem.type == 0;
             }

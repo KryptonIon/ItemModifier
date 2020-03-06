@@ -156,7 +156,7 @@ namespace ItemModifier.UIKit
         /// </summary>
         /// <param name="Margin">Add space around the element.</param>
         public UITextbox(Vector4 Margin = default) : base(Margin: Margin) => (Width, Height) = (new StyleDimension(100f), new StyleDimension(22f));
-        
+
         /// <summary>
         /// Initializes a new <see cref="UITextbox"/> Element.
         /// </summary>

@@ -29,7 +29,7 @@ namespace ItemModifier.UIKit
                 SmallButton = value;
                 if (Small)
                 {
-                    Width =new StyleDimension( 60, Width.Percent);
+                    Width = new StyleDimension(60, Width.Percent);
                     Height = new StyleDimension(28, Height.Percent);
                 }
                 else
