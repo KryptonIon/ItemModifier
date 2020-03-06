@@ -38,7 +38,7 @@ namespace ItemModifier.UIKit
         /// Initializes a new <see cref="UICheckbox"/> Element.
         /// </summary>
         /// <param name="Margin">Add space around the element.</param>
-        public UICheckbox(Vector4 Margin = default) : base(Margin) => (Width, Height) = (new StyleDimension(18), new StyleDimension(18));
+        public UICheckbox(Vector4 Margin = default) : base(Margin) => (Width, Height) = (new StyleDimension(18f), new StyleDimension(18f));
 
         public UICheckbox(bool Value, Vector4 Margin = default) : this(Margin) => this.Value = Value;
 

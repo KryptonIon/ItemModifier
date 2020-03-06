@@ -46,13 +46,13 @@ namespace ItemModifier.UI
             {
                 if (InputElement != null)
                 {
-                    Width = new StyleDimension(NameSize.X + 5 + InputElement.OuterDimensions.Width);
+                    Width = new StyleDimension(NameSize.X + 5f + InputElement.OuterDimensions.Width);
                     InputElement.Left = new StyleDimension(NameSize.X + 5);
                     Height = new StyleDimension(NameSize.Y > InputElement.Height.Pixels ? NameSize.Y : InputElement.Height.Pixels);
                 }
                 else
                 {
-                    Width = new StyleDimension(NameSize.X + 5);
+                    Width = new StyleDimension(NameSize.X + 5f);
                     Height = new StyleDimension(NameSize.Y);
                 }
                 return Width.Pixels;

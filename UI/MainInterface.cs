@@ -27,8 +27,8 @@ namespace ItemModifier.UI
         {
             ChangelogWindow = new ChangelogUIW
             {
-                Top = new StyleDimension(0, 0.2f),
-                Left = new StyleDimension(0, 0.1f),
+                Top = new StyleDimension(0f, 0.2f),
+                Left = new StyleDimension(0f, 0.1f),
                 ParentInterface = this
             };
 

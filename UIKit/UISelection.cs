@@ -75,7 +75,7 @@ namespace ItemModifier.UIKit
             public void RecalculateSize()
             {
                 Vector2 labelSize = KRUtils.MeasureTextAccurate(Label, true);
-                Width = new StyleDimension(14 + labelSize.X);
+                Width = new StyleDimension(14f + labelSize.X);
                 Height = new StyleDimension(labelSize.Y);
             }
 

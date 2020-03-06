@@ -8,12 +8,12 @@
         /// <summary>
         /// <see cref="StyleDimension"/> that fills an entire container.
         /// </summary>
-        public static readonly StyleDimension Fill = new StyleDimension(0, 1);
+        public static readonly StyleDimension Fill = new StyleDimension(0f, 1f);
 
         /// <summary>
         /// Blank <see cref="StyleDimension"/>.
         /// </summary>
-        public static readonly StyleDimension Empty = new StyleDimension(0, 0);
+        public static readonly StyleDimension Empty = new StyleDimension(0f, 0f);
 
         /// <summary>
         /// Unchanging offset.

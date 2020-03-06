@@ -250,8 +250,8 @@ namespace ItemModifier
 
         public override void Unload()
         {
-            Instance = null;
             Textures.Unload();
+            Instance = null;
         }
 
         public override void UpdateUI(GameTime gameTime)

@@ -29,13 +29,13 @@ namespace ItemModifier.UIKit
                 SmallButton = value;
                 if (Small)
                 {
-                    Width = new StyleDimension(60, Width.Percent);
-                    Height = new StyleDimension(28, Height.Percent);
+                    Width = new StyleDimension(60f, Width.Percent);
+                    Height = new StyleDimension(28f, Height.Percent);
                 }
                 else
                 {
-                    Width = new StyleDimension(80, Width.Percent);
-                    Height = new StyleDimension(32, Height.Percent);
+                    Width = new StyleDimension(80f, Width.Percent);
+                    Height = new StyleDimension(32f, Height.Percent);
                 }
             }
         }
@@ -62,7 +62,7 @@ namespace ItemModifier.UIKit
         /// <param name="Margin">Add space around the element.</param>
         /// <param name="Flat">If true, the button will be flat, otherwise it will be round.</param>
         /// <param name="Small">If true, the button will be small, otherwise it will be normal.</param>
-        public UIButton(bool Flat = true, bool Small = false, Vector4 Padding = default, Vector4 Margin = default) : base(Padding, Margin) => (this.Flat, this.Small, Width, Height) = (Flat, Small, new StyleDimension(80), new StyleDimension(32));
+        public UIButton(bool Flat = true, bool Small = false, Vector4 Padding = default, Vector4 Margin = default) : base(Padding, Margin) => (this.Flat, this.Small, Width, Height) = (Flat, Small, new StyleDimension(80f), new StyleDimension(32f));
 
         public override void LeftClick(UIMouseEventArgs e)
         {
