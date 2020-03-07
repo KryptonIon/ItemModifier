@@ -9,8 +9,11 @@ namespace ItemModifier.UI
     public class ItemModifyUIW : UIWindow
     {
         public event UIEventHandler<int> OnSelectedIndexChanged;
+
         internal List<UICategory> Categories = new List<UICategory>();
+
         private Item DefaultItem = new Item();
+
         internal Item ModifiedItem
         {
             get
@@ -52,77 +55,151 @@ namespace ItemModifier.UI
                 return modifiedItem;
             }
         }
+
         internal UICategory AllCategory;
+
         internal UICategory PotionsCategory;
+
         internal UICategory ToolsCategory;
+
         internal UICategory WeaponsCategory;
+
         internal UICategory ArmorCategory;
+
         internal UICategory AccessoryCategory;
+
         internal UIBool AutoReuse;
+
         internal UIBool Consumable;
+
         internal UIBool Potion;
+
         internal UIBool Accessory;
+
         internal UIIntTextbox Shoot;
+
         internal UIIntTextbox Tile;
+
         internal UIIntTextbox TileBoost;
+
         internal UIIntTextbox Buff;
+
         internal UIIntTextbox BuffTime;
+
         internal UIIntTextbox Damage;
+
         internal UIIntTextbox Critical;
+
         internal UIIntTextbox HealHP;
+
         internal UIIntTextbox HealMP;
+
         internal UIIntTextbox AxePower;
+
         internal UIIntTextbox PickaxePower;
+
         internal UIIntTextbox HammerPower;
+
         internal UIIntTextbox Stack;
+
         internal UIIntTextbox MaxStack;
+
         internal UIIntTextbox UseAnimation;
+
         internal UIIntTextbox UseTime;
+
         internal UIIntTextbox Defense;
+
         internal UIIntTextbox FishingPower;
+
         //internal UIIntTextbox ColorTint;
+
         //internal UIIntTextbox UseSound;
+
         internal UIFloatTextbox ShootSpeed;
+
         internal UIFloatTextbox KnockBack;
+
         internal UIFloatTextbox Scale;
+
         internal UISelection DamageType;
+
         internal UISelection UseStyle;
+
         internal UICategory.UIProperty PAutoReuse;
+
         internal UICategory.UIProperty PConsumable;
+
         internal UICategory.UIProperty PPotion;
+
         internal UICategory.UIProperty PShoot;
+
         internal UICategory.UIProperty PTile;
+
         internal UICategory.UIProperty PTileBoost;
+
         internal UICategory.UIProperty PBuff;
+
         internal UICategory.UIProperty PBuffTime;
+
         internal UICategory.UIProperty PDamage;
+
         internal UICategory.UIProperty PCritical;
+
         internal UICategory.UIProperty PHealHP;
+
         internal UICategory.UIProperty PHealMP;
+
         internal UICategory.UIProperty PAxePower;
+
         internal UICategory.UIProperty PPickaxePower;
+
         internal UICategory.UIProperty PHammerPower;
+
         internal UICategory.UIProperty PStack;
+
         internal UICategory.UIProperty PMaxStack;
+
         internal UICategory.UIProperty PUseAnimation;
+
         internal UICategory.UIProperty PUseTime;
+
         internal UICategory.UIProperty PShootSpeed;
+
         internal UICategory.UIProperty PKnockBack;
+
         internal UICategory.UIProperty PAccessory;
+
         internal UICategory.UIProperty PDefense;
+
         internal UICategory.UIProperty PDamageType;
+
         internal UICategory.UIProperty PFishingPower;
+
         internal UICategory.UIProperty PScale;
+
         //internal UICategory.UIProperty PColorTint;
+
         internal UICategory.UIProperty PUseStyle;
+
         //internal UICategory.UIProperty PUseSound;
+
         internal UIImageButton PreviousCategory;
+
         internal UIImageButton NextCategory;
+
         internal UIImageButton ToggleLiveSync;
+
         internal UIText CategoryName;
+
         internal UIContainer GrayBG;
+
         internal UIImage LockImage;
+
+        internal UIImage ClearModifications;
+
         public bool LiveSync { get; set; } = true;
+
         public UICategory ActiveCategory
         {
             get
@@ -139,6 +216,7 @@ namespace ItemModifier.UI
         }
 
         private int categoryIndex;
+
         public int CategoryIndex
         {
             get => categoryIndex;
@@ -156,7 +234,6 @@ namespace ItemModifier.UI
         public override void OnInitialize()
         {
             base.OnInitialize();
-            var MouseItem = Main.LocalPlayer.HeldItem;
 
             CategoryName = new UIText("");
             CategoryName.Left = new StyleDimension((Width.Pixels - CategoryName.Width.Pixels) * 0.5f);
@@ -248,8 +325,8 @@ namespace ItemModifier.UI
             Categories.Add(AccessoryCategory);
 
             AutoReuse = new UIBool();
-            AutoReuse.OnValueChanged += (source, value) => MouseItem.autoReuse = value;
-            AutoReuse.OnRightClick += (source, e) => MouseItem.autoReuse = DefaultItem.autoReuse;
+            AutoReuse.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.autoReuse = value;
+            AutoReuse.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.autoReuse = DefaultItem.autoReuse;
             PAutoReuse = new UICategory.UIProperty("Auto Use:")
             {
                 InputElement = AutoReuse
@@ -260,8 +337,8 @@ namespace ItemModifier.UI
             WeaponsCategory.AddProperty(PAutoReuse);
 
             Consumable = new UIBool();
-            Consumable.OnValueChanged += (source, value) => MouseItem.consumable = value;
-            Consumable.OnRightClick += (source, e) => MouseItem.consumable = DefaultItem.consumable;
+            Consumable.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.consumable = value;
+            Consumable.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.consumable = DefaultItem.consumable;
             PConsumable = new UICategory.UIProperty("Consumable:")
             {
                 InputElement = Consumable
@@ -272,8 +349,8 @@ namespace ItemModifier.UI
             WeaponsCategory.AddProperty(PConsumable);
 
             Potion = new UIBool();
-            Potion.OnValueChanged += (source, value) => MouseItem.potion = value;
-            Potion.OnRightClick += (source, e) => MouseItem.potion = DefaultItem.potion;
+            Potion.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.potion = value;
+            Potion.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.potion = DefaultItem.potion;
             PPotion = new UICategory.UIProperty("Potion Sickness:")
             {
                 InputElement = Potion
@@ -283,18 +360,18 @@ namespace ItemModifier.UI
             PotionsCategory.AddProperty(PPotion);
 
             DamageType = new UISelection(default, "Melee", "Magic", "Ranged", "Summon", "Thrown");
-            DamageType.Choices[0].OnValueChanged += (source, value) => MouseItem.melee = value;
-            DamageType.Choices[1].OnValueChanged += (source, value) => MouseItem.magic = value;
-            DamageType.Choices[2].OnValueChanged += (source, value) => MouseItem.ranged = value;
-            DamageType.Choices[3].OnValueChanged += (source, value) => MouseItem.summon = value;
-            DamageType.Choices[4].OnValueChanged += (source, value) => MouseItem.thrown = value;
+            DamageType.Choices[0].OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.melee = value;
+            DamageType.Choices[1].OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.magic = value;
+            DamageType.Choices[2].OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.ranged = value;
+            DamageType.Choices[3].OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.summon = value;
+            DamageType.Choices[4].OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.thrown = value;
             DamageType.OnRightClick += (source, e) =>
             {
-                MouseItem.melee = DefaultItem.melee;
-                MouseItem.magic = DefaultItem.magic;
-                MouseItem.ranged = DefaultItem.ranged;
-                MouseItem.summon = DefaultItem.summon;
-                MouseItem.thrown = DefaultItem.thrown;
+                Main.LocalPlayer.HeldItem.melee = DefaultItem.melee;
+                Main.LocalPlayer.HeldItem.magic = DefaultItem.magic;
+                Main.LocalPlayer.HeldItem.ranged = DefaultItem.ranged;
+                Main.LocalPlayer.HeldItem.summon = DefaultItem.summon;
+                Main.LocalPlayer.HeldItem.thrown = DefaultItem.thrown;
             };
             PDamageType = new UICategory.UIProperty("Damage Type:")
             {
@@ -304,8 +381,8 @@ namespace ItemModifier.UI
             WeaponsCategory.AddProperty(PDamageType);
 
             Accessory = new UIBool();
-            Accessory.OnValueChanged += (source, value) => MouseItem.accessory = value;
-            Accessory.OnRightClick += (source, e) => MouseItem.accessory = DefaultItem.accessory;
+            Accessory.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.accessory = value;
+            Accessory.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.accessory = DefaultItem.accessory;
             PAccessory = new UICategory.UIProperty("Accessory:")
             {
                 InputElement = Accessory
@@ -315,8 +392,8 @@ namespace ItemModifier.UI
             AccessoryCategory.AddProperty(PAccessory);
 
             Damage = new UIIntTextbox() { MinThreshold = -1 };
-            Damage.OnValueChanged += (source, value) => MouseItem.damage = value;
-            Damage.OnRightClick += (source, e) => MouseItem.damage = DefaultItem.damage;
+            Damage.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.damage = value;
+            Damage.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.damage = DefaultItem.damage;
             PDamage = new UICategory.UIProperty("Damage:")
             {
                 InputElement = Damage
@@ -326,8 +403,8 @@ namespace ItemModifier.UI
             WeaponsCategory.AddProperty(PDamage);
 
             Critical = new UIIntTextbox();
-            Critical.OnValueChanged += (source, value) => MouseItem.crit = value;
-            Critical.OnRightClick += (source, e) => MouseItem.crit = DefaultItem.crit;
+            Critical.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.crit = value;
+            Critical.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.crit = DefaultItem.crit;
             PCritical = new UICategory.UIProperty("Crit Chance:")
             {
                 InputElement = Critical
@@ -337,8 +414,8 @@ namespace ItemModifier.UI
             WeaponsCategory.AddProperty(PCritical);
 
             KnockBack = new UIFloatTextbox();
-            KnockBack.OnValueChanged += (source, value) => MouseItem.knockBack = value;
-            KnockBack.OnRightClick += (source, e) => MouseItem.knockBack = DefaultItem.knockBack;
+            KnockBack.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.knockBack = value;
+            KnockBack.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.knockBack = DefaultItem.knockBack;
             PKnockBack = new UICategory.UIProperty("KnockBack:")
             {
                 InputElement = KnockBack
@@ -348,8 +425,8 @@ namespace ItemModifier.UI
             WeaponsCategory.AddProperty(PKnockBack);
 
             Shoot = new UIIntTextbox(0, ProjectileLoader.ProjectileCount - 1) { Sign = false, Negatable = false };
-            Shoot.OnValueChanged += (source, value) => MouseItem.shoot = value;
-            Shoot.OnRightClick += (source, e) => MouseItem.shoot = DefaultItem.shoot;
+            Shoot.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.shoot = value;
+            Shoot.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.shoot = DefaultItem.shoot;
             PShoot = new UICategory.UIProperty("Projectile Shot:")
             {
                 InputElement = Shoot
@@ -359,8 +436,8 @@ namespace ItemModifier.UI
             WeaponsCategory.AddProperty(PShoot);
 
             ShootSpeed = new UIFloatTextbox();
-            ShootSpeed.OnValueChanged += (source, value) => MouseItem.shootSpeed = value;
-            ShootSpeed.OnRightClick += (source, e) => MouseItem.shootSpeed = DefaultItem.shootSpeed;
+            ShootSpeed.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.shootSpeed = value;
+            ShootSpeed.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.shootSpeed = DefaultItem.shootSpeed;
             PShootSpeed = new UICategory.UIProperty("Shoot Speed:")
             {
                 InputElement = ShootSpeed
@@ -370,8 +447,8 @@ namespace ItemModifier.UI
             WeaponsCategory.AddProperty(PShootSpeed);
 
             Tile = new UIIntTextbox(-1, TileLoader.TileCount - 1);
-            Tile.OnValueChanged += (source, value) => MouseItem.createTile = value;
-            Tile.OnRightClick += (source, e) => MouseItem.createTile = DefaultItem.createTile;
+            Tile.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.createTile = value;
+            Tile.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.createTile = DefaultItem.createTile;
             PTile = new UICategory.UIProperty("Place Tile:")
             {
                 InputElement = Tile
@@ -380,8 +457,8 @@ namespace ItemModifier.UI
             AllCategory.AddProperty(PTile);
 
             TileBoost = new UIIntTextbox();
-            TileBoost.OnValueChanged += (source, value) => MouseItem.tileBoost = value;
-            TileBoost.OnRightClick += (source, e) => MouseItem.tileBoost = DefaultItem.tileBoost;
+            TileBoost.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.tileBoost = value;
+            TileBoost.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.tileBoost = DefaultItem.tileBoost;
             PTileBoost = new UICategory.UIProperty("Added Range:")
             {
                 InputElement = TileBoost
@@ -390,8 +467,8 @@ namespace ItemModifier.UI
             AllCategory.AddProperty(PTileBoost);
 
             Buff = new UIIntTextbox(0, BuffLoader.BuffCount - 1) { Sign = false, Negatable = false };
-            Buff.OnValueChanged += (source, value) => MouseItem.buffType = value;
-            Buff.OnRightClick += (source, e) => MouseItem.buffType = DefaultItem.buffType;
+            Buff.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.buffType = value;
+            Buff.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.buffType = DefaultItem.buffType;
             PBuff = new UICategory.UIProperty("Buff Inflicted:")
             {
                 InputElement = Buff
@@ -401,8 +478,8 @@ namespace ItemModifier.UI
             PotionsCategory.AddProperty(PBuff);
 
             BuffTime = new UIIntTextbox() { Sign = false, Negatable = false };
-            BuffTime.OnValueChanged += (source, value) => MouseItem.buffTime = value;
-            BuffTime.OnRightClick += (source, e) => MouseItem.buffTime = DefaultItem.buffTime;
+            BuffTime.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.buffTime = value;
+            BuffTime.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.buffTime = DefaultItem.buffTime;
             PBuffTime = new UICategory.UIProperty("Buff Duration:")
             {
                 InputElement = BuffTime
@@ -412,8 +489,8 @@ namespace ItemModifier.UI
             PotionsCategory.AddProperty(PBuffTime);
 
             HealHP = new UIIntTextbox() { Sign = false, Negatable = false };
-            HealHP.OnValueChanged += (source, value) => MouseItem.healLife = value;
-            HealHP.OnRightClick += (source, e) => MouseItem.healLife = DefaultItem.healLife;
+            HealHP.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.healLife = value;
+            HealHP.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.healLife = DefaultItem.healLife;
             PHealHP = new UICategory.UIProperty("HP Healed:")
             {
                 InputElement = HealHP
@@ -423,8 +500,8 @@ namespace ItemModifier.UI
             PotionsCategory.AddProperty(PHealHP);
 
             HealMP = new UIIntTextbox() { Sign = false, Negatable = false };
-            HealMP.OnValueChanged += (source, value) => MouseItem.healMana = value;
-            HealMP.OnRightClick += (source, e) => MouseItem.healMana = DefaultItem.healMana;
+            HealMP.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.healMana = value;
+            HealMP.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.healMana = DefaultItem.healMana;
             PHealMP = new UICategory.UIProperty("Mana Healed:")
             {
                 InputElement = HealMP
@@ -434,8 +511,8 @@ namespace ItemModifier.UI
             PotionsCategory.AddProperty(PHealMP);
 
             AxePower = new UIIntTextbox() { Sign = false, Negatable = false };
-            AxePower.OnValueChanged += (source, value) => MouseItem.axe = value;
-            AxePower.OnRightClick += (source, e) => MouseItem.axe = DefaultItem.axe;
+            AxePower.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.axe = value;
+            AxePower.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.axe = DefaultItem.axe;
             PAxePower = new UICategory.UIProperty("Axe Power:")
             {
                 InputElement = AxePower
@@ -445,8 +522,8 @@ namespace ItemModifier.UI
             ToolsCategory.AddProperty(PAxePower);
 
             PickaxePower = new UIIntTextbox() { Sign = false, Negatable = false };
-            PickaxePower.OnValueChanged += (source, value) => MouseItem.pick = value;
-            PickaxePower.OnRightClick += (source, e) => MouseItem.pick = DefaultItem.pick;
+            PickaxePower.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.pick = value;
+            PickaxePower.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.pick = DefaultItem.pick;
             PPickaxePower = new UICategory.UIProperty("Pickaxe Power:")
             {
                 InputElement = PickaxePower
@@ -456,8 +533,8 @@ namespace ItemModifier.UI
             ToolsCategory.AddProperty(PPickaxePower);
 
             HammerPower = new UIIntTextbox() { Sign = false, Negatable = false };
-            HammerPower.OnValueChanged += (source, value) => MouseItem.hammer = value;
-            HammerPower.OnRightClick += (source, e) => MouseItem.hammer = DefaultItem.hammer;
+            HammerPower.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.hammer = value;
+            HammerPower.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.hammer = DefaultItem.hammer;
             PHammerPower = new UICategory.UIProperty("Hammer Power;")
             {
                 InputElement = HammerPower
@@ -467,8 +544,8 @@ namespace ItemModifier.UI
             ToolsCategory.AddProperty(PHammerPower);
 
             Stack = new UIIntTextbox() { Sign = false, Negatable = false };
-            Stack.OnValueChanged += (source, value) => MouseItem.stack = value;
-            Stack.OnRightClick += (source, e) => MouseItem.stack = DefaultItem.stack;
+            Stack.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.stack = value;
+            Stack.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.stack = DefaultItem.stack;
             PStack = new UICategory.UIProperty("Amount:")
             {
                 InputElement = Stack
@@ -476,8 +553,8 @@ namespace ItemModifier.UI
             AllCategory.AddProperty(PStack);
 
             MaxStack = new UIIntTextbox() { Sign = false, Negatable = false };
-            MaxStack.OnValueChanged += (source, value) => MouseItem.maxStack = value;
-            MaxStack.OnRightClick += (source, e) => MouseItem.maxStack = DefaultItem.maxStack;
+            MaxStack.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.maxStack = value;
+            MaxStack.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.maxStack = DefaultItem.maxStack;
             PMaxStack = new UICategory.UIProperty("Max Stack:")
             {
                 InputElement = MaxStack
@@ -486,8 +563,8 @@ namespace ItemModifier.UI
             AllCategory.AddProperty(PMaxStack);
 
             UseAnimation = new UIIntTextbox() { Sign = false, Negatable = false };
-            UseAnimation.OnValueChanged += (source, value) => MouseItem.useAnimation = value;
-            UseAnimation.OnRightClick += (source, e) => MouseItem.useAnimation = DefaultItem.useAnimation;
+            UseAnimation.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.useAnimation = value;
+            UseAnimation.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.useAnimation = DefaultItem.useAnimation;
             PUseAnimation = new UICategory.UIProperty("Animation Duration:")
             {
                 InputElement = UseAnimation
@@ -498,8 +575,8 @@ namespace ItemModifier.UI
             WeaponsCategory.AddProperty(PUseAnimation);
 
             UseTime = new UIIntTextbox() { Sign = false, Negatable = false };
-            UseTime.OnValueChanged += (source, value) => MouseItem.useTime = value;
-            UseTime.OnRightClick += (source, e) => MouseItem.useTime = DefaultItem.useTime;
+            UseTime.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.useTime = value;
+            UseTime.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.useTime = DefaultItem.useTime;
             PUseTime = new UICategory.UIProperty("Use Duration:")
             {
                 InputElement = UseTime
@@ -510,8 +587,8 @@ namespace ItemModifier.UI
             WeaponsCategory.AddProperty(PUseTime);
 
             Defense = new UIIntTextbox();
-            Defense.OnValueChanged += (source, value) => MouseItem.defense = value;
-            Defense.OnRightClick += (source, e) => MouseItem.defense = DefaultItem.defense;
+            Defense.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.defense = value;
+            Defense.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.defense = DefaultItem.defense;
             PDefense = new UICategory.UIProperty("Defense:")
             {
                 InputElement = Defense
@@ -522,8 +599,8 @@ namespace ItemModifier.UI
             AccessoryCategory.AddProperty(PDefense);
 
             FishingPower = new UIIntTextbox();
-            FishingPower.OnValueChanged += (source, value) => MouseItem.fishingPole = value;
-            FishingPower.OnRightClick += (source, e) => MouseItem.fishingPole = DefaultItem.fishingPole;
+            FishingPower.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.fishingPole = value;
+            FishingPower.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.fishingPole = DefaultItem.fishingPole;
             PFishingPower = new UICategory.UIProperty("Fishing Power")
             {
                 InputElement = FishingPower
@@ -533,8 +610,8 @@ namespace ItemModifier.UI
             ToolsCategory.AddProperty(PFishingPower);
 
             Scale = new UIFloatTextbox();
-            Scale.OnValueChanged += (source, value) => MouseItem.scale = value;
-            Scale.OnRightClick += (source, e) => MouseItem.scale = DefaultItem.scale;
+            Scale.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.scale = value;
+            Scale.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.scale = DefaultItem.scale;
             PScale = new UICategory.UIProperty("Item Scale")
             {
                 InputElement = Scale
@@ -543,7 +620,7 @@ namespace ItemModifier.UI
             AllCategory.AddProperty(PScale);
 
             UseStyle = new UISelection(default, "Swing", "Drink", "Stab", "Above Head", "Held");
-            UseStyle.OnSelectedChanged += (source, newSelected) => MouseItem.useStyle = UseStyle.Choices.FindIndex(choice => choice.ID == newSelected.ID) + 1;
+            UseStyle.OnSelectedChanged += (source, newSelected) => Main.LocalPlayer.HeldItem.useStyle = UseStyle.Choices.FindIndex(choice => choice.ID == newSelected.ID) + 1;
             PUseStyle = new UICategory.UIProperty("Use Style")
             {
                 InputElement = UseStyle
@@ -560,9 +637,10 @@ namespace ItemModifier.UI
                 Height = new StyleDimension(16f),
                 Top = new StyleDimension(-19f)
             };
-            ToggleLiveSync.Left = new StyleDimension(Width.Pixels - 22f - ToggleLiveSync.Width.Pixels); // -16 for CloseButton, -3 for spacing before close button, -3 for spacing between this button and close button
+            ToggleLiveSync.Left = new StyleDimension(Width.Pixels - CloseButton.Width.Pixels - ToggleLiveSync.Width.Pixels - 6); // -3 spacing, -3 spacing
             ToggleLiveSync.Parent = this;
             ToggleLiveSync.OnLeftClick += (source, e) => { LiveSync = !LiveSync; if (!LiveSync) GrayBG.Visible = false; };
+            ToggleLiveSync.WhileMouseHover += (source, e) => ItemModifier.Instance.Tooltip = "Toggle Live Sync";
 
             GrayBG = new UIContainer(new Color(47, 79, 79, 150), new Vector2(InnerDimensions.Width, InnerDimensions.Height))
             {
@@ -576,6 +654,17 @@ namespace ItemModifier.UI
             LockImage.Top = new StyleDimension((GrayBG.Height.Pixels - LockImage.Height.Pixels) * 0.5f);
             LockImage.Parent = GrayBG;
 
+            ClearModifications = new UIImageButton(ItemModifier.Textures.ClearModifications)
+            {
+                Width = new StyleDimension(16f),
+                Height = new StyleDimension(16f),
+                Top = new StyleDimension(-19f)
+            };
+            ClearModifications.Left = new StyleDimension(Width.Pixels - CloseButton.Width.Pixels - ToggleLiveSync.Width.Pixels - ClearModifications.Width.Pixels - 9); // -3 spacing, -3 spacing, -3 spacing
+            ClearModifications.Parent = this;
+            ClearModifications.OnLeftClick += (source, e) => Main.LocalPlayer.HeldItem.SetDefaults(Main.LocalPlayer.HeldItem.type);
+            ClearModifications.WhileMouseHover += (source, e) => ItemModifier.Instance.Tooltip = "Clear Modifications";
+
             AllCategory.Visible = true;
             UpdateCategory();
         }
@@ -583,49 +672,48 @@ namespace ItemModifier.UI
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            var MouseItem = Main.LocalPlayer.HeldItem;
-            if (DefaultItem.type != MouseItem.type) DefaultItem.SetDefaults(MouseItem.type);
+            if (DefaultItem.type != Main.LocalPlayer.HeldItem.type) DefaultItem.SetDefaults(Main.LocalPlayer.HeldItem.type);
             if (LiveSync)
             {
-                AutoReuse.Value = MouseItem.autoReuse;
-                Consumable.Value = MouseItem.consumable;
-                Potion.Value = MouseItem.potion;
-                Accessory.Value = MouseItem.accessory;
-                DamageType.Choices[0].Value = MouseItem.melee;
-                DamageType.Choices[1].Value = MouseItem.magic;
-                DamageType.Choices[2].Value = MouseItem.ranged;
-                DamageType.Choices[3].Value = MouseItem.summon;
-                DamageType.Choices[4].Value = MouseItem.thrown;
-                if (!Shoot.Focused) Shoot.Value = MouseItem.shoot;
-                if (!Tile.Focused) Tile.Value = MouseItem.createTile;
-                if (!TileBoost.Focused) TileBoost.Value = MouseItem.tileBoost;
-                if (!Buff.Focused) Buff.Value = MouseItem.buffType;
-                if (!BuffTime.Focused) BuffTime.Value = MouseItem.buffTime;
-                if (!Damage.Focused) Damage.Value = MouseItem.damage;
-                if (!Critical.Focused) Critical.Value = MouseItem.crit;
-                if (!ShootSpeed.Focused) ShootSpeed.Value = MouseItem.shootSpeed;
-                if (!KnockBack.Focused) KnockBack.Value = MouseItem.knockBack;
-                if (!HealHP.Focused) HealHP.Value = MouseItem.healLife;
-                if (!HealMP.Focused) HealMP.Value = MouseItem.healMana;
-                if (!AxePower.Focused) AxePower.Value = MouseItem.axe;
-                if (!PickaxePower.Focused) PickaxePower.Value = MouseItem.pick;
-                if (!HammerPower.Focused) HammerPower.Value = MouseItem.hammer;
-                if (!Stack.Focused) Stack.Value = MouseItem.stack;
-                if (!MaxStack.Focused) MaxStack.Value = MouseItem.maxStack;
-                if (!UseAnimation.Focused) UseAnimation.Value = MouseItem.useAnimation;
-                if (!UseTime.Focused) UseTime.Value = MouseItem.useTime;
-                if (!Defense.Focused) Defense.Value = MouseItem.defense;
-                if (!FishingPower.Focused) FishingPower.Value = MouseItem.fishingPole;
-                if (!Scale.Focused) Scale.Value = MouseItem.scale;
-                if (MouseItem.useStyle == 0)
+                AutoReuse.Value = Main.LocalPlayer.HeldItem.autoReuse;
+                Consumable.Value = Main.LocalPlayer.HeldItem.consumable;
+                Potion.Value = Main.LocalPlayer.HeldItem.potion;
+                Accessory.Value = Main.LocalPlayer.HeldItem.accessory;
+                DamageType.Choices[0].Value = Main.LocalPlayer.HeldItem.melee;
+                DamageType.Choices[1].Value = Main.LocalPlayer.HeldItem.magic;
+                DamageType.Choices[2].Value = Main.LocalPlayer.HeldItem.ranged;
+                DamageType.Choices[3].Value = Main.LocalPlayer.HeldItem.summon;
+                DamageType.Choices[4].Value = Main.LocalPlayer.HeldItem.thrown;
+                if (!Shoot.Focused) Shoot.Value = Main.LocalPlayer.HeldItem.shoot;
+                if (!Tile.Focused) Tile.Value = Main.LocalPlayer.HeldItem.createTile;
+                if (!TileBoost.Focused) TileBoost.Value = Main.LocalPlayer.HeldItem.tileBoost;
+                if (!Buff.Focused) Buff.Value = Main.LocalPlayer.HeldItem.buffType;
+                if (!BuffTime.Focused) BuffTime.Value = Main.LocalPlayer.HeldItem.buffTime;
+                if (!Damage.Focused) Damage.Value = Main.LocalPlayer.HeldItem.damage;
+                if (!Critical.Focused) Critical.Value = Main.LocalPlayer.HeldItem.crit;
+                if (!ShootSpeed.Focused) ShootSpeed.Value = Main.LocalPlayer.HeldItem.shootSpeed;
+                if (!KnockBack.Focused) KnockBack.Value = Main.LocalPlayer.HeldItem.knockBack;
+                if (!HealHP.Focused) HealHP.Value = Main.LocalPlayer.HeldItem.healLife;
+                if (!HealMP.Focused) HealMP.Value = Main.LocalPlayer.HeldItem.healMana;
+                if (!AxePower.Focused) AxePower.Value = Main.LocalPlayer.HeldItem.axe;
+                if (!PickaxePower.Focused) PickaxePower.Value = Main.LocalPlayer.HeldItem.pick;
+                if (!HammerPower.Focused) HammerPower.Value = Main.LocalPlayer.HeldItem.hammer;
+                if (!Stack.Focused) Stack.Value = Main.LocalPlayer.HeldItem.stack;
+                if (!MaxStack.Focused) MaxStack.Value = Main.LocalPlayer.HeldItem.maxStack;
+                if (!UseAnimation.Focused) UseAnimation.Value = Main.LocalPlayer.HeldItem.useAnimation;
+                if (!UseTime.Focused) UseTime.Value = Main.LocalPlayer.HeldItem.useTime;
+                if (!Defense.Focused) Defense.Value = Main.LocalPlayer.HeldItem.defense;
+                if (!FishingPower.Focused) FishingPower.Value = Main.LocalPlayer.HeldItem.fishingPole;
+                if (!Scale.Focused) Scale.Value = Main.LocalPlayer.HeldItem.scale;
+                if (Main.LocalPlayer.HeldItem.useStyle == 0)
                 {
                     UseStyle.DeselectAll();
                 }
                 else
                 {
-                    UseStyle.Select(MouseItem.useStyle - 1);
+                    UseStyle.Select(Main.LocalPlayer.HeldItem.useStyle - 1);
                 }
-                GrayBG.Visible = MouseItem.type == 0;
+                GrayBG.Visible = Main.LocalPlayer.HeldItem.type == 0;
             }
         }
 

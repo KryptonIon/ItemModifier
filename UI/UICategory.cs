@@ -76,14 +76,14 @@ namespace ItemModifier.UI
         }
 
         public List<UIProperty> Properties = new List<UIProperty>();
+
         public string Name { get; set; }
+        
         public float RowSpacing { get; set; } = 0;
+       
         public float ColumnSpacing { get; set; } = 8;
 
-        public UICategory(string Name)
-        {
-            this.Name = Name;
-        }
+        public UICategory(string Name) => this.Name = Name;
 
         public void AddProperty(UIProperty Property)
         {

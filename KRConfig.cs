@@ -7,6 +7,7 @@ namespace ItemModifier
     public class KRConfig : ModConfig
     {
         public override ConfigScope Mode => ConfigScope.ServerSide;
+
         public static KRConfig Instance;
 
         [Label("HelpMessage")]

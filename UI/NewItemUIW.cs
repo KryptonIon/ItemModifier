@@ -36,15 +36,25 @@ namespace ItemModifier.UI
         }
 
         internal UICheckbox UseModifiedProperties;
+
         internal UIText Label1; // Use Modified Properties
+        
         internal UIText Label2; // No Matches
+        
         internal UITextbox ItemNameTextbox;
+        
         internal UIIntTextbox ItemIDTextbox;
+        
         internal UIImageButton Generate;
+        
         internal UIItemDisplay ItemDisplay;
+        
         internal UIContainer Matches;
+        
         internal ItemMatch[] ItemMatches = new ItemMatch[39];
+        
         private int columnIndex;
+        
         public int ColumnIndex
         {
             get => columnIndex;
@@ -61,7 +71,9 @@ namespace ItemModifier.UI
                 }
             }
         }
+        
         private int maxColumnIndex;
+        
         private List<int> matchIDs;
 
         public NewItemUIW() : base("New Item") => (InheritVisibility, Visible, Width, Height) = (false, false, new StyleDimension(425f), new StyleDimension(100f));

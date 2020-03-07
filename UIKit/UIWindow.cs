@@ -74,8 +74,8 @@ namespace ItemModifier.UIKit
         {
             if (Dragging)
             {
-                Left = new StyleDimension(Main.mouseX - DragPos.X, Left.Pixels);
-                Top = new StyleDimension(Main.mouseY - DragPos.Y, Top.Pixels);
+                Left = new StyleDimension(Main.mouseX - DragPos.X, Left.Percent);
+                Top = new StyleDimension(Main.mouseY - DragPos.Y, Top.Percent);
                 Recalculate();
             }
             Point dimensionsPoint = new Point((int)Dimensions.X, (int)Dimensions.Y);
@@ -105,7 +105,7 @@ namespace ItemModifier.UIKit
 
         public override void LeftMouseDown(UIMouseEventArgs e)
         {
-            if (Draggable && e.MousePosition.X == 2 + TitleBarHeight)
+            if (Draggable && TitleBarDimensions.Value.Rectangle.Contains(e.MousePosition.ToPoint()))
             {
                 DragPos = new Vector2(e.MousePosition.X - Left.Pixels, e.MousePosition.Y - Top.Pixels);
                 Dragging = true;
@@ -127,8 +127,7 @@ namespace ItemModifier.UIKit
                 CloseButton.Left = new StyleDimension(-CloseButton.Width.Pixels - 3f, 1f);
                 CloseButton.Top = new StyleDimension(UseTitle ? -19f : 2f);
                 CloseButton.OnLeftClick += (source, e) => Visible = false;
-                CloseButton.OnMouseOver += (source, e) => ItemModifier.Instance.Tooltip = "Close";
-                CloseButton.OnMouseOut += (source, e) => ItemModifier.Instance.Tooltip = "";
+                CloseButton.WhileMouseHover += (source, e) => ItemModifier.Instance.Tooltip = "Close";
                 CloseButton.Parent = this;
             }
         }

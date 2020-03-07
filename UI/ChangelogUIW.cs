@@ -8,17 +8,29 @@ namespace ItemModifier.UI
     public class ChangelogUIW : UIWindow
     {
         public event UIEventHandler<int> OnSelectedIndexChanged;
+
         private string Website { get; set; }
+
         internal UIText ChangelogVersion;
+        
         internal UIImageButton PreviousButton;
+        
         internal UIImageButton NextButton;
+        
         internal UIImageButton ChangelogWebsite;
+        
         internal UIElement TextContainer;
+        
         internal UIImage UpArrowScroll;
+        
         internal UIImage DownArrowScroll;
+        
         internal UIText[] ChangelogText = new UIText[16];
+        
         public ItemModifier.Changelog CurrentChangelog { get; private set; }
+        
         private int changelogIndex;
+        
         public int ChangelogIndex
         {
             get => changelogIndex;
@@ -30,7 +42,9 @@ namespace ItemModifier.UI
                 OnSelectedIndexChanged?.Invoke(this, changelogIndex);
             }
         }
+        
         private int lineIndex;
+        
         public int LineIndex
         {
             get => lineIndex;
@@ -44,7 +58,9 @@ namespace ItemModifier.UI
                 DownArrowScroll.Visible = LineIndex < MaxLineIndex;
             }
         }
+        
         private int maxLineIndex;
+        
         public int MaxLineIndex
         {
             get => maxLineIndex;
