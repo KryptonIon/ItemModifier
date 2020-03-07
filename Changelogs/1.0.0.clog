@@ -1,0 +1,16 @@
+1.0.0—Added "ShowProperties" Setting
+Added "ShowUnnecessary" Setting
+Added "ShowPID" Setting
+Added "CreateTile" Command
+Added "HealLife" Command
+Added "HealMana" Command
+Added "Shoot" Command
+Added "ShootSpeed" Command
+Added "UseTime" Command
+Added "UseAnimation" Command
+Added "GenerateItem" Command
+Added "Set" Command
+Added "Properties" Command
+Added "Settings" Command
+Added Utilities
+Added EnterWorld MessageDemo Update;https://kryptonion.github.io/ItemModifier/Changelogs/1.0.0/

@@ -1,6 +1,5 @@
 ﻿using ItemModifier.UIKit;
 using Microsoft.Xna.Framework;
-using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
@@ -301,7 +300,6 @@ namespace ItemModifier.UI
             {
                 InputElement = DamageType
             };
-            PDamageType.Recalculate();
             AllCategory.AddProperty(PDamageType);
             WeaponsCategory.AddProperty(PDamageType);
 
@@ -619,13 +617,13 @@ namespace ItemModifier.UI
                 if (!Defense.Focused) Defense.Value = MouseItem.defense;
                 if (!FishingPower.Focused) FishingPower.Value = MouseItem.fishingPole;
                 if (!Scale.Focused) Scale.Value = MouseItem.scale;
-                try
-                {
-                    UseStyle.Select(MouseItem.useStyle - 1);
-                }
-                catch (IndexOutOfRangeException)
+                if (MouseItem.useStyle == 0)
                 {
                     UseStyle.DeselectAll();
+                }
+                else
+                {
+                    UseStyle.Select(MouseItem.useStyle - 1);
                 }
                 GrayBG.Visible = MouseItem.type == 0;
             }

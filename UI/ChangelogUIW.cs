@@ -25,7 +25,7 @@ namespace ItemModifier.UI
 
             set
             {
-                changelogIndex = value > ItemModifier.Changelog.Changelogs.Count - 1 ? 0 : value < 0 ? ItemModifier.Changelog.Changelogs.Count - 1 : value;
+                changelogIndex = value > ItemModifier.Changelogs.Count - 1 ? 0 : value < 0 ? ItemModifier.Changelogs.Count - 1 : value;
                 UpdateChangelog();
                 OnSelectedIndexChanged?.Invoke(this, changelogIndex);
             }
@@ -39,7 +39,7 @@ namespace ItemModifier.UI
             {
                 lineIndex = value < 0 ? 0 : value > MaxLineIndex ? MaxLineIndex : value;
                 for (int i = 0; i < ChangelogText.Length; i++) ChangelogText[i].Text = "";
-                for (int i = 0; i < Math.Min(ChangelogText.Length, CurrentChangelog.RawUpdate.Count); i++) ChangelogText[i].Text = CurrentChangelog.RawUpdate[i + LineIndex];
+                for (int i = 0; i < Math.Min(ChangelogText.Length, CurrentChangelog.Raw.Count); i++) ChangelogText[i].Text = CurrentChangelog.Raw[i + LineIndex];
                 UpArrowScroll.Visible = LineIndex > 0;
                 DownArrowScroll.Visible = LineIndex < MaxLineIndex;
             }
@@ -62,10 +62,10 @@ namespace ItemModifier.UI
             base.OnInitialize();
             ChangelogVersion = new UIText("There's a problem")
             {
-                SkipDescenderCheck = true,
-                Left = new StyleDimension(0f, 0.5f),
-                Parent = this
+                SkipDescenderCheck = true
             };
+            ChangelogVersion.Left = new StyleDimension(-ChangelogVersion.Width.Pixels * 0.5f, 0.5f);
+            ChangelogVersion.Parent = this;
 
             PreviousButton = new UIImageButton(ItemModifier.Textures.LeftArrow, new Color(0, 100, 255));
             PreviousButton.OnLeftClick += (source, e) => ChangelogIndex -= 1;
@@ -171,11 +171,11 @@ namespace ItemModifier.UI
 
         private void UpdateChangelog()
         {
-            CurrentChangelog = ItemModifier.Changelog.Changelogs[ChangelogIndex];
+            CurrentChangelog = ItemModifier.Changelogs[ChangelogIndex];
             ChangelogVersion.Text = CurrentChangelog.Version.ToString() + " " + CurrentChangelog.Title;
-            ChangelogVersion.Left = new StyleDimension(-ChangelogVersion.Width.Pixels * 0.5f);
+            ChangelogVersion.Left = new StyleDimension(-ChangelogVersion.Width.Pixels * 0.5f, 0.5f);
             Website = CurrentChangelog.Website;
-            MaxLineIndex = CurrentChangelog.RawUpdate.Count - ChangelogText.Length;
+            MaxLineIndex = CurrentChangelog.Raw.Count - ChangelogText.Length;
             LineIndex = 0;
         }
     }

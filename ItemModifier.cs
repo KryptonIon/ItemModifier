@@ -1,8 +1,8 @@
 ﻿using ItemModifier.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using System.Collections.Generic;
+using System.IO;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.UI;
@@ -13,57 +13,30 @@ namespace ItemModifier
     {
         public class Changelog
         {
-            public static List<Changelog> Changelogs;
-
-            public Version Version { get; }
+            public string Version { get; }
 
             public string Title { get; }
 
             public string Website { get; }
 
-            public Changelog(Version Version, List<string> RawUpdate, List<string> MarkdownUpdate, string Title = "", string Website = "")
-            {
-                this.Version = Version;
-                this.Title = Title;
-                this.Website = Website;
-                this.RawUpdate = RawUpdate;
-                this.MarkdownUpdate = MarkdownUpdate;
-            }
+            public List<string> Raw { get; }
 
-            public List<string> RawUpdate { get; }
-
-            public List<string> MarkdownUpdate { get; }
-
-            internal static void Load()
-            {
-                Changelogs = new List<Changelog>
-                {
-                    new Changelog(new Version(1, 0, 0), new List<string> { "Added \"ShowProperties\" Setting", "Added \"ShowUnnecessary\" Setting", "Added \"ShowPID\" Setting", "Added \"CreateTile\" Command", "Added \"HealLife\" Command", "Added \"HealMana\" Command", "Added \"Shoot\" Command", "Added \"ShootSpeed\" Command", "Added \"UseTime\" Command", "Added \"UseAnimation\" Command", "Added \"GenerateItem\" Command", "Added \"Set\" Command", "Added \"Properties\" Command", "Added \"Settings\" Command", "Added Utilities", "Added EnterWorld Message" }, new List<string> { "# Additions", "> Settings:", "* Added `ShowProperties` Setting", "* Added `ShowUnnecessary` Setting", "* Added `ShowPID` Setting", "> Commands:", "* Added `CreateTile` Command", "* Added `HealLife` Command", "* Added `HealMana` Command", "* Added `Shoot` Command", "* Added `ShootSpeed` Command", "* Added `UseTime` Command", "* Added `UseAnimation` Command", "* Added `GenerateItem` Command", "* Added `Set` Command", "* Added `Properties` Command", "* Added `Settings` Command", "> Others:", "* Added Utilities", "* Added EnterWorld Message" }, "Demo Update", "https://github.com/KryptonIon/ItemModifier/wiki/1.0.0"),
-                    new Changelog(new Version(1, 0, 1), new List<string> { "Changed Description" }, new List<string> { "# Changes", "* Changed Description" }, "Fixes & Changes Update 1", "https://github.com/KryptonIon/ItemModifier/wiki/1.0.1"),
-                    new Changelog(new Version(1, 0, 2), new List<string> { "Changed Mod Homepage from Github Repository to Terraria Forums" }, new List<string> { "# Changes", "* Changed Mod Homepage from Github Repository to Terraria Forums" }, "Fixes & Changes Update 2", "https://github.com/KryptonIon/ItemModifier/wiki/1.0.2"),
-                    new Changelog(new Version(1, 0, 3), new List<string> { "Changed Description" }, new List<string> { "# Changes", "* Changed Description" }, "Fixes & Changes Update 3", "https://github.com/KryptonIon/ItemModifier/wiki/1.0.3"),
-                    new Changelog(new Version(1, 0, 4), new List<string> { "Added ShowEWMessage Setting", "Added Another EnterWorld Message", "Changed Description" }, new List<string> { "# Additions", "> Settings:", "* Added `ShowEWMessage` Setting", "> Others:", "* Added Another EnterWorld Message", "", "# Changes", "* Changed Description" }, "Mini Update 1", "https://github.com/KryptonIon/ItemModifier/wiki/1.0.4"),
-                    new Changelog(new Version(1, 0, 5), new List<string> { "Added \"TileBoost(+Range)\" Command", "Added \"Pickaxe Power\" Command", "Added \"Axe Power\" Command", "Added \"Hammer Power\" Command", "Added \"Knockback\" Command", "Added \"Damage\" Command", "Added \"Critical Strike Chance\" Command", "Added \"AutoReuse\" Command", "Added \"Reset\" Command", "Added Settings List", "Changed \"Properties\" Command trigger from \"p\" to \"properties\"", "Changed Description", "Fixed EnterWorld Message 2 being white" }, new List<string> { "# Additions", "> Commands:", "* Added `TileBoost(+Range)` Command", "* Added `Pickaxe Power` Command", "* Added `Axe Power` Command", "* Added `Hammer Power` Command", "* Added `Knockback` Command", "* Added `Damage` Command", "* Added `Critical Strike Chance` Command", "* Added `AutoReuse` Command", "* Added `Reset` Command", "* Added Settings List(/settings)", "", "# Changes", "* Changed `Properties` Command trigger from `p` to `properties`", "* Changed Description", "", "# Fixes", "* Fixed EnterWorld Message 2 being white" }, "Tweaks Update 1", "https://github.com/KryptonIon/ItemModifier/wiki/1.0.5"),
-                    new Changelog(new Version(1, 0, 6), new List<string> { "Updated Parameters of \"/gi params\" and \"/set params\" (Sorry, forgot to do so last update)" }, new List<string> { "# Changes", "* Changed Parameters of `/gi` params and `/set params` (Sorry, forgot to do so last update)" }, "Fixes & Changes Update 4", "https://github.com/KryptonIon/ItemModifier/wiki/1.0.6"),
-                    new Changelog(new Version(1, 0, 7), new List<string> { "Added Wiki Command", "Changed Enter World Messages", "Properties will refer to TileBoost as both +Range and TileBoost", "Description will now contain changelog of current version", "Removed ShowPID Setting", "Fixed Properties not having colons when Requesting Properties", "Fixed Properties not having colons when using Properties Command", "Fixed TileBoost not being properly Capitalized when Requesting Properties" }, new List<string> { "# Additions", "> Commands:", "Added `Wiki` Command", "", "# Changes", "Changed Enter World Messages", "Properties will refer to TileBoost as both +Range and TileBoost", "Description will now contain changelog of current version", "Removed ShowPID Setting", "", "# Fixes", "Fixed Properties not having colons when Requesting Properties", "Fixed Properties not having colons when using Properties Command", "Fixed TileBoost not being properly Capitalized when Requesting Properties" }, "Wiki Update", "https://github.com/KryptonIon/ItemModifier/wiki/1.0.7"),
-                    new Changelog(new Version(1, 0, 8), new List<string> { "Added \"AlwaysUseID\" Setting", "Added \"ShowResultList\" Setting", "Added \"GetRandomItem\" Setting", "Added \"ShowMaxStack\" Setting", "Added \"SetItem\" Command", "Added \"ID\" Command", "Added \"Buff\" Command", "Added \"BuffTime\" Command", "Added \"Stack\" Command", "Added \"Potion\" Command", "Added \"Consumable\" Command", "Added \"MaxStack\" Command", "Added new error message(0 shootspeed)(/shootspeed)", "Added Error Codes(Current Code Count: 5)", "Added Command Aliases", "Changed Changelog Format", "Changed GenerateItem Command behavior", "Changed (most)Error Messages", "Changed All Command Example Usages, Fields are now indicated with Brackets[] instead of Angular Brackets<>, Notes are now indicated with Parentheses() instead of Brackets[]", "Changed \"Settings\" Command trigger from \"/setting\" to \"/settings\"", "The ShootSpeed and Knockback Modifier now uses Floating-point numbers(float) instead of Integers(int), which means decimals can now be used", "Changed Settings Parameter from \"/settings settings\" to \"/settings list\"", "Settings Success Message Changed from \"Success! {SettingName} is now {SettingValue}\" to \"{SettingName} set to {SettingValue}\"", "Killed(\"Changed\") Settings Command's AutoCorrect", "(Internal)CSProj file is now removed from the mod(can still be acquired via Github)", "(Internal)Unified modification processes(fixes some inconsistency between commands eg /set and /shoot).", "Fixed Damage Property showing unnecessarily", "Fixed Shoot Command saying tile count rather than projectile count", "Fixed Errors having Reply Color" }, new List<string> { "# Additions", "> Settings:", "* Added `AlwaysUseID` Setting", "* Added `ShowResultList` Setting", "* Added `GetRandomItem` Setting", "* Added `ShowMaxStack` Setting", "> Commands:", "* Added `SetItem` Command", "* Added `ID` Command", "* Added `Buff` Command", "* Added `BuffTime` Command", "* Added `Stack` Command", "* Added `Potion` Command", "* Added `Consumable` Command", "* Added `MaxStack` Command", "> Others:", "* Added new error message(0 shootspeed)(/shootspeed)", "* Added Error Codes(Current Code Count: 5)", "* Added Command Aliases", "", "# Changes", "* Changed Changelog Format", "* Changed GenerateItem Command behavior", "* Changed (most)Error Messages", "* Changed All Command Example Usages, Fields are now indicated with Brackets[] instead of Angular Brackets<>, Notes are now indicated with Parentheses() instead of Brackets[]", "* Changed `Settings` Command trigger from `/setting` to `/settings`", "* The ShootSpeed and Knockback Modifier now uses Floating-point numbers(float) instead of Integers(int), which means decimals can now be used", "* Changed Settings Parameter from `/settings settings` to `/settings list`", "* Settings Success Message Changed from `Success! {SettingName} is now {SettingValue}` to `{SettingName} set to {SettingValue}`", "* Killed(\"Changed\") `Settings` Command's AutoCorrect", "* (Internal)CSProj file is now removed from the mod(can still be acquired via Github)", "* (Internal)Unified modification processes(fixes some inconsistency between commands eg /set and /shoot).", "", "# Fixes", "* Fixed Damage Property showing unnecessarily", "* Fixed Shoot Command saying tile count rather than projectile count", "* Fixed Errors having Reply Color" }, "1.0 Final Update", "https://github.com/KryptonIon/ItemModifier/wiki/1.0.8"),
-                    new Changelog(new Version(1, 0, 8, 1), new List<string> { "Fixed HealLife parsing", "Fixed SetItem $^" }, new List<string> { "# Fixes", "* Fixed HealLife parsing", "* Fixed SetItem $^" }, "Fixes and Changes 5", "https://github.com/KryptonIon/ItemModifier/wiki/1.0.8.1")
-                };
-            }
-
-            internal static void Unload()
-            {
-                Changelogs = null;
-            }
+            public Changelog(string Version, List<string> Raw, string Title = "", string Website = "") => (this.Version, this.Raw, this.Title, this.Website) = (Version, Raw, Title, Website);
 
             public override string ToString()
             {
-                return ToString();
+                return $"{Version} {Title} \n{string.Join("\n", Raw)}";
             }
 
-            public string ToString(bool Raw = true)
+            public static Changelog Read(string Path)
             {
-                return $"{Version} {Title} \n{string.Join("\n", Raw ? RawUpdate : MarkdownUpdate)}";
+                using (MemoryStream mStream = new MemoryStream(ModContent.GetFileBytes(Path)))
+                {
+                    using (BinaryReader reader = new BinaryReader(mStream))
+                    {
+                        return new Changelog(reader.ReadString(), new List<string>(reader.ReadString().Split('\n')), reader.ReadString(), reader.ReadString());
+                    }
+                }
             }
         }
 
@@ -234,12 +207,26 @@ namespace ItemModifier
 
         public byte DimensionsType { get; set; }
 
+        public static List<Changelog> Changelogs { get; private set; }
+
         public override void Load()
         {
             Instance = ModContent.GetInstance<ItemModifier>();
 
             Textures.Load();
-            Changelog.Load();
+            Changelogs = new List<Changelog> {
+                Changelog.Read("ItemModifier/Changelogs/1.0.0.clog"),
+                Changelog.Read("ItemModifier/Changelogs/1.0.1.clog"),
+                Changelog.Read("ItemModifier/Changelogs/1.0.2.clog"),
+                Changelog.Read("ItemModifier/Changelogs/1.0.3.clog"),
+                Changelog.Read("ItemModifier/Changelogs/1.0.4.clog"),
+                Changelog.Read("ItemModifier/Changelogs/1.0.5.clog"),
+                Changelog.Read("ItemModifier/Changelogs/1.0.6.clog"),
+                Changelog.Read("ItemModifier/Changelogs/1.0.7.clog"),
+                Changelog.Read("ItemModifier/Changelogs/1.0.8.clog"),
+                Changelog.Read("ItemModifier/Changelogs/1.0.8.1.clog")
+                //Changelog.Read("ItemModifier/Changelogs/1.1.0.clog")
+            };
 
             if (!Main.dedServ)
             {
@@ -290,7 +277,7 @@ namespace ItemModifier
     {
         public static void CopyItemProperties(this Item Target, Item Origin)
         {
-            //Target.Prefix(Origin.prefix);
+            Target.Prefix(Origin.prefix);
             Target.autoReuse = Origin.autoReuse;
             Target.consumable = Origin.consumable;
             Target.potion = Origin.potion;

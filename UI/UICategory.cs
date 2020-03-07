@@ -20,8 +20,11 @@ namespace ItemModifier.UI
                     RecalculateSize();
                 }
             }
+
             private string label;
+
             private UIElement inputElement;
+
             internal UIElement InputElement
             {
                 get => inputElement;
@@ -31,10 +34,12 @@ namespace ItemModifier.UI
                     inputElement = null;
                     inputElement = value;
                     inputElement.Parent = this;
-                    RecalculateSize();
+                    Recalculate();
                 }
             }
+
             public Vector2 NameSize => KRUtils.MeasureTextAccurate(Label, true);
+
             public Color TextColor { get; set; } = Color.White;
 
             public UIProperty(string Label)
@@ -65,8 +70,8 @@ namespace ItemModifier.UI
 
             public override void Recalculate()
             {
-                RecalculateSize();
                 base.Recalculate();
+                RecalculateSize();
             }
         }
 

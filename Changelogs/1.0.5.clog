@@ -1,0 +1,13 @@
+1.0.5‹Added "TileBoost(+Range)" Command
+Added "Pickaxe Power" Command
+Added "Axe Power" Command
+Added "Hammer Power" Command
+Added "Knockback" Command
+Added "Damage" Command
+Added "Critical Strike Chance" Command
+Added "AutoReuse" Command
+Added "Reset" Command
+Added Settings List
+Changed "Properties" Command trigger from "p" to "properties"
+Changed Description
+Fixed EnterWorld Message 2 being whiteTweaks Update 1;https://kryptonion.github.io/ItemModifier/Changelogs/1.0.5/

@@ -28,7 +28,7 @@ namespace ItemModifier.UIKit
                 set
                 {
                     label = value;
-                    RecalculateSize();
+                    Recalculate();
                 }
             }
             private string label;
@@ -74,15 +74,15 @@ namespace ItemModifier.UIKit
             /// </summary>
             public void RecalculateSize()
             {
-                Vector2 labelSize = KRUtils.MeasureTextAccurate(Label, true);
+                Vector2 labelSize = KRUtils.MeasureTextAccurate(Label, false);
                 Width = new StyleDimension(14f + labelSize.X);
                 Height = new StyleDimension(labelSize.Y);
             }
 
             public override void Recalculate()
             {
-                base.Recalculate();
                 RecalculateSize();
+                base.Recalculate();
             }
 
             protected override void DrawSelf(SpriteBatch sb)
@@ -164,7 +164,7 @@ namespace ItemModifier.UIKit
             UISelectionChoice newChoice = new UISelectionChoice(Label);
             newChoice.OnLeftClick += (source, e) => Select(newChoice);
             newChoice.Top = new StyleDimension(21 * Choices.Count);
-            Height = new StyleDimension(newChoice.Height.Pixels, Height.Percent);
+            Height = new StyleDimension(Height.Pixels + newChoice.Height.Pixels, Height.Percent);
             if (newChoice.Width.Pixels > Width.Pixels) Width = new StyleDimension(newChoice.Width.Pixels, Width.Percent);
             Choices.Add(newChoice);
             newChoice.Parent = this;
