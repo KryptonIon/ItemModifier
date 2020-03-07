@@ -10,19 +10,10 @@ using Terraria.UI.Chat;
 
 namespace ItemModifier.UIKit
 {
-    /// <summary>
-    /// Contains utilities.
-    /// </summary>
     public static class KRUtils
     {
         public static Color UIBackgroundColor { get => new Color(44, 57, 105, 190); }
 
-        /// <summary>
-        /// Measures text(in the MouseText font) more accurately.
-        /// </summary>
-        /// <param name="Text">Text to be measured.</param>
-        /// <param name="SkipDescenderScaling">Wheter the presence of the letters g, j, p, q, Q or y will affect the height.</param>
-        /// <returns>The size of the text in <see cref="Vector2"/>.</returns>
         public static Vector2 MeasureTextAccurate(string Text, bool SkipDescenderScaling = false)
         {
             Vector2 Size = Main.fontMouseText.MeasureString(Text);
@@ -30,32 +21,7 @@ namespace ItemModifier.UIKit
             return Size;
         }
 
-        /// <summary>
-        /// Cuts text exceeding the size limit(left to right).
-        /// </summary>
-        /// <param name="Text">Text to be trimmed.</param>
-        /// <param name="MaxWidth">Max size(X Axis) the text can be.</param>
-        /// <returns>The trimmed text.</returns>
         public static string TrimText(string Text, float MaxWidth, DynamicSpriteFont font)
-        {
-            string result = "";
-            float size = 0;
-            float charSize;
-            for (int j = 0; j < Text.Length && size + (charSize = font.GetCharacterMetrics(Text[j]).KernedWidth) < MaxWidth; j++)
-            {
-                size += charSize;
-                result += Text[j];
-            }
-            return result;
-        }
-
-        /// <summary>
-        /// Cuts text exceeding the size limit(right to left, returned text will still be in normal order).
-        /// </summary>
-        /// <param name="Text">Text to be trimmed.</param>
-        /// <param name="MaxWidth">Max size(X Axis) the text can be.</param>
-        /// <returns>The trimmed text.</returns>
-        public static string TrimTextReverse(string Text, float MaxWidth, DynamicSpriteFont font)
         {
             string result = "";
             float size = 0;
@@ -68,62 +34,29 @@ namespace ItemModifier.UIKit
             return result;
         }
 
-        /// <summary>
-        /// Checks if the specified key is pressed(with reference to the specified <see cref="KeyboardState"/>).
-        /// </summary>
-        /// <param name="OldKeyboardState">Old keyboard state.</param>
-        /// <param name="NewKeyboardState">New keyboard state.</param>
-        /// <param name="key">Key to check.</param>
-        /// <returns>True if the specified keys is pressed, false otherwise.</returns>
         public static bool IsKeyPressed(KeyboardState OldKeyboardState, KeyboardState NewKeyboardState, Keys key)
         {
             return !OldKeyboardState.IsKeyDown(key) && NewKeyboardState.IsKeyDown(key);
         }
 
-        /// <summary>
-        /// Checks if all the specified keys are pressed(with reference to the specified <see cref="KeyboardState"/>s).
-        /// </summary>
-        /// <param name="OldKeyboardState">Old keyboard state.</param>
-        /// <param name="NewKeyboardState">New keyboard state.</param>
-        /// <param name="keys">Keys to check.</param>
-        /// <returns>True if all of the specified keys are pressed, false otherwise.</returns>
         public static bool AreAllKeysPressed(KeyboardState OldKeyboardState, KeyboardState NewKeyboardState, params Keys[] keys)
         {
             for (int i = 0; i < keys.Length; i++) if (!IsKeyPressed(OldKeyboardState, NewKeyboardState, keys[i])) return false;
             return true;
         }
 
-        /// <summary>
-        /// Checks if any of the specified keys are pressed(with reference to the specified <see cref="KeyboardState"/>s).
-        /// </summary>
-        /// <param name="OldKeyboardState">Old keyboard state.</param>
-        /// <param name="NewKeyboardState">New keyboard state.</param>
-        /// <param name="keys">Keys to check.</param>
-        /// <returns>True if any of the specified keys are pressed, false otherwise.</returns>
         public static bool IsAnyKeyPressed(KeyboardState OldKeyboardState, KeyboardState NewKeyboardState, params Keys[] keys)
         {
             for (int i = 0; i < keys.Length; i++) if (IsKeyPressed(OldKeyboardState, NewKeyboardState, keys[i])) return true;
             return false;
         }
 
-        /// <summary>
-        /// Checks if all of the specified keys are being held down(with reference to the specified <see cref="KeyboardState"/>).
-        /// </summary>
-        /// <param name="NewKeyboardState">New keyboard state.</param>
-        /// <param name="keys">Keys to check.</param>
-        /// <returns></returns>
         public static bool AreAllKeysDown(KeyboardState NewKeyboardState, params Keys[] keys)
         {
             for (int i = 0; i < keys.Length; i++) if (!NewKeyboardState.IsKeyDown(keys[i])) return false;
             return true;
         }
 
-        /// <summary>
-        /// Checks if any of the specified keys are being held down(with reference to the specified <see cref="KeyboardState"/>).
-        /// </summary>
-        /// <param name="NewKeyboardState">New keyboard state.</param>
-        /// <param name="keys">Keys to check.</param>
-        /// <returns></returns>
         public static bool IsAnyKeyDown(KeyboardState NewKeyboardState, params Keys[] keys)
         {
             for (int i = 0; i < keys.Length; i++) if (NewKeyboardState.IsKeyDown(keys[i])) return true;

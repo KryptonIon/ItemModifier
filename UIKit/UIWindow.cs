@@ -7,53 +7,26 @@ namespace ItemModifier.UIKit
 {
     public class UIWindow : UIElement
     {
-        /// <summary>
-        /// Title of the window.
-        /// </summary>
         public string Title { get; protected set; } = "";
 
-        /// <summary>
-        /// True if window is being dragged, false otherwise.
-        /// </summary>
         public bool Dragging { get; private set; }
 
-        /// <summary>
-        /// True if window can be dragged, false otherwise.
-        /// </summary>
         public bool Draggable { get; set; } = true;
 
         private Vector2 DragPos;
 
-        /// <summary>
-        /// Texture of the border.
-        /// </summary>
         public Texture2D BorderTexture { get; set; } = ItemModifier.Textures.WindowBorder;
 
-        /// <summary>
-        /// Color of the border.
-        /// </summary>
         public Color BorderColor { get; set; } = Color.Black;
 
-        /// <summary>
-        /// Texture of the background.
-        /// </summary>
         public Texture2D BackgroundTexture { get; set; } = ItemModifier.Textures.WindowBackground;
 
-        /// <summary>
-        /// Color of the background.
-        /// </summary>
         public Color BackgroundColor = KRUtils.UIBackgroundColor;
 
-        /// <summary>
-        /// Height of the title bar.
-        /// </summary>
         public const int TitleBarHeight = 21;
 
         private bool useTitle = false;
 
-        /// <summary>
-        /// True if the window has a title bar, false otherwise.
-        /// </summary>
         public bool UseTitle
         {
             get => useTitle;
@@ -68,9 +41,6 @@ namespace ItemModifier.UIKit
 
         private bool hasBorder = true;
 
-        /// <summary>
-        /// True if the window has a border, false otherwise.
-        /// </summary>
         public bool HasBorder
         {
             get => hasBorder;
@@ -84,23 +54,10 @@ namespace ItemModifier.UIKit
 
         internal UIImageButton CloseButton = new UIImageButton(ItemModifier.Textures.X);
 
-        /// <summary>
-        /// The dimensions of the title bar. Null if there's none.
-        /// </summary>
         public Dimensions? TitleBarDimensions { get; protected set; }
 
         private readonly bool hasCloseButton = false;
 
-        /// <summary>
-        /// Initializes a new <see cref="UIWindow"/> Element.
-        /// </summary>
-        /// <param name="Title">Title of the window.</param>
-        /// <param name="UseTitle">If true, the title bar will be drawn.</param>
-        /// <param name="HasCloseButton">If true, an X button to hide the window will be at the top right, false otherwise.</param>
-        /// <param name="HasBorder">If true, a black border will surround the window.</param>
-        /// <param name="Draggable">If true, the window can be dragged.</param>
-        /// <param name="Padding">Add space inside the element.</param>
-        /// <param name="Margin">Add space around the element.</param>
         public UIWindow(string Title, bool UseTitle = true, bool HasCloseButton = true, bool HasBorder = true, bool Draggable = true, Vector4 Padding = default, Vector4 Margin = default) : base(Padding, Margin)
         {
             this.UseTitle = UseTitle;

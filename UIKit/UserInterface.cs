@@ -63,9 +63,6 @@ namespace ItemModifier.UIKit
 
         public bool Initialized { get; private set; }
 
-        /// <summary>
-        /// Child elements of this User Interface.
-        /// </summary>
         internal List<UIElement> Children = new List<UIElement>();
 
         public Dimensions Dimensions { get; } = new Dimensions(0f, 0f, Main.screenWidth, Main.screenHeight);
@@ -295,19 +292,12 @@ namespace ItemModifier.UIKit
             Children.ForEach(child => child.Recalculate());
         }
 
-        /// <summary>
-        /// Remove a child element.
-        /// </summary>
-        /// <param name="Child">Child object.</param>
         public bool RemoveChild(UIElement Child)
         {
             Child.ParentInterface = null;
             return Children.Remove(Child);
         }
 
-        /// <summary>
-        /// Removes all children.
-        /// </summary>
         public void RemoveAllChildren()
         {
             for (int i = 0; i < Children.Count; i++)
@@ -317,11 +307,6 @@ namespace ItemModifier.UIKit
             Children.Clear();
         }
 
-        /// <summary>
-        /// Gets the element at the specified point.
-        /// </summary>
-        /// <param name="point">Point in the screen.</param>
-        /// <returns>The element at the specified point, null is non is found.</returns>
         public UIElement GetElementAt(Vector2 point)
         {
             for (int i = Children.Count - 1; i > -1; i--)
@@ -335,9 +320,6 @@ namespace ItemModifier.UIKit
             return null;
         }
 
-        /// <summary>
-        /// Activate Element, triggers <see cref="OnActivate"/> and <see cref="Initialize"/>.
-        /// </summary>
         public void Activate()
         {
             if (!Initialized) Initialize();
@@ -346,43 +328,28 @@ namespace ItemModifier.UIKit
             Recalculate();
         }
 
-        /// <summary>
-        /// Triggered by <see cref="Activate"/>.
-        /// </summary>
         public virtual void OnActivate()
         {
 
         }
 
-        /// <summary>
-        /// Deactivate Element, triggers <see cref="OnDeactivate"/>
-        /// </summary>
         public void Deactivate()
         {
             OnDeactivate();
             Children.ForEach(child => child.Deactivate());
         }
 
-        /// <summary>
-        /// Triggered by <see cref="Deactivate"/>.
-        /// </summary>
         public virtual void OnDeactivate()
         {
 
         }
 
-        /// <summary>
-        /// Initialize element, triggers <see cref="OnInitialize"/>.
-        /// </summary>
         public void Initialize()
         {
             OnInitialize();
             Initialized = true;
         }
 
-        /// <summary>
-        /// Triggered by <see cref="Initialize"/>.
-        /// </summary>
         public virtual void OnInitialize()
         {
 

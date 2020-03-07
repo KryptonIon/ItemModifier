@@ -5,21 +5,12 @@ using Terraria.ID;
 
 namespace ItemModifier.UIKit
 {
-    /// <summary>
-    /// Element for check/x input.
-    /// </summary>
     public class UICheckbox : UIElement, IInput<bool>
     {
-        /// <summary>
-        /// Fired when <see cref="Value"/> is changed.
-        /// </summary>
         public event UIEventHandler<bool> OnValueChanged;
 
         private bool PrivateValue;
 
-        /// <summary>
-        /// True if the checked, false otherwise.
-        /// </summary>
         public bool Value
         {
             get => PrivateValue;
@@ -34,10 +25,6 @@ namespace ItemModifier.UIKit
             }
         }
 
-        /// <summary>
-        /// Initializes a new <see cref="UICheckbox"/> Element.
-        /// </summary>
-        /// <param name="Margin">Add space around the element.</param>
         public UICheckbox(Vector4 Margin = default) : base(Margin) => (Width, Height) = (new StyleDimension(18f), new StyleDimension(18f));
 
         public UICheckbox(bool Value, Vector4 Margin = default) : this(Margin) => this.Value = Value;

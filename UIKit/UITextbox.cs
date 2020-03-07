@@ -10,9 +10,6 @@ using Terraria.ID;
 
 namespace ItemModifier.UIKit
 {
-    /// <summary>
-    /// Element for text input.
-    /// </summary>
     public class UITextbox : UIElement
     {
         public enum CharacterLimitType
@@ -22,34 +19,16 @@ namespace ItemModifier.UIKit
             NoLimit
         }
 
-        /// <summary>
-        /// Fired when <see cref="Text"/> is changed.
-        /// </summary>
         public event UIEventHandler<string> OnTextChanged;
 
-        /// <summary>
-        /// Fired when <see cref="Text"/> is changed by the user.
-        /// </summary>
         public event UIEventHandler<string> OnTextChangedByUser;
 
-        /// <summary>
-        /// Fired when textbox is focused/unfocused.
-        /// </summary>
         public event UIEventHandler<bool> OnFocusChanged;
 
-        /// <summary>
-        /// Color of text.
-        /// </summary>
         public Color TextColor { get; set; } = Color.White;
 
-        /// <summary>
-        /// If true, a box-like textbox will be used, otherwise a line-like textbox will be used.
-        /// </summary>
         public bool Box { get; set; } = true;
 
-        /// <summary>
-        /// Maximum characters <see cref="Text"/> can hold.
-        /// </summary>
         public uint CharacterLimit
         {
             get => characterLimit;
@@ -64,9 +43,6 @@ namespace ItemModifier.UIKit
 
         private string text = "";
 
-        /// <summary>
-        /// Value of this input.
-        /// </summary>
         public string Text
         {
             get => text;
@@ -85,9 +61,6 @@ namespace ItemModifier.UIKit
 
         private bool focused;
 
-        /// <summary>
-        /// True if textbox is focused, false otherwise.
-        /// </summary>
         public bool Focused
         {
             get => focused;
@@ -102,21 +75,12 @@ namespace ItemModifier.UIKit
             }
         }
 
-        /// <summary>
-        /// History of <see cref="Text"/>, newest is <see cref="LatestIndex"/>
-        /// </summary>
         protected string[] TextHistory = new string[10];
 
-        /// <summary>
-        /// History of <see cref="CaretPosition"/>, newest is <see cref="LatestIndex"/>
-        /// </summary>
         protected int[] CaretHistory = new int[10];
 
         private int latestIndex;
 
-        /// <summary>
-        /// Defines the point between old and new for the arrays <see cref="TextHistory"/> and <see cref="CaretHistory"/>.
-        /// </summary>
         protected int LatestIndex
         {
             get => latestIndex;
@@ -126,16 +90,10 @@ namespace ItemModifier.UIKit
             }
         }
 
-        /// <summary>
-        /// Time till caret will be drawn.
-        /// </summary>
         protected int CaretDelta { get; set; }
 
         private int caretPosition;
 
-        /// <summary>
-        /// Position of the caret.
-        /// </summary>
         public int CaretPosition
         {
             get => caretPosition;
@@ -151,17 +109,8 @@ namespace ItemModifier.UIKit
 
         public CharacterLimitType LimitType { get; set; } = CharacterLimitType.NoLimit;
 
-        /// <summary>
-        /// Initializes a new <see cref="UITextbox"/> Element.
-        /// </summary>
-        /// <param name="Margin">Add space around the element.</param>
         public UITextbox(Vector4 Margin = default) : base(Margin: Margin) => (Width, Height) = (new StyleDimension(100f), new StyleDimension(22f));
 
-        /// <summary>
-        /// Initializes a new <see cref="UITextbox"/> Element.
-        /// </summary>
-        /// <param name="CharacterLimit">Maximum characters <see cref="Text"/> can hold.</param>
-        /// <param name="Margin">Add space around the element.</param>
         public UITextbox(uint CharacterLimit, Vector4 Margin = default) : this(Margin) => (this.CharacterLimit, LimitType) = (CharacterLimit, CharacterLimitType.StaticLimit);
 
         public override void LeftClick(UIMouseEventArgs e)
@@ -217,10 +166,6 @@ namespace ItemModifier.UIKit
             }
         }
 
-        /// <summary>
-        /// Draws the textbox's text.
-        /// </summary>
-        /// <param name="sb">Spritebatch</param>
         protected virtual Vector3 DrawText(SpriteBatch sb)
         {
             Vector2 pos = new Vector2(Dimensions.X, Dimensions.Y);
@@ -230,7 +175,7 @@ namespace ItemModifier.UIKit
                 pos.X += 4;
                 maxWidth -= 8;
             }
-            return new Vector3(pos.X, pos.Y, Utils.DrawBorderString(sb, KRUtils.TrimTextReverse(Text, maxWidth, Main.fontMouseText), pos, TextColor).X);
+            return new Vector3(pos.X, pos.Y, Utils.DrawBorderString(sb, KRUtils.TrimText(Text, maxWidth, Main.fontMouseText), pos, TextColor).X);
             /*Rectangle scissorRect = sb.GraphicsDevice.ScissorRectangle;
             sb.End();
             sb.GraphicsDevice.ScissorRectangle = Rectangle.Intersect(KRUtils.GetClippingRectangle(sb, Dimensions.Rectangle), sb.GraphicsDevice.ScissorRectangle);
@@ -242,18 +187,11 @@ namespace ItemModifier.UIKit
             return new Vector3(pos.X, pos.Y, size);*/
         }
 
-        /// <summary>
-        /// Draws the caret.
-        /// </summary>
-        /// <param name="sb">Spritebatch</param>
         protected virtual void DrawCaret(SpriteBatch sb, Vector3 TextPosition)
         {
             sb.Draw(ItemModifier.Textures.Caret, new Vector2(TextPosition.X + TextPosition.Z, Dimensions.Y), Color.Black);
         }
 
-        /// <summary>
-        /// Checks for triggered hotkeys.
-        /// </summary>
         protected virtual void CheckKeys()
         {
             if (KRUtils.IsKeyPressed(Main.oldKeyState, Main.keyState, Keys.Left)) CaretPosition--;
@@ -303,9 +241,6 @@ namespace ItemModifier.UIKit
             }
         }
 
-        /// <summary>
-        /// Triggers & Handles text input.
-        /// </summary>
         protected virtual void HandleText()
         {
             PlayerInput.WritingText = true;
@@ -337,20 +272,12 @@ namespace ItemModifier.UIKit
             }
         }
 
-        /// <summary>
-        /// Handle new text.
-        /// </summary>
-        /// <param name="newText">string = new text, int = new caret position.</param>
         protected virtual void TextChanged(Tuple<string, int> newText)
         {
             Text = newText.Item1;
             CaretPosition = newText.Item2;
         }
 
-        /// <summary>
-        /// Handles text input.
-        /// </summary>
-        /// <returns>New text, new caret position.</returns>
         protected virtual Tuple<string, int> GetInputText()
         {
             if (!Main.hasFocus) return Tuple.Create(Text, CaretPosition);
@@ -416,28 +343,16 @@ namespace ItemModifier.UIKit
             return Tuple.Create(newText, newCaretPos);
         }
 
-        /// <summary>
-        /// Inserts text into the textbox with respect to <see cref="CaretPosition"/>.
-        /// </summary>
-        /// <param name="Text">Text to insert.</param>
         public virtual void InsertText(string Text)
         {
             Text.Insert(CaretPosition, Text);
         }
 
-        /// <summary>
-        /// Inserts text at a specific point.
-        /// </summary>
-        /// <param name="InsertPos">Point to insert text.</param>
-        /// <param name="Text">Text to insert.</param>
         public virtual void InsertText(int InsertPos, string Text)
         {
             Text.Insert(InsertPos, Text);
         }
 
-        /// <summary>
-        /// Go back one steb in text history.
-        /// </summary>
         public void Undo()
         {
             LatestIndex--;
@@ -445,9 +360,6 @@ namespace ItemModifier.UIKit
             CaretPosition = CaretHistory[LatestIndex];
         }
 
-        /// <summary>
-        /// Go forward one steb in text history.
-        /// </summary>
         public void Redo()
         {
             LatestIndex++;

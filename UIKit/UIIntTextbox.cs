@@ -5,16 +5,10 @@ using Terraria;
 
 namespace ItemModifier.UIKit
 {
-    /// <summary>
-    /// Element for integer input.
-    /// </summary>
     public class UIIntTextbox : UINumberTextbox<int>
     {
         private int PrivateValue;
 
-        /// <summary>
-        /// Value of this input.
-        /// </summary>
         public override int Value
         {
             get => PrivateValue;
@@ -31,43 +25,19 @@ namespace ItemModifier.UIKit
             }
         }
 
-        /// <summary>
-        /// Maximum <see cref="Value"/> can be.
-        /// </summary>
         public int MaxThreshold { get; set; }
 
-        /// <summary>
-        /// If true, <see cref="Value"/> will be limited by <see cref="MaxThreshold"/>.
-        /// </summary>
         public bool MaxThresholdEnabled { get; set; }
 
-        /// <summary>
-        /// Minimum <see cref="Value"/> can be.
-        /// </summary>
         public int MinThreshold { get; set; }
 
-        /// <summary>
-        /// If true, <see cref="Value"/> will be limited by <see cref="MinThreshold"/>.
-        /// </summary>
         public bool MinThresholdEnabled { get; set; }
 
-        /// <summary>
-        /// Initializes a new <see cref="UIIntTextbox"/> Element.
-        /// </summary>
-        /// <param name="Padding">Add space inside the element.</param>
-        /// <param name="Margin">Add space around the element.</param>
         public UIIntTextbox(Vector4 Margin = default) : base(10, Margin)
         {
 
         }
 
-        /// <summary>
-        /// Initializes a new <see cref="UIIntTextbox"/> Element.
-        /// </summary>
-        /// <param name="Min">Minimum value <see cref="Value"/> should be.</param>
-        /// <param name="Max">Maximum Value <see cref="Value"/> should be.</param>
-        /// <param name="Padding">Add space inside the element.</param>
-        /// <param name="Margin">Add space around the element.</param>
         public UIIntTextbox(int Min, int Max, Vector4 Margin = default) : this(Margin) => (MaxThresholdEnabled, MaxThreshold, MinThresholdEnabled, MinThreshold) = (true, Max, true, Min);
 
         public override void RecalculateValue()

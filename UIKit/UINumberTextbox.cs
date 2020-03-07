@@ -6,77 +6,38 @@ using Terraria;
 
 namespace ItemModifier.UIKit
 {
-    /// <summary>
-    /// Element that is the backbone of number textboxes.
-    /// </summary>
     public abstract class UINumberTextbox<T> : UITextbox, IInput<T> where T : struct
     {
-        /// <summary>
-        /// Fired when <see cref="Value"/> is changed.
-        /// </summary>
         public event UIEventHandler<T> OnValueChanged;
 
-        /// <summary>
-        /// Value of this input.
-        /// </summary>
         public abstract T Value { get; set; }
 
-        /// <summary>
-        /// If true, + or - will display before the value.
-        /// </summary>
         public bool Sign { get; set; } = true;
 
-        /// <summary>
-        /// If true, value can be negated else value will stay positive.
-        /// </summary>
         public bool Negatable { get; set; } = true;
 
-        /// <summary>
-        /// If true, + will be displayed, - otherwise.
-        /// </summary>
         public bool Positive { get; set; } = true;
 
-        /// <summary>
-        /// Color of the + sign.
-        /// </summary>
         public Color PositiveColor { get; set; } = new Color(0, 255, 0);
 
-        /// <summary>
-        /// Color of the - sign.
-        /// </summary>
         public Color NegativeColor { get; set; } = Color.Red;
 
-        /// <summary>
-        /// Initializes a new <see cref="UINumberTextbox"/> Element.
-        /// </summary>
-        /// <param name="Margin">Add space around the element.</param>
         public UINumberTextbox(Vector4 Margin = default) : base(Margin)
         {
             Text = "0";
             OnFocusChanged += (source, value) => { if (!value) RecalculateValue(); };
         }
 
-        /// <summary>
-        /// Initializes a new <see cref="UINumberTextbox"/> Element.
-        /// </summary>
-        /// <param name="CharacterLimit">Maximum characters textbox can hold.</param>
-        /// <param name="Margin">Add space around the element.</param>
         public UINumberTextbox(uint CharacterLimit, Vector4 Margin = default) : base(CharacterLimit, Margin)
         {
             Text = "0";
             OnFocusChanged += (source, value) => { if (!value) RecalculateValue(); };
         }
 
-        /// <summary>
-        /// Time till value increases.
-        /// </summary>
         protected int ValIncHoldDelta { get; set; }
 
         private int valIncHoldDeltaThres;
 
-        /// <summary>
-        /// Maximum time till value increases.
-        /// </summary>
         protected int ValIncHoldDeltaThres
         {
             get => valIncHoldDeltaThres;
@@ -93,14 +54,8 @@ namespace ItemModifier.UIKit
             UpdateText();
         }
 
-        /// <summary>
-        /// Recalculate value of input.
-        /// </summary>
         public abstract void RecalculateValue();
 
-        /// <summary>
-        /// Sync value with text.
-        /// </summary>
         public virtual void UpdateText()
         {
             if (Sign) Text = Value.ToString().Replace("-", "");
@@ -141,7 +96,7 @@ namespace ItemModifier.UIKit
                 pos.X += width;
                 maxWidth -= width;
             }
-            return new Vector3(pos.X, pos.Y, Utils.DrawBorderString(sb, KRUtils.TrimTextReverse(Text, maxWidth, Main.fontMouseText), pos, TextColor).X);
+            return new Vector3(pos.X, pos.Y, Utils.DrawBorderString(sb, KRUtils.TrimText(Text, maxWidth, Main.fontMouseText), pos, TextColor).X);
         }
 
         protected override void CheckKeys()

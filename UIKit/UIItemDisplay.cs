@@ -4,45 +4,18 @@ using Terraria;
 
 namespace ItemModifier.UIKit
 {
-    /// <summary>
-    /// Element for item display.
-    /// </summary>
     public class UIItemDisplay : UIElement
     {
-        /// <summary>
-        /// ID of item to display.
-        /// </summary>
         public Item DisplayItem = new Item();
 
-        /// <summary>
-        /// Color the texture; White if no tinting is applied.
-        /// </summary>
         public Color ColorTint = Color.White;
 
-        /// <summary>
-        /// If true, the texture will be scaled down if texture is bigger than <see cref="UIItemDisplay"/>.
-        /// </summary>
         public bool ScaleDown { get; set; } = false;
 
-        /// <summary>
-        /// If true, the texture will be scaled up if texture is smaller than <see cref="UIItemDisplay"/>.
-        /// </summary>
         public bool ScaleUp { get; set; } = false;
 
-        /// <summary>
-        /// If true, the texture will be centered.
-        /// </summary>
         public bool Center { get; set; } = true;
 
-        /// <summary>
-        /// Initializes a new <see cref="UIItemDisplay"/> Element.
-        /// </summary>
-        /// <param name="Size">Size of <see cref="UIItemDisplay"/>.</param>
-        /// <param name="ItemID">ID of item to display.</param>
-        /// <param name="ScaleDown">If true, the texture will be scaled down if texture is bigger than <see cref="UIItemDisplay"/>.</param>
-        /// <param name="ScaleUp">If true, the texture will be scaled up if texture is smaller than <see cref="UIItemDisplay"/>.</param>
-        /// <param name="Padding">Add space inside the element.</param>
-        /// <param name="Margin">Add space around the element.</param>
         public UIItemDisplay(Vector2 Size, int ItemID = 0, bool ScaleDown = true, bool ScaleUp = false, Vector4 Padding = default, Vector4 Margin = default) : base(Padding, Margin)
         {
             Width = new StyleDimension(Size.X);

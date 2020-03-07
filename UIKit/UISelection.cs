@@ -6,19 +6,10 @@ using Terraria.ID;
 
 namespace ItemModifier.UIKit
 {
-    /// <summary>
-    /// Element for multiple choice selection.
-    /// </summary>
     public class UISelection : UIElement
     {
-        /// <summary>
-        /// Choices for <see cref="UISelection"/>.
-        /// </summary>
         public class UISelectionChoice : UIElement, IInput<bool>
         {
-            /// <summary>
-            /// Fired when <see cref="Value"/> is changed.
-            /// </summary>
             public event UIEventHandler<bool> OnValueChanged;
 
             public string Label
@@ -35,9 +26,6 @@ namespace ItemModifier.UIKit
 
             private bool PrivateValue;
 
-            /// <summary>
-            /// True if selected, false otherwise.
-            /// </summary>
             public bool Value
             {
                 get => PrivateValue;
@@ -49,12 +37,6 @@ namespace ItemModifier.UIKit
                 }
             }
 
-            /// <summary>
-            /// Initializes a new <see cref="UISelectionChoice"/> Element.
-            /// </summary>
-            /// <param name="Label">Label of the choice.</param>
-            /// <param name="Padding">Add space inside the element.</param>
-            /// <param name="Margin">Add space around the element.</param>
             internal UISelectionChoice(string Label, Vector4 Margin = default) : base(Margin: Margin) => this.Label = Label;
 
             public override void LeftClick(UIMouseEventArgs e)
@@ -69,9 +51,6 @@ namespace ItemModifier.UIKit
                 base.MouseOver(e);
             }
 
-            /// <summary>
-            /// Recalculates Width and Height.
-            /// </summary>
             public void RecalculateSize()
             {
                 Vector2 labelSize = KRUtils.MeasureTextAccurate(Label, false);
@@ -92,24 +71,12 @@ namespace ItemModifier.UIKit
             }
         }
 
-        /// <summary>
-        /// Fired when selected choice(s) is/are changed.
-        /// </summary>
         public event UIEventHandler<UISelectionChoice> OnSelectedChanged;
 
-        /// <summary>
-        /// Choices of <see cref="UISelection"/>.
-        /// </summary>
         public List<UISelectionChoice> Choices { get; private set; } = new List<UISelectionChoice>();
 
-        /// <summary>
-        /// If true, multiple choices can be selected, if false, only one may be selected.
-        /// </summary>
         public bool AllowMultipleSelection { get; set; }
 
-        /// <summary>
-        /// Gets selected choice; First selected choice if <see cref="AllowMultipleSelection"/> is enabled.
-        /// </summary>
         public UISelectionChoice Selected
         {
             get
@@ -125,9 +92,6 @@ namespace ItemModifier.UIKit
             }
         }
 
-        /// <summary>
-        /// Gets a list of selected choices.
-        /// </summary>
         public List<UISelectionChoice> AllSelected
         {
             get
@@ -144,21 +108,11 @@ namespace ItemModifier.UIKit
             }
         }
 
-        /// <summary>
-        /// Initializes a new <see cref="UISelection"/> Element.
-        /// </summary>
-        /// <param name="Margin">Add space around the element.</param>
-        /// <param name="Labels">Labels for choices.</param>
         public UISelection(Vector4 Margin = default, params string[] Labels) : base(Margin: Margin)
         {
             AddChoices(Labels);
         }
 
-        /// <summary>
-        /// Adds a new choice.
-        /// </summary>
-        /// <param name="Label">Label for new choice.</param>
-        /// <returns></returns>
         public UISelectionChoice AddChoice(string Label)
         {
             UISelectionChoice newChoice = new UISelectionChoice(Label);
@@ -171,11 +125,6 @@ namespace ItemModifier.UIKit
             return newChoice;
         }
 
-        /// <summary>
-        /// Adds new choices.
-        /// </summary>
-        /// <param name="Labels">Labels for new choices.</param>
-        /// <returns></returns>
         public List<UISelectionChoice> AddChoices(params string[] Labels)
         {
             List<UISelectionChoice> list = new List<UISelectionChoice>();
@@ -186,10 +135,6 @@ namespace ItemModifier.UIKit
             return list;
         }
 
-        /// <summary>
-        /// Selects a choice.
-        /// </summary>
-        /// <param name="choice">A <see cref="UISelectionChoice"/> Element</param>
         public void Select(UISelectionChoice choice)
         {
             if (!AllowMultipleSelection)
@@ -207,18 +152,11 @@ namespace ItemModifier.UIKit
             OnSelectedChanged?.Invoke(this, choice);
         }
 
-        /// <summary>
-        /// Selects a choice based on their index.
-        /// </summary>
-        /// <param name="index">Starts at 0. Index of choices(top to bottom).</param>
         public void Select(int index)
         {
             Select(Choices[index]);
         }
 
-        /// <summary>
-        /// Deselects all choices.
-        /// </summary>
         public void DeselectAll()
         {
             for (int i = 0; i < Choices.Count; i++)

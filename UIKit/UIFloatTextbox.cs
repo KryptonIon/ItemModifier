@@ -5,16 +5,10 @@ using Terraria;
 
 namespace ItemModifier.UIKit
 {
-    /// <summary>
-    /// Element for decimal input.
-    /// </summary>
     public class UIFloatTextbox : UINumberTextbox<float>
     {
         private float PrivateValue;
 
-        /// <summary>
-        /// Value of this input.
-        /// </summary>
         public override float Value
         {
             get => PrivateValue;
@@ -31,43 +25,19 @@ namespace ItemModifier.UIKit
             }
         }
 
-        /// <summary>
-        /// Maximum <see cref="Value"/> can be.
-        /// </summary>
         public float MaxThreshold { get; set; }
 
-        /// <summary>
-        /// If true, <see cref="Value"/> will be limited by <see cref="MaxThreshold"/>.
-        /// </summary>
         public bool MaxThresholdEnabled { get; set; }
 
-        /// <summary>
-        /// Minimum <see cref="Value"/> can be.
-        /// </summary>
         public float MinThreshold { get; set; }
 
-        /// <summary>
-        /// If true, <see cref="Value"/> will be limited by <see cref="MinThreshold"/>.
-        /// </summary>
         public bool MinThresholdEnabled { get; set; }
 
-        /// <summary>
-        /// Initializes a new <see cref="UIFloatTextbox"/> Element.
-        /// </summary>
-        /// <param name="Padding">Add space inside the element.</param>
-        /// <param name="Margin">Add space around the element.</param>
         public UIFloatTextbox(Vector4 Margin = default) : base(39, Margin)
         {
 
         }
 
-        /// <summary>
-        /// Initializes a new <see cref="UIFloatTextbox"/> Element.
-        /// </summary>
-        /// <param name="Min">Minimum value <see cref="Value"/> should be.</param>
-        /// <param name="Max">Maximum Value <see cref="Value"/> should be.</param>
-        /// <param name="Padding">Add space inside the element.</param>
-        /// <param name="Margin">Add space around the element.</param>
         public UIFloatTextbox(float Min, float Max, Vector4 Margin = default) : this(Margin) => (MaxThresholdEnabled, MaxThreshold, MinThresholdEnabled, MinThreshold) = (true, Max, true, Min);
 
         public override void RecalculateValue()
