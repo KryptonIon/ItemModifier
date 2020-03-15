@@ -34,7 +34,6 @@ namespace ItemModifier.UIKit
             set
             {
                 useTitle = value;
-                CloseButton.Visible = useTitle;
                 Recalculate();
             }
         }
@@ -52,17 +51,18 @@ namespace ItemModifier.UIKit
             }
         }
 
-        internal UIImageButton CloseButton = new UIImageButton(ItemModifier.Textures.X);
+        protected UIImageButton CloseButton;
 
         public Dimensions? TitleBarDimensions { get; protected set; }
-
-        private readonly bool hasCloseButton = false;
 
         public UIWindow(string Title, bool UseTitle = true, bool HasCloseButton = true, bool HasBorder = true, bool Draggable = true, Vector4 Padding = default, Vector4 Margin = default) : base(Padding, Margin)
         {
             this.UseTitle = UseTitle;
             this.Title = Title;
-            hasCloseButton = HasCloseButton;
+            if (HasCloseButton)
+            {
+                CloseButton = new UIImageButton(ItemModifier.Textures.X);
+            }
             hasBorder = HasBorder;
             this.Draggable = Draggable;
             Width = new StyleDimension(300f);
@@ -122,7 +122,7 @@ namespace ItemModifier.UIKit
 
         public override void OnInitialize()
         {
-            if (hasCloseButton)
+            if (CloseButton != null)
             {
                 CloseButton.Left = new StyleDimension(-CloseButton.Width.Pixels - 3f, 1f);
                 CloseButton.Top = new StyleDimension(UseTitle ? -19f : 2f);
