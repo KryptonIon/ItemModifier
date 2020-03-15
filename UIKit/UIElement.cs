@@ -1,12 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Terraria;
 
 namespace ItemModifier.UIKit
 {
-    public abstract class UIElement : IComparable<UIElement>
+    public abstract class UIElement : IComparable<UIElement>, IEnumerable<UIElement>
     {
         public delegate void UIEventHandler<T>(UIElement source, T args);
 
@@ -557,6 +558,16 @@ namespace ItemModifier.UIKit
         public virtual void OnInitialize()
         {
 
+        }
+
+        public IEnumerator<UIElement> GetEnumerator()
+        {
+            return Children.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return Children.GetEnumerator();
         }
     }
 }
