@@ -13,7 +13,10 @@ namespace ItemModifier.UIKit
 
         public bool Value
         {
-            get => PrivateValue;
+            get
+            {
+                return PrivateValue;
+            }
 
             set
             {
@@ -25,9 +28,16 @@ namespace ItemModifier.UIKit
             }
         }
 
-        public UICheckbox(Vector4 Margin = default) : base(Margin) => (Width, Height) = (new StyleDimension(18f), new StyleDimension(18f));
+        public UICheckbox(Vector4 margin = default) : base(margin)
+        {
+            Width = new StyleDimension(18f);
+            Height = Width;
+        }
 
-        public UICheckbox(bool Value, Vector4 Margin = default) : this(Margin) => this.Value = Value;
+        public UICheckbox(bool value, Vector4 margin = default) : this(margin)
+        {
+            Value = value;
+        }
 
         public override void LeftClick(UIMouseEventArgs e)
         {

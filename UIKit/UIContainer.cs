@@ -38,15 +38,15 @@ namespace ItemModifier.UIKit
 
         private bool DraggingScrollInner;
 
-        public UIContainer(Vector2 Size, Vector4 Padding = default, Vector4 Margin = default) : base(Padding, Margin)
+        public UIContainer(Vector2 size, Vector4 padding = default, Vector4 margin = default) : base(padding, margin)
         {
-            Width = new StyleDimension(Size.X);
-            Height = new StyleDimension(Size.Y);
+            Width = new StyleDimension(size.X);
+            Height = new StyleDimension(size.Y);
         }
 
-        public UIContainer(Color BackgroundColor, Vector2 Size, Vector4 Padding = default, Vector4 Margin = default) : this(Size, Padding, Margin)
+        public UIContainer(Color backgroundColor, Vector2 size, Vector4 padding = default, Vector4 margin = default) : this(size, padding, margin)
         {
-            this.BackgroundColor = BackgroundColor;
+            BackgroundColor = backgroundColor;
         }
 
         protected override void DrawSelf(SpriteBatch sb)

@@ -6,6 +6,9 @@ namespace ItemModifier.UIKit
     {
         public UIElement Target { get; }
 
-        public UIEventArgs(UIElement Target) => this.Target = Target;
+        public UIEventArgs(UIElement target)
+        {
+            Target = target;
+        }
     }
 }

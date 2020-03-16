@@ -12,12 +12,36 @@ namespace ItemModifier.UIKit
 
         public float Height { get; }
 
-        public Vector2 Position => new Vector2(X, Y);
+        public Vector2 Position
+        {
+            get
+            {
+                return new Vector2(X, Y);
+            }
+        }
 
-        public Vector2 Size => new Vector2(Width, Height);
+        public Vector2 Size
+        {
+            get
+            {
+                return new Vector2(Width, Height);
+            }
+        }
 
-        public Rectangle Rectangle => new Rectangle((int)X, (int)Y, (int)Width, (int)Height);
+        public Rectangle Rectangle
+        {
+            get
+            {
+                return new Rectangle((int)X, (int)Y, (int)Width, (int)Height);
+            }
+        }
 
-        public Dimensions(float X, float Y, float Width, float Height) => (this.X, this.Y, this.Width, this.Height) = (X, Y, Width, Height);
+        public Dimensions(float x, float y, float width, float height)
+        {
+            X = x;
+            Y = y;
+            Width = width;
+            Height = height;
+        }
     }
 }

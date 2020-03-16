@@ -11,7 +11,10 @@ namespace ItemModifier.UIKit
 
         public override float Value
         {
-            get => PrivateValue;
+            get
+            {
+                return PrivateValue;
+            }
 
             set
             {
@@ -33,12 +36,18 @@ namespace ItemModifier.UIKit
 
         public bool MinThresholdEnabled { get; set; }
 
-        public UIFloatTextbox(Vector4 Margin = default) : base(39, Margin)
+        public UIFloatTextbox(Vector4 margin = default) : base(39, margin)
         {
 
         }
 
-        public UIFloatTextbox(float Min, float Max, Vector4 Margin = default) : this(Margin) => (MaxThresholdEnabled, MaxThreshold, MinThresholdEnabled, MinThreshold) = (true, Max, true, Min);
+        public UIFloatTextbox(float min, float max, Vector4 margin = default) : this(margin)
+        {
+            MinThresholdEnabled = true;
+            MinThreshold = min;
+            MaxThresholdEnabled = true;
+            MaxThreshold = max;
+        }
 
         public override void RecalculateValue()
         {
@@ -55,14 +64,8 @@ namespace ItemModifier.UIKit
                 }
                 else
                 {
-                    if (Negatable)
-                    {
-                        Value = Positive ? Math.Abs(numberparsed) : -Math.Abs(numberparsed);
-                    }
-                    else
-                    {
-                        Value = Math.Abs(numberparsed);
-                    }
+                    if (Negatable) Value = Positive ? Math.Abs(numberparsed) : -Math.Abs(numberparsed);
+                    else Value = Math.Abs(numberparsed);
                 }
             }
             catch (Exception)

@@ -6,6 +6,9 @@ namespace ItemModifier.UIKit
     {
         public Vector2 MousePosition { get; }
 
-        public UIMouseEventArgs(UIElement Target, Vector2 MousePosition) : base(Target) => this.MousePosition = MousePosition;
+        public UIMouseEventArgs(UIElement target, Vector2 mousePosition) : base(target)
+        {
+            MousePosition = mousePosition;
+        }
     }
 }

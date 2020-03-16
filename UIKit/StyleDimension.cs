@@ -10,9 +10,17 @@
 
         public float Percent { get; }
 
-        public StyleDimension(float Pixels) => (this.Pixels, Percent) = (Pixels, 0);
+        public StyleDimension(float pixels)
+        {
+            Pixels = pixels;
+            Percent = 0;
+        }
 
-        public StyleDimension(float Pixels, float Percent) => (this.Pixels, this.Percent) = (Pixels, Percent);
+        public StyleDimension(float pixels, float percent)
+        {
+            Pixels = pixels;
+            Percent = percent;
+        }
 
         public float CalculateValue(float ContainerSize)
         {

@@ -13,7 +13,10 @@ namespace ItemModifier.UIKit
 
         public bool Value
         {
-            get => PrivateValue;
+            get
+            {
+                return PrivateValue;
+            }
 
             set
             {
@@ -29,9 +32,18 @@ namespace ItemModifier.UIKit
 
         public string FalseText { get; set; } = "False";
 
-        public UIBool(bool Value = false, Vector4 Margin = default) : base(Margin: Margin) => (Width, Height, this.Value) = (new StyleDimension(41), new StyleDimension(21), Value);
+        public UIBool(bool value = false, Vector4 margin = default) : base(margin: margin)
+        {
+            Width = new StyleDimension(41f);
+            Height = new StyleDimension(21f);
+            Value = value;
+        }
 
-        public UIBool(bool Value, string TrueText, string FalseText, Vector4 Margin = default) : this(Value, Margin) => (this.TrueText, this.FalseText) = (TrueText, FalseText);
+        public UIBool(bool value, string trueText, string falseText, Vector4 margin = default) : this(value, margin)
+        {
+            TrueText = trueText;
+            FalseText = falseText;
+        }
 
         public override void LeftClick(UIMouseEventArgs e)
         {

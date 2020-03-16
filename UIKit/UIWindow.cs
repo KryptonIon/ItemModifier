@@ -29,7 +29,10 @@ namespace ItemModifier.UIKit
 
         public bool UseTitle
         {
-            get => useTitle;
+            get
+            {
+                return useTitle;
+            }
 
             set
             {
@@ -42,7 +45,10 @@ namespace ItemModifier.UIKit
 
         public bool HasBorder
         {
-            get => hasBorder;
+            get
+            {
+                return hasBorder;
+            }
 
             set
             {
@@ -55,19 +61,15 @@ namespace ItemModifier.UIKit
 
         public Dimensions? TitleBarDimensions { get; protected set; }
 
-        public UIWindow(string Title, bool UseTitle = true, bool HasCloseButton = true, bool HasBorder = true, bool Draggable = true, Vector4 Padding = default, Vector4 Margin = default) : base(Padding, Margin)
+        public UIWindow(string title, bool useTitle = true, bool hasCloseButton = true, bool hasBorder = true, bool draggable = true, Vector4 padding = default, Vector4 margin = default) : base(padding, margin)
         {
-            this.UseTitle = UseTitle;
-            this.Title = Title;
-            if (HasCloseButton)
-            {
-                CloseButton = new UIImageButton(ItemModifier.Textures.X);
-            }
-            hasBorder = HasBorder;
-            this.Draggable = Draggable;
+            UseTitle = useTitle;
+            Title = title;
+            if (hasCloseButton) CloseButton = new UIImageButton(ItemModifier.Textures.X);
+            this.hasBorder = hasBorder;
+            Draggable = draggable;
             Width = new StyleDimension(300f);
             Height = new StyleDimension(200f);
-            OnVisibilityChanged += (source, value) => Main.PlaySound(value ? SoundID.MenuOpen : SoundID.MenuClose);
         }
 
         protected override void DrawSelf(SpriteBatch sb)
@@ -135,8 +137,8 @@ namespace ItemModifier.UIKit
         public override void Recalculate()
         {
             Dimensions ParentInnerDimension = Parent?.InnerDimensions ?? ParentInterface?.Dimensions ?? UserInterface.ActiveInstance.Dimensions;
-            var width = MathHelper.Clamp(Width.CalculateValue(ParentInnerDimension.Width), MinWidth.CalculateValue(ParentInnerDimension.Width), MaxWidth.CalculateValue(ParentInnerDimension.Width)) + Padding.X + Padding.Z + Margin.X + Margin.Z + 4; // +4 is border, 2 sides
-            var height = MathHelper.Clamp(Height.CalculateValue(ParentInnerDimension.Height), MinHeight.CalculateValue(ParentInnerDimension.Height), MaxHeight.CalculateValue(ParentInnerDimension.Height)) + Padding.Y + Padding.W + Margin.Y + Margin.W + (UseTitle ? 25 : 4); // +4 is border, 2 sides
+            float width = MathHelper.Clamp(Width.CalculateValue(ParentInnerDimension.Width), MinWidth.CalculateValue(ParentInnerDimension.Width), MaxWidth.CalculateValue(ParentInnerDimension.Width)) + Padding.X + Padding.Z + Margin.X + Margin.Z + 4; // +4 is border, 2 sides
+            float height = MathHelper.Clamp(Height.CalculateValue(ParentInnerDimension.Height), MinHeight.CalculateValue(ParentInnerDimension.Height), MaxHeight.CalculateValue(ParentInnerDimension.Height)) + Padding.Y + Padding.W + Margin.Y + Margin.W + (UseTitle ? 25 : 4); // +4 is border, 2 sides
             OuterDimensions = new Dimensions(Left.CalculateValue(ParentInnerDimension.Width) + ParentInnerDimension.X + ParentInnerDimension.Width * HorizontalAlign - width * HorizontalAlign, Top.CalculateValue(ParentInnerDimension.Height) + ParentInnerDimension.Y + ParentInnerDimension.Height * VerticalAlign - height * VerticalAlign, width, height);
             Dimensions = new Dimensions(OuterDimensions.X + Margin.X + 2, OuterDimensions.Y + Margin.Y + 2, OuterDimensions.Width - Margin.X - Margin.Z - 4, OuterDimensions.Height - Margin.Y - Margin.W - 4);
             if (UseTitle)

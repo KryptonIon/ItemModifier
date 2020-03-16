@@ -7,63 +7,81 @@ namespace ItemModifier.UI
 {
     public class ChangelogUIW : UIWindow
     {
-        public event UIEventHandler<int> OnSelectedIndexChanged;
-
         private string Website { get; set; }
 
         internal UIText ChangelogVersion;
-        
+
         internal UIImageButton PreviousButton;
-        
+
         internal UIImageButton NextButton;
-        
+
         internal UIImageButton ChangelogWebsite;
-        
+
         internal UIElement TextContainer;
-        
+
         internal UIImage UpArrowScroll;
-        
+
         internal UIImage DownArrowScroll;
-        
+
         internal UIText[] ChangelogText = new UIText[16];
-        
-        public ItemModifier.Changelog CurrentChangelog { get; private set; }
-        
+
         private int changelogIndex;
-        
+
         public int ChangelogIndex
         {
-            get => changelogIndex;
+            get
+            {
+                return changelogIndex;
+            }
 
             set
             {
-                changelogIndex = value > ItemModifier.Changelogs.Count - 1 ? 0 : value < 0 ? ItemModifier.Changelogs.Count - 1 : value;
-                UpdateChangelog();
-                OnSelectedIndexChanged?.Invoke(this, changelogIndex);
+                changelogIndex = value < 0 ? ItemModifier.Changelogs.Count - 1 : value >= ItemModifier.Changelogs.Count ? 0 : value;
+                ItemModifier.Changelog currentChangelog = ItemModifier.Changelogs[changelogIndex];
+                ChangelogVersion.Text = $"{currentChangelog.Version} {currentChangelog.Title}";
+                ChangelogVersion.Left = new StyleDimension(-ChangelogVersion.Width.Pixels * 0.5f, 0.5f);
+                Website = currentChangelog.Website;
+                MaxLineIndex = currentChangelog.Raw.Count - ChangelogText.Length;
+                LineIndex = 0;
             }
         }
-        
+
         private int lineIndex;
-        
+
         public int LineIndex
         {
-            get => lineIndex;
+            get
+            {
+                return lineIndex;
+            }
 
             set
             {
+                ItemModifier.Changelog currentChangelog = ItemModifier.Changelogs[changelogIndex];
                 lineIndex = value < 0 ? 0 : value > MaxLineIndex ? MaxLineIndex : value;
-                for (int i = 0; i < ChangelogText.Length; i++) ChangelogText[i].Text = "";
-                for (int i = 0; i < Math.Min(ChangelogText.Length, CurrentChangelog.Raw.Count); i++) ChangelogText[i].Text = CurrentChangelog.Raw[i + LineIndex];
+                for (int i = 0; i < ChangelogText.Length; i++)
+                {
+                    ChangelogText[i].Text = "";
+                }
+
+                for (int i = 0; i < Math.Min(ChangelogText.Length, currentChangelog.Raw.Count); i++)
+                {
+                    ChangelogText[i].Text = currentChangelog.Raw[i + LineIndex];
+                }
+
                 UpArrowScroll.Visible = LineIndex > 0;
                 DownArrowScroll.Visible = LineIndex < MaxLineIndex;
             }
         }
-        
+
         private int maxLineIndex;
-        
+
         public int MaxLineIndex
         {
-            get => maxLineIndex;
+            get
+            {
+                return maxLineIndex;
+            }
 
             private set
             {
@@ -71,7 +89,13 @@ namespace ItemModifier.UI
             }
         }
 
-        public ChangelogUIW() : base("Changelog") => (InheritVisibility, Visible, Width, Height) = (false, false, new StyleDimension(500f), new StyleDimension(485f));
+        public ChangelogUIW() : base("Changelog")
+        {
+            InheritVisibility = false;
+            Visible = false;
+            Width = new StyleDimension(500f);
+            Height = new StyleDimension(485f);
+        }
 
         public override void OnInitialize()
         {
@@ -112,7 +136,7 @@ namespace ItemModifier.UI
                 ColorTint = new Color(50, 50, 200),
                 Top = new StyleDimension(ChangelogVersion.Height.Pixels)
             };
-            UpArrowScroll.Left = new StyleDimension((Width.Pixels - UpArrowScroll.Width.Pixels) * 0.5f);
+            UpArrowScroll.Left = new StyleDimension(-UpArrowScroll.Width.Pixels * 0.5f, 0.5f);
             UpArrowScroll.Parent = this;
             UpArrowScroll.OnLeftClick += (source, e) =>
             {
@@ -134,9 +158,8 @@ namespace ItemModifier.UI
                 }
             };
 
-            TextContainer = new UIContainer(new Vector2(Width.Pixels, Height.Pixels - ChangelogVersion.Height.Pixels))
+            TextContainer = new UIContainer(new Vector2(Width.Pixels, Height.Pixels - ChangelogVersion.Height.Pixels - UpArrowScroll.Height.Pixels))
             {
-                OverflowHidden = true,
                 Top = new StyleDimension(ChangelogVersion.Height.Pixels + UpArrowScroll.Height.Pixels),
                 Parent = this
             };
@@ -159,8 +182,8 @@ namespace ItemModifier.UI
                 InheritVisibility = false,
                 ColorTint = new Color(50, 50, 200)
             };
-            DownArrowScroll.Top = new StyleDimension(Height.Pixels - DownArrowScroll.Height.Pixels);
-            DownArrowScroll.Left = new StyleDimension((Width.Pixels - DownArrowScroll.Width.Pixels) * 0.5f);
+            DownArrowScroll.Top = new StyleDimension(-DownArrowScroll.Height.Pixels, 1f);
+            DownArrowScroll.Left = new StyleDimension(-DownArrowScroll.Width.Pixels * 0.5f, 0.5f);
             DownArrowScroll.Parent = this;
             DownArrowScroll.OnLeftClick += (source, e) =>
             {
@@ -182,17 +205,7 @@ namespace ItemModifier.UI
                 }
             };
 
-            UpdateChangelog();
-        }
-
-        private void UpdateChangelog()
-        {
-            CurrentChangelog = ItemModifier.Changelogs[ChangelogIndex];
-            ChangelogVersion.Text = CurrentChangelog.Version.ToString() + " " + CurrentChangelog.Title;
-            ChangelogVersion.Left = new StyleDimension(-ChangelogVersion.Width.Pixels * 0.5f, 0.5f);
-            Website = CurrentChangelog.Website;
-            MaxLineIndex = CurrentChangelog.Raw.Count - ChangelogText.Length;
-            LineIndex = 0;
+            ChangelogIndex = 0;
         }
     }
 }

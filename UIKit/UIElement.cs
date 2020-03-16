@@ -17,7 +17,10 @@ namespace ItemModifier.UIKit
 
         public UIElement Parent
         {
-            get => parent;
+            get
+            {
+                return parent;
+            }
 
             set
             {
@@ -30,7 +33,6 @@ namespace ItemModifier.UIKit
                     parent?.Children.Remove(this);
                     parent = value;
                     parent.Children.Add(this);
-                    if (InheritVisibility) Visible = parent.Visible;
                     parentInterface = parent.parentInterface;
                 }
                 Recalculate();
@@ -41,7 +43,10 @@ namespace ItemModifier.UIKit
 
         public UserInterface ParentInterface
         {
-            get => parentInterface;
+            get
+            {
+                return parentInterface;
+            }
 
             set
             {
@@ -135,20 +140,21 @@ namespace ItemModifier.UIKit
 
         public bool Visible
         {
-            get => visible;
+            get
+            {
+                return visible;
+            }
 
             set
             {
                 if (visible != value)
                 {
                     visible = value;
-                    Children.ForEach(child => { if (child.InheritVisibility) child.Visible = visible; });
+                    Children.ForEach(child => child.Visible = visible);
                     OnVisibilityChanged?.Invoke(this, visible);
                 }
             }
         }
-
-        public bool InheritVisibility { get; set; } = true;
 
         #region MouseEvents
 
@@ -204,13 +210,19 @@ namespace ItemModifier.UIKit
 
         #endregion
 
-        public int Count { get => Children.Count; }
+        public int Count
+        {
+            get
+            {
+                return Children.Count;
+            }
+        }
 
-        public UIElement(Vector4 Padding = default, Vector4 Margin = default)
+        public UIElement(Vector4 padding = default, Vector4 margin = default)
         {
             ID = Guid.NewGuid().ToString();
-            this.Padding = Padding;
-            this.Margin = Margin;
+            Padding = padding;
+            Margin = margin;
             if (OverflowHiddenRasterizerState == null)
             {
                 OverflowHiddenRasterizerState = new RasterizerState
@@ -228,7 +240,10 @@ namespace ItemModifier.UIKit
 
         public UIElement this[int index]
         {
-            get => Children[index];
+            get
+            {
+                return Children[index];
+            }
         }
 
         public Rectangle GetClippingRectangle(SpriteBatch sb)
@@ -253,7 +268,10 @@ namespace ItemModifier.UIKit
             for (int i = Children.Count - 1; i > -1; i--)
             {
                 UIElement element = Children[i];
-                if (element.Visible && element.ContainsPoint(point)) return element.GetElementAt(point);
+                if (element.Visible && element.ContainsPoint(point))
+                {
+                    return element.GetElementAt(point);
+                }
             }
             return this;
         }
@@ -267,18 +285,15 @@ namespace ItemModifier.UIKit
 
         public void SetSnapPoint(string name, int id, Vector2? anchor = null, Vector2? offset = null)
         {
-            if (!anchor.HasValue)
-            {
-                anchor = new Vector2(0.5f);
-            }
-            if (!offset.HasValue)
-            {
-                offset = Vector2.Zero;
-            }
+            if (!anchor.HasValue) anchor = new Vector2(0.5f);
+            if (!offset.HasValue) offset = Vector2.Zero;
             _snapPoint = new SnapPoint(name, id, anchor.Value, offset.Value);
         }
 
-        public void SetPadding(float pixels) => (Padding.X, Padding.Y, Padding.Z, Padding.W) = (pixels, pixels, pixels, pixels);
+        public void SetPadding(float pixels)
+        {
+            Padding = new Vector4(pixels);
+        }
 
         public virtual void Update(GameTime gameTime)
         {
@@ -352,9 +367,18 @@ namespace ItemModifier.UIKit
 
         public virtual void Recalculate()
         {
-            Dimensions ParentInnerDimension = Parent?.InnerDimensions ?? ParentInterface?.Dimensions ?? UserInterface.ActiveInstance.Dimensions;
-            var width = MathHelper.Clamp(Width.CalculateValue(ParentInnerDimension.Width), MinWidth.CalculateValue(ParentInnerDimension.Width), MaxWidth.CalculateValue(ParentInnerDimension.Width)) + Padding.X + Padding.Z + Margin.X + Margin.Z;
-            var height = MathHelper.Clamp(Height.CalculateValue(ParentInnerDimension.Height), MinHeight.CalculateValue(ParentInnerDimension.Height), MaxHeight.CalculateValue(ParentInnerDimension.Height)) + Padding.Y + Padding.W + Margin.Y + Margin.W;
+            Dimensions ParentInnerDimension;
+            if (Parent == null)
+            {
+                ParentInnerDimension = ParentInterface?.Dimensions ?? UserInterface.ActiveInstance.Dimensions;
+            }
+            else
+            {
+                ParentInnerDimension = Parent.InnerDimensions;
+                if (Parent is UIContainer container) ParentInnerDimension = new Dimensions(ParentInnerDimension.X, ParentInnerDimension.Y - container.ScrollValue, ParentInnerDimension.Width, float.MaxValue);
+            }
+            float width = MathHelper.Clamp(Width.CalculateValue(ParentInnerDimension.Width), MinWidth.CalculateValue(ParentInnerDimension.Width), MaxWidth.CalculateValue(ParentInnerDimension.Width)) + Padding.X + Padding.Z + Margin.X + Margin.Z;
+            float height = MathHelper.Clamp(Height.CalculateValue(ParentInnerDimension.Height), MinHeight.CalculateValue(ParentInnerDimension.Height), MaxHeight.CalculateValue(ParentInnerDimension.Height)) + Padding.Y + Padding.W + Margin.Y + Margin.W;
             OuterDimensions = new Dimensions(Left.CalculateValue(ParentInnerDimension.Width) + ParentInnerDimension.X + ParentInnerDimension.Width * HorizontalAlign - width * HorizontalAlign, Top.CalculateValue(ParentInnerDimension.Height) + ParentInnerDimension.Y + ParentInnerDimension.Height * VerticalAlign - height * VerticalAlign, width, height);
             Dimensions = new Dimensions(OuterDimensions.X + Margin.X, OuterDimensions.Y + Margin.Y, OuterDimensions.Width - Margin.X - Margin.Z, OuterDimensions.Height - Margin.Y - Margin.W);
             InnerDimensions = new Dimensions(Dimensions.X + Padding.X, Dimensions.Y + Padding.Y, Dimensions.Width - Padding.X - Padding.Z, Dimensions.Height - Padding.Y - Padding.W);

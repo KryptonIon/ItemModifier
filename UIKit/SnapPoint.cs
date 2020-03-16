@@ -16,7 +16,13 @@ namespace ItemModifier.UIKit
 
         public Vector2 Position { get; private set; }
 
-        public SnapPoint(string name, int id, Vector2 anchor, Vector2 offset) => (Name, ID, this.anchor, this.offset) = (name, id, anchor, offset);
+        public SnapPoint(string name, int id, Vector2 anchor, Vector2 offset)
+        {
+            Name = name;
+            ID = id;
+            this.anchor = anchor;
+            this.offset = offset;
+        }
 
         public void Calculate(UIElement element)
         {
@@ -25,6 +31,9 @@ namespace ItemModifier.UIKit
             Position = dimensions.Position + offset + anchor * dimensions.Size;
         }
 
-        public override string ToString() => $"SnapPoint - ID: {ID}, Name: {Name}";
+        public override string ToString()
+        {
+            return $"SnapPoint - ID: {ID}, Name: {Name}";
+        }
     }
 }

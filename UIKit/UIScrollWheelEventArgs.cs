@@ -6,6 +6,9 @@ namespace ItemModifier.UIKit
     {
         public int ScrollWheelValue { get; }
 
-        public UIScrollWheelEventArgs(UIElement Target, Vector2 MousePosition, int ScrollWheelValue) : base(Target, MousePosition) => this.ScrollWheelValue = ScrollWheelValue;
+        public UIScrollWheelEventArgs(UIElement target, Vector2 mousePosition, int scrollWheelValue) : base(target, mousePosition)
+        {
+            ScrollWheelValue = scrollWheelValue;
+        }
     }
 }

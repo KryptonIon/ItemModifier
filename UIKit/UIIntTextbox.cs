@@ -11,7 +11,10 @@ namespace ItemModifier.UIKit
 
         public override int Value
         {
-            get => PrivateValue;
+            get
+            {
+                return PrivateValue;
+            }
 
             set
             {
@@ -38,7 +41,13 @@ namespace ItemModifier.UIKit
 
         }
 
-        public UIIntTextbox(int Min, int Max, Vector4 Margin = default) : this(Margin) => (MaxThresholdEnabled, MaxThreshold, MinThresholdEnabled, MinThreshold) = (true, Max, true, Min);
+        public UIIntTextbox(int Min, int Max, Vector4 Margin = default) : this(Margin)
+        {
+            MinThresholdEnabled = true;
+            MinThreshold = Min;
+            MaxThresholdEnabled = true;
+            MaxThreshold = Max;
+        }
 
         public override void RecalculateValue()
         {
@@ -55,14 +64,8 @@ namespace ItemModifier.UIKit
                 }
                 else
                 {
-                    if (Negatable)
-                    {
-                        Value = Positive ? Math.Abs(numberparsed) : -Math.Abs(numberparsed);
-                    }
-                    else
-                    {
-                        Value = Math.Abs(numberparsed);
-                    }
+                    if (Negatable) Value = Positive ? Math.Abs(numberparsed) : -Math.Abs(numberparsed);
+                    else Value = Math.Abs(numberparsed);
                 }
             }
             catch (OverflowException)

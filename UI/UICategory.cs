@@ -61,9 +61,11 @@ namespace ItemModifier.UI
 
             public Color TextColor { get; set; } = Color.White;
 
-            public UIProperty(Texture2D ImageLabel, string Label, UIElement InputElement)
+            public UIProperty(Texture2D imageLabel, string label, UIElement inputElement)
             {
-                (imageLabel, this.Label, this.InputElement) = (new UIImage(ImageLabel) { Parent = this }, Label, InputElement);
+                this.imageLabel = new UIImage(imageLabel);
+                Label = label;
+                InputElement = inputElement;
             }
 
             private void RecalculateSize()
@@ -98,10 +100,10 @@ namespace ItemModifier.UI
 
         public List<UIProperty> Properties { get; }
 
-        public UICategory(string Name, List<UIProperty> Properties)
+        public UICategory(string name, List<UIProperty> properties = new List<UIProperty>)
         {
-            this.Name = Name;
-            this.Properties = Properties ?? new List<UIProperty>();
+            Name = name;
+            Properties = properties;
         }
 
         public UIProperty this[int index]

@@ -5,22 +5,32 @@ namespace ItemModifier.UIKit
 {
     public class UIImage : UIElement
     {
-        private Texture2D _image;
+        private Texture2D image;
 
         public Texture2D Image
         {
-            get => _image;
+            get
+            {
+                return image;
+            }
+
             set
             {
-                _image = value;
-                Width = new StyleDimension(_image.Width);
-                Height = new StyleDimension(_image.Height);
+                image = value;
+                Width = new StyleDimension(image.Width);
+                Height = new StyleDimension(image.Height);
             }
         }
 
         public Color ColorTint;
 
-        public UIImage(Texture2D Image, Color? ColorTint = null, Vector4 Margin = default) : base(Margin: Margin) => (this.Image, this.ColorTint, Width, Height) = (Image, ColorTint ?? Color.White, new StyleDimension(Image.Width), new StyleDimension(Image.Height));
+        public UIImage(Texture2D image, Color? colorTint = null, Vector4 margin = default) : base(margin: margin)
+        {
+            Image = image;
+            ColorTint = colorTint;
+            Width = new StyleDimension(image.Width);
+            Height = new StyleDimension(image.Height);
+        }
 
         protected override void DrawSelf(SpriteBatch sb)
         {

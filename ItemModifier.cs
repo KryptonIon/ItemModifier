@@ -19,9 +19,15 @@ namespace ItemModifier
 
             public string Website { get; }
 
-            public List<string> Raw { get; }
+            public string[] Raw { get; }
 
-            public Changelog(string Version, List<string> Raw, string Title = "", string Website = "") => (this.Version, this.Raw, this.Title, this.Website) = (Version, Raw, Title, Website);
+            public Changelog(string version, string[] raw, string title = "", string website = "")
+            {
+                Version = version;
+                Raw = raw;
+                Title = title;
+                Website = website;
+            }
 
             public override string ToString()
             {
@@ -34,7 +40,7 @@ namespace ItemModifier
                 {
                     using (BinaryReader reader = new BinaryReader(mStream))
                     {
-                        return new Changelog(reader.ReadString(), new List<string>(reader.ReadString().Split('\n')), reader.ReadString(), reader.ReadString());
+                        return new Changelog(reader.ReadString(), reader.ReadString().Split('\n'), reader.ReadString(), reader.ReadString());
                     }
                 }
             }
@@ -112,6 +118,64 @@ namespace ItemModifier
 
             public static Texture2D Air { get; private set; }
 
+            public static Texture2D AutoReuse { get; private set; }
+
+            public static Texture2D Consumable { get; private set; }
+
+            public static Texture2D PotionSickness { get; private set; }
+
+            public static Texture2D DamageType { get; private set; }
+
+            public static Texture2D Accessory { get; private set; }
+
+            public static Texture2D Damage { get; private set; }
+
+            public static Texture2D CritChance { get; private set; }
+
+            public static Texture2D Knockback { get; private set; }
+
+            public static Texture2D ProjectileShot { get; private set; }
+
+            public static Texture2D ProjectileSpeed { get; private set; }
+
+            public static Texture2D CreateTile { get; private set; }
+
+            public static Texture2D AddedRange { get; private set; }
+
+            public static Texture2D BuffDuration { get; private set; }
+
+            public static Texture2D BuffType { get; private set; }
+
+            public static Texture2D HPHealed { get; private set; }
+
+            public static Texture2D MPHealed { get; private set; }
+
+            public static Texture2D AxePower { get; private set; }
+
+            public static Texture2D PickaxePower { get; private set; }
+
+            public static Texture2D HammerPower { get; private set; }
+
+            public static Texture2D Stack { get; private set; }
+
+            public static Texture2D MaxStack { get; private set; }
+
+            public static Texture2D UseAnimation { get; private set; }
+
+            public static Texture2D UseTime { get; private set; }
+
+            public static Texture2D Defense { get; private set; }
+
+            public static Texture2D FishingPower { get; private set; }
+
+            public static Texture2D ItemScale { get; private set; }
+
+            public static Texture2D UseStyle { get; private set; }
+
+            public static Texture2D ScrollBorder { get; private set; }
+
+            public static Texture2D ScrollInside { get; private set; }
+
             public static void Load()
             {
                 ModifyItem = ModContent.GetTexture("ItemModifier/UI/ModifyItem");
@@ -149,6 +213,37 @@ namespace ItemModifier
                 VerticalLine = ModContent.GetTexture("ItemModifier/UIKit/VerticalLine");
                 Caret = ModContent.GetTexture("ItemModifier/UIKit/Caret");
                 Air = ModContent.GetTexture("ItemModifier/UIKit/Air");
+                AutoReuse = ModContent.GetTexture("ItemModifier/UI/AutoReuse");
+                Consumable = ModContent.GetTexture("ItemModifier/UI/Consumable");
+                PotionSickness = ModContent.GetTexture("ItemModifier/UI/PotionSickness");
+                DamageType = ModContent.GetTexture("ItemModifier/UI/DamageType");
+                Accessory = ModContent.GetTexture("ItemModifier/UI/Accessory");
+                Damage = ModContent.GetTexture("ItemModifier/UI/Damage");
+                CritChance = ModContent.GetTexture("ItemModifier/UI/CritChance");
+                Knockback = ModContent.GetTexture("ItemModifier/UI/Knockback");
+                ProjectileShot = ModContent.GetTexture("ItemModifier/UI/ProjectileShot");
+                ProjectileSpeed = ModContent.GetTexture("ItemModifier/UI/ProjectileSpeed");
+                CreateTile = ModContent.GetTexture("ItemModifier/UI/CreateTile");
+                AddedRange = ModContent.GetTexture("ItemModifier/UI/AddedRange");
+                BuffDuration = ModContent.GetTexture("ItemModifier/UI/BuffDuration");
+                BuffType = ModContent.GetTexture("ItemModifier/UI/BuffType");
+                HPHealed = ModContent.GetTexture("ItemModifier/UI/HealHP");
+                MPHealed = ModContent.GetTexture("ItemModifier/UI/HealMP");
+                AxePower = ModContent.GetTexture("ItemModifier/UI/AxePower");
+                PickaxePower = ModContent.GetTexture("ItemModifier/UI/PickaxePower");
+                HammerPower = ModContent.GetTexture("ItemModifier/UI/HammerPower");
+                Stack = ModContent.GetTexture("ItemModifier/UI/Stack");
+                MaxStack = ModContent.GetTexture("ItemModifier/UI/MaxStack");
+                UseAnimation = ModContent.GetTexture("ItemModifier/UI/UseAnimation");
+                UseTime = ModContent.GetTexture("ItemModifier/UI/UseTime");
+                Defense = ModContent.GetTexture("ItemModifier/UI/Defense");
+                FishingPower = ModContent.GetTexture("ItemModifier/UI/FishingPower");
+                ItemScale = ModContent.GetTexture("ItemModifier/UI/Scale");
+                UseStyle = ModContent.GetTexture("ItemModifier/UI/UseStyle");
+                ScrollBorder = new Texture2D(Main.graphics.GraphicsDevice, 1, 1);
+                ScrollInside = new Texture2D(Main.graphics.GraphicsDevice, 1, 1);
+                ScrollBorder.SetData(new Color[] { new Color(43, 56, 101) });
+                ScrollInside.SetData(new Color[] { Color.White });
             }
 
             public static void Unload()
@@ -238,6 +333,7 @@ namespace ItemModifier
         public override void Unload()
         {
             Textures.Unload();
+            Changelogs = null;
             Instance = null;
         }
 
@@ -251,7 +347,10 @@ namespace ItemModifier
             if (ItemAtCursorDisabled)
             {
                 int mouseItemIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Interact Item Icon"));
-                if (mouseItemIndex != -1) layers.RemoveAt(mouseItemIndex);
+                if (mouseItemIndex != -1)
+                {
+                    layers.RemoveAt(mouseItemIndex);
+                }
             }
             int mouseIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Hotbar"));
             if (mouseIndex != -1)
@@ -275,44 +374,44 @@ namespace ItemModifier
 
     public static class ExtensionMethods
     {
-        public static void CopyItemProperties(this Item Target, Item Origin)
+        public static void CopyItemProperties(this Item target, Item origin)
         {
-            Target.Prefix(Origin.prefix);
-            Target.autoReuse = Origin.autoReuse;
-            Target.consumable = Origin.consumable;
-            Target.potion = Origin.potion;
-            Target.melee = Origin.melee;
-            Target.magic = Origin.magic;
-            Target.ranged = Origin.ranged;
-            Target.summon = Origin.summon;
-            Target.thrown = Origin.thrown;
-            Target.accessory = Origin.accessory;
-            Target.damage = Origin.damage;
-            Target.knockBack = Origin.damage;
-            Target.crit = Origin.crit;
-            Target.shoot = Origin.shoot;
-            Target.shootSpeed = Origin.shootSpeed;
-            Target.createTile = Origin.createTile;
-            Target.tileBoost = Origin.tileBoost;
-            Target.buffTime = Origin.buffTime;
-            Target.buffType = Origin.buffType;
-            Target.healLife = Origin.healLife;
-            Target.healMana = Origin.healMana;
-            Target.axe = Origin.axe;
-            Target.pick = Origin.pick;
-            Target.hammer = Origin.hammer;
-            Target.maxStack = Origin.maxStack;
-            Target.useTime = Origin.useTime;
-            Target.useAnimation = Origin.useAnimation;
-            Target.defense = Origin.defense;
-            Target.melee = Origin.melee;
-            Target.magic = Origin.magic;
-            Target.ranged = Origin.ranged;
-            Target.summon = Origin.summon;
-            Target.thrown = Origin.thrown;
-            Target.fishingPole = Origin.fishingPole;
-            Target.scale = Origin.scale;
-            Target.useStyle = Origin.useStyle;
+            target.Prefix(origin.prefix);
+            target.autoReuse = origin.autoReuse;
+            target.consumable = origin.consumable;
+            target.potion = origin.potion;
+            target.melee = origin.melee;
+            target.magic = origin.magic;
+            target.ranged = origin.ranged;
+            target.summon = origin.summon;
+            target.thrown = origin.thrown;
+            target.accessory = origin.accessory;
+            target.damage = origin.damage;
+            target.knockBack = origin.damage;
+            target.crit = origin.crit;
+            target.shoot = origin.shoot;
+            target.shootSpeed = origin.shootSpeed;
+            target.createTile = origin.createTile;
+            target.tileBoost = origin.tileBoost;
+            target.buffTime = origin.buffTime;
+            target.buffType = origin.buffType;
+            target.healLife = origin.healLife;
+            target.healMana = origin.healMana;
+            target.axe = origin.axe;
+            target.pick = origin.pick;
+            target.hammer = origin.hammer;
+            target.maxStack = origin.maxStack;
+            target.useTime = origin.useTime;
+            target.useAnimation = origin.useAnimation;
+            target.defense = origin.defense;
+            target.melee = origin.melee;
+            target.magic = origin.magic;
+            target.ranged = origin.ranged;
+            target.summon = origin.summon;
+            target.thrown = origin.thrown;
+            target.fishingPole = origin.fishingPole;
+            target.scale = origin.scale;
+            target.useStyle = origin.useStyle;
         }
     }
 }

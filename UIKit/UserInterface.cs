@@ -69,7 +69,10 @@ namespace ItemModifier.UIKit
 
         public bool Visible { get; set; } = true;
 
-        public UserInterface() => ActiveInstance = this;
+        public UserInterface()
+        {
+            ActiveInstance = this;
+        }
 
         public void Use()
         {

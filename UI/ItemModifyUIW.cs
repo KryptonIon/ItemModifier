@@ -550,10 +550,7 @@ namespace ItemModifier.UI
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            if (DefaultItem.type != Main.LocalPlayer.HeldItem.type)
-            {
-                DefaultItem.SetDefaults(Main.LocalPlayer.HeldItem.type);
-            }
+            if (DefaultItem.type != Main.LocalPlayer.HeldItem.type) DefaultItem.SetDefaults(Main.LocalPlayer.HeldItem.type);
 
             if (LiveSync)
             {
@@ -566,119 +563,29 @@ namespace ItemModifier.UI
                 DamageType.Choices[2].Value = Main.LocalPlayer.HeldItem.ranged;
                 DamageType.Choices[3].Value = Main.LocalPlayer.HeldItem.summon;
                 DamageType.Choices[4].Value = Main.LocalPlayer.HeldItem.thrown;
-                if (!Shoot.Focused)
-                {
-                    Shoot.Value = Main.LocalPlayer.HeldItem.shoot;
-                }
-
-                if (!Tile.Focused)
-                {
-                    Tile.Value = Main.LocalPlayer.HeldItem.createTile;
-                }
-
-                if (!TileBoost.Focused)
-                {
-                    TileBoost.Value = Main.LocalPlayer.HeldItem.tileBoost;
-                }
-
-                if (!Buff.Focused)
-                {
-                    Buff.Value = Main.LocalPlayer.HeldItem.buffType;
-                }
-
-                if (!BuffTime.Focused)
-                {
-                    BuffTime.Value = Main.LocalPlayer.HeldItem.buffTime;
-                }
-
-                if (!Damage.Focused)
-                {
-                    Damage.Value = Main.LocalPlayer.HeldItem.damage;
-                }
-
-                if (!Critical.Focused)
-                {
-                    Critical.Value = Main.LocalPlayer.HeldItem.crit;
-                }
-
-                if (!ShootSpeed.Focused)
-                {
-                    ShootSpeed.Value = Main.LocalPlayer.HeldItem.shootSpeed;
-                }
-
-                if (!KnockBack.Focused)
-                {
-                    KnockBack.Value = Main.LocalPlayer.HeldItem.knockBack;
-                }
-
-                if (!HealHP.Focused)
-                {
-                    HealHP.Value = Main.LocalPlayer.HeldItem.healLife;
-                }
-
-                if (!HealMP.Focused)
-                {
-                    HealMP.Value = Main.LocalPlayer.HeldItem.healMana;
-                }
-
-                if (!AxePower.Focused)
-                {
-                    AxePower.Value = Main.LocalPlayer.HeldItem.axe;
-                }
-
-                if (!PickaxePower.Focused)
-                {
-                    PickaxePower.Value = Main.LocalPlayer.HeldItem.pick;
-                }
-
-                if (!HammerPower.Focused)
-                {
-                    HammerPower.Value = Main.LocalPlayer.HeldItem.hammer;
-                }
-
-                if (!Stack.Focused)
-                {
-                    Stack.Value = Main.LocalPlayer.HeldItem.stack;
-                }
-
-                if (!MaxStack.Focused)
-                {
-                    MaxStack.Value = Main.LocalPlayer.HeldItem.maxStack;
-                }
-
-                if (!UseAnimation.Focused)
-                {
-                    UseAnimation.Value = Main.LocalPlayer.HeldItem.useAnimation;
-                }
-
-                if (!UseTime.Focused)
-                {
-                    UseTime.Value = Main.LocalPlayer.HeldItem.useTime;
-                }
-
-                if (!Defense.Focused)
-                {
-                    Defense.Value = Main.LocalPlayer.HeldItem.defense;
-                }
-
-                if (!FishingPower.Focused)
-                {
-                    FishingPower.Value = Main.LocalPlayer.HeldItem.fishingPole;
-                }
-
-                if (!Scale.Focused)
-                {
-                    Scale.Value = Main.LocalPlayer.HeldItem.scale;
-                }
-
-                if (Main.LocalPlayer.HeldItem.useStyle == 0)
-                {
-                    UseStyle.DeselectAll();
-                }
-                else
-                {
-                    UseStyle.Select(Main.LocalPlayer.HeldItem.useStyle - 1);
-                }
+                if (!Shoot.Focused) Shoot.Value = Main.LocalPlayer.HeldItem.shoot;
+                if (!Tile.Focused) Tile.Value = Main.LocalPlayer.HeldItem.createTile;
+                if (!TileBoost.Focused) TileBoost.Value = Main.LocalPlayer.HeldItem.tileBoost;
+                if (!Buff.Focused) Buff.Value = Main.LocalPlayer.HeldItem.buffType;
+                if (!BuffTime.Focused) BuffTime.Value = Main.LocalPlayer.HeldItem.buffTime;
+                if (!Damage.Focused) Damage.Value = Main.LocalPlayer.HeldItem.damage;
+                if (!Critical.Focused) Critical.Value = Main.LocalPlayer.HeldItem.crit;
+                if (!ShootSpeed.Focused) ShootSpeed.Value = Main.LocalPlayer.HeldItem.shootSpeed;
+                if (!KnockBack.Focused) KnockBack.Value = Main.LocalPlayer.HeldItem.knockBack;
+                if (!HealHP.Focused) HealHP.Value = Main.LocalPlayer.HeldItem.healLife;
+                if (!HealMP.Focused) HealMP.Value = Main.LocalPlayer.HeldItem.healMana;
+                if (!AxePower.Focused) AxePower.Value = Main.LocalPlayer.HeldItem.axe;
+                if (!PickaxePower.Focused) PickaxePower.Value = Main.LocalPlayer.HeldItem.pick;
+                if (!HammerPower.Focused) HammerPower.Value = Main.LocalPlayer.HeldItem.hammer;
+                if (!Stack.Focused) Stack.Value = Main.LocalPlayer.HeldItem.stack;
+                if (!MaxStack.Focused) MaxStack.Value = Main.LocalPlayer.HeldItem.maxStack;
+                if (!UseAnimation.Focused) UseAnimation.Value = Main.LocalPlayer.HeldItem.useAnimation;
+                if (!UseTime.Focused) UseTime.Value = Main.LocalPlayer.HeldItem.useTime;
+                if (!Defense.Focused) Defense.Value = Main.LocalPlayer.HeldItem.defense;
+                if (!FishingPower.Focused) FishingPower.Value = Main.LocalPlayer.HeldItem.fishingPole;
+                if (!Scale.Focused) Scale.Value = Main.LocalPlayer.HeldItem.scale;
+                if (Main.LocalPlayer.HeldItem.useStyle == 0) UseStyle.DeselectAll();
+                else UseStyle.Select(Main.LocalPlayer.HeldItem.useStyle - 1);
                 GrayBG.Visible = Main.LocalPlayer.HeldItem.type == 0;
             }
         }

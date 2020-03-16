@@ -8,25 +8,34 @@ namespace ItemModifier.UIKit
     {
         public string Text
         {
-            get => _text;
+            get
+            {
+                return text;
+            }
 
             set
             {
-                _text = value;
-                RecalculateSize();
+                text = value;
+                Recalculate();
             }
         }
 
-        private string _text;
+        private string text;
 
         public Color TextColor { get; set; } = Color.White;
 
         public bool SkipDescenderCheck { get; set; } = false;
 
-        public UIText(string Text, Vector4 Padding = default, Vector4 Margin = default) : base(Padding, Margin) => (this.Text, Height) = (Text, new StyleDimension(21));
+        public UIText(string text, Vector4 padding = default, Vector4 margin = default) : base(padding, margin)
+        {
+            Text = text;
+        }
 
-        public UIText(string Text, Color TextColor, Vector4 Padding = default, Vector4 Margin = default) : this(Text, Padding, Margin) => this.TextColor = TextColor;
-        
+        public UIText(string text, Color textColor, Vector4 padding = default, Vector4 margin = default) : this(text, padding, margin)
+        {
+            TextColor = textColor;
+        }
+
         public override void Recalculate()
         {
             RecalculateSize();

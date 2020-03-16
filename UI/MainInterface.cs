@@ -82,7 +82,7 @@ namespace ItemModifier.UI
             ChangelogWB.OnLeftClick += (source, e) => ChangelogWindow.Visible = !ChangelogWindow.Visible;
             ChangelogWB.WhileMouseHover += (source, e) => ItemModifier.Instance.Tooltip = "Changelog";
 
-            DiscordLink = new UIImageButton(ItemModifier.Textures.DiscordIcon, ActiveTransparency: 1.5f, InactiveTransparency: 0.6f)
+            DiscordLink = new UIImageButton(ItemModifier.Textures.DiscordIcon, activeTransparency: 1.5f, inactiveTransparency: 0.6f)
             {
                 Left = new StyleDimension(17f)
             };
@@ -93,7 +93,7 @@ namespace ItemModifier.UI
 
             if (KRConfig.Instance.HelpMessage)
             {
-                UIWindow messageBox = new UIWindow("", false, Draggable: false)
+                UIWindow messageBox = new UIWindow("", false, draggable: false)
                 {
                     Width = new StyleDimension(350f),
                     Height = new StyleDimension(21f),

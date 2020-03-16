@@ -31,7 +31,10 @@ namespace ItemModifier.UIKit
 
         public uint CharacterLimit
         {
-            get => characterLimit;
+            get
+            {
+                return characterLimit;
+            }
 
             set
             {
@@ -45,7 +48,10 @@ namespace ItemModifier.UIKit
 
         public string Text
         {
-            get => text;
+            get
+            {
+                return text;
+            }
 
             set
             {
@@ -63,7 +69,10 @@ namespace ItemModifier.UIKit
 
         public bool Focused
         {
-            get => focused;
+            get
+            {
+                return focused;
+            }
 
             protected set
             {
@@ -83,7 +92,11 @@ namespace ItemModifier.UIKit
 
         protected int LatestIndex
         {
-            get => latestIndex;
+            get
+            {
+                return latestIndex;
+            }
+
             set
             {
                 latestIndex = value > 9 ? 0 : value;
@@ -96,7 +109,11 @@ namespace ItemModifier.UIKit
 
         public int CaretPosition
         {
-            get => caretPosition;
+            get
+            {
+                return caretPosition;
+            }
+
             set
             {
                 caretPosition = value < 0 ? 0 : value > Text.Length ? Text.Length : value;
@@ -109,9 +126,17 @@ namespace ItemModifier.UIKit
 
         public CharacterLimitType LimitType { get; set; } = CharacterLimitType.NoLimit;
 
-        public UITextbox(Vector4 Margin = default) : base(Margin: Margin) => (Width, Height) = (new StyleDimension(100f), new StyleDimension(22f));
+        public UITextbox(Vector4 Margin = default) : base(margin: Margin)
+        {
+            Width = new StyleDimension(100f);
+            Height = new StyleDimension(22f);
+        }
 
-        public UITextbox(uint CharacterLimit, Vector4 Margin = default) : this(Margin) => (this.CharacterLimit, LimitType) = (CharacterLimit, CharacterLimitType.StaticLimit);
+        public UITextbox(uint characterLimit, Vector4 margin = default) : this(margin)
+        {
+            CharacterLimit = characterLimit;
+            LimitType = CharacterLimitType.StaticLimit;
+        }
 
         public override void LeftClick(UIMouseEventArgs e)
         {
@@ -150,14 +175,8 @@ namespace ItemModifier.UIKit
                 CheckKeys();
                 HandleText();
                 Vector3 textsize = DrawText(sb);
-                if (CaretDelta < 20)
-                {
-                    DrawCaret(sb, textsize);
-                }
-                else if (CaretDelta > 39)
-                {
-                    CaretDelta = 0;
-                }
+                if (CaretDelta < 20) DrawCaret(sb, textsize);
+                else if (CaretDelta > 39) CaretDelta = 0;
                 CaretDelta++;
             }
             else
@@ -257,10 +276,7 @@ namespace ItemModifier.UIKit
                         newText = Tuple.Create(trimmedText, trimmedText.Length);
                         break;
                     case CharacterLimitType.StaticLimit:
-                        if (newText.Item1.Length > CharacterLimit)
-                        {
-                            newText = Tuple.Create(newText.Item1.Remove((int)CharacterLimit), (int)CharacterLimit);
-                        }
+                        if (newText.Item1.Length > CharacterLimit) newText = Tuple.Create(newText.Item1.Remove((int)CharacterLimit), (int)CharacterLimit);
                         break;
                 }
                 TextChanged(newText);
@@ -293,18 +309,9 @@ namespace ItemModifier.UIKit
             {
                 int num = Main.keyInt[j];
                 string str = Main.keyString[j];
-                if (num == 13)
-                {
-                    Main.inputTextEnter = true;
-                }
-                else if (num == 27)
-                {
-                    Main.inputTextEscape = true;
-                }
-                else if (num >= 32 && num != 127)
-                {
-                    inputText += str;
-                }
+                if (num == 13) Main.inputTextEnter = true;
+                else if (num == 27) Main.inputTextEscape = true;
+                else if (num >= 32 && num != 127) inputText += str;
             }
             Main.keyCount = 0;
             newText = newText.Insert(newCaretPos, inputText);

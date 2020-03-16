@@ -9,17 +9,17 @@ namespace ItemModifier.UIKit
 
         public bool Horizontal { get; set; } = true;
 
-        public UILine(float Length, float Thickness, bool Horizontal = true, Vector4 Padding = default, Vector4 Margin = default) : base(Padding, Margin)
+        public UILine(float length, float thickness, bool horizontal = true, Vector4 padding = default, Vector4 margin = default) : base(padding, margin)
         {
-            if (Horizontal)
+            if (horizontal)
             {
-                Width = new StyleDimension(Length);
-                Height = new StyleDimension(Thickness);
+                Width = new StyleDimension(length);
+                Height = new StyleDimension(thickness);
             }
             else
             {
-                Width = new StyleDimension(Thickness);
-                Height = new StyleDimension(Length);
+                Width = new StyleDimension(thickness);
+                Height = new StyleDimension(length);
             }
         }
 

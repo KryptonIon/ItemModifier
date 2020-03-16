@@ -226,3 +226,4 @@ project.lock.json
 
 build.txt
 *.sln
+*.editorconfig

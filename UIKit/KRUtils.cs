@@ -12,7 +12,13 @@ namespace ItemModifier.UIKit
 {
     public static class KRUtils
     {
-        public static Color UIBackgroundColor { get => new Color(44, 57, 105, 190); }
+        public static Color UIBackgroundColor
+        {
+            get
+            {
+                return new Color(44, 57, 105, 190);
+            }
+        }
 
         public static Vector2 MeasureTextAccurate(string Text, bool SkipDescenderScaling = false)
         {

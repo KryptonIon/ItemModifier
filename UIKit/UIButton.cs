@@ -13,7 +13,10 @@ namespace ItemModifier.UIKit
 
         public bool Small
         {
-            get => SmallButton;
+            get
+            {
+                return SmallButton;
+            }
 
             set
             {
@@ -37,7 +40,13 @@ namespace ItemModifier.UIKit
 
         public string Text { get; set; }
 
-        public UIButton(bool Flat = true, bool Small = false, Vector4 Padding = default, Vector4 Margin = default) : base(Padding, Margin) => (this.Flat, this.Small, Width, Height) = (Flat, Small, new StyleDimension(80f), new StyleDimension(32f));
+        public UIButton(bool flat = true, bool small = false, Vector4 padding = default, Vector4 margin = default) : base(padding, margin)
+        {
+            Flat = flat;
+            Small = small;
+            Width = new StyleDimension(80f);
+            Height = new StyleDimension(32f);
+        }
 
         public override void LeftClick(UIMouseEventArgs e)
         {

@@ -14,7 +14,10 @@ namespace ItemModifier.UIKit
 
             public string Label
             {
-                get => label;
+                get
+                {
+                    return label;
+                }
 
                 set
                 {
@@ -28,7 +31,10 @@ namespace ItemModifier.UIKit
 
             public bool Value
             {
-                get => PrivateValue;
+                get
+                {
+                    return PrivateValue;
+                }
 
                 set
                 {
@@ -37,7 +43,10 @@ namespace ItemModifier.UIKit
                 }
             }
 
-            internal UISelectionChoice(string Label, Vector4 Margin = default) : base(Margin: Margin) => this.Label = Label;
+            internal UISelectionChoice(string label, Vector4 margin = default) : base(margin: margin)
+            {
+                Label = label;
+            }
 
             public override void LeftClick(UIMouseEventArgs e)
             {
@@ -108,14 +117,14 @@ namespace ItemModifier.UIKit
             }
         }
 
-        public UISelection(Vector4 Margin = default, params string[] Labels) : base(Margin: Margin)
+        public UISelection(Vector4 margin = default, params string[] labels) : base(margin: margin)
         {
-            AddChoices(Labels);
+            AddChoices(labels);
         }
 
-        public UISelectionChoice AddChoice(string Label)
+        public UISelectionChoice AddChoice(string label)
         {
-            UISelectionChoice newChoice = new UISelectionChoice(Label);
+            UISelectionChoice newChoice = new UISelectionChoice(label);
             newChoice.OnLeftClick += (source, e) => Select(newChoice);
             newChoice.Top = new StyleDimension(21 * Choices.Count);
             Height = new StyleDimension(Height.Pixels + newChoice.Height.Pixels, Height.Percent);
@@ -125,12 +134,12 @@ namespace ItemModifier.UIKit
             return newChoice;
         }
 
-        public List<UISelectionChoice> AddChoices(params string[] Labels)
+        public List<UISelectionChoice> AddChoices(params string[] labels)
         {
             List<UISelectionChoice> list = new List<UISelectionChoice>();
-            for (int i = 0; i < Labels.Length; i++)
+            for (int i = 0; i < labels.Length; i++)
             {
-                list.Add(AddChoice(Labels[i]));
+                list.Add(AddChoice(labels[i]));
             }
             return list;
         }

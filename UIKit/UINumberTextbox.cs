@@ -22,13 +22,13 @@ namespace ItemModifier.UIKit
 
         public Color NegativeColor { get; set; } = Color.Red;
 
-        public UINumberTextbox(Vector4 Margin = default) : base(Margin)
+        public UINumberTextbox(Vector4 margin = default) : base(margin)
         {
             Text = "0";
             OnFocusChanged += (source, value) => { if (!value) RecalculateValue(); };
         }
 
-        public UINumberTextbox(uint CharacterLimit, Vector4 Margin = default) : base(CharacterLimit, Margin)
+        public UINumberTextbox(uint characterLimit, Vector4 margin = default) : base(characterLimit, margin)
         {
             Text = "0";
             OnFocusChanged += (source, value) => { if (!value) RecalculateValue(); };
@@ -40,7 +40,11 @@ namespace ItemModifier.UIKit
 
         protected int ValIncHoldDeltaThres
         {
-            get => valIncHoldDeltaThres;
+            get
+            {
+                return valIncHoldDeltaThres;
+            }
+
             set
             {
                 valIncHoldDeltaThres = value < 5 ? 5 : value;

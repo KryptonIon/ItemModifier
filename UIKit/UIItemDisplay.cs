@@ -16,13 +16,13 @@ namespace ItemModifier.UIKit
 
         public bool Center { get; set; } = true;
 
-        public UIItemDisplay(Vector2 Size, int ItemID = 0, bool ScaleDown = true, bool ScaleUp = false, Vector4 Padding = default, Vector4 Margin = default) : base(Padding, Margin)
+        public UIItemDisplay(Vector2 size, int itemID = 0, bool scaleDown = true, bool scaleUp = false, Vector4 padding = default, Vector4 margin = default) : base(padding, margin)
         {
-            Width = new StyleDimension(Size.X);
-            Height = new StyleDimension(Size.Y);
-            DisplayItem.SetDefaults(ItemID);
-            this.ScaleDown = ScaleDown;
-            this.ScaleUp = ScaleUp;
+            Width = new StyleDimension(size.X);
+            Height = new StyleDimension(size.Y);
+            DisplayItem.SetDefaults(itemID);
+            ScaleDown = scaleDown;
+            ScaleUp = scaleUp;
         }
 
         protected override void DrawSelf(SpriteBatch sb)
