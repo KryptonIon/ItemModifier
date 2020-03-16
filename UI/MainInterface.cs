@@ -11,7 +11,7 @@ namespace ItemModifier.UI
 
         internal ChangelogUIW ChangelogWindow;
 
-        internal NewItemUIW GenerateItemWindow;
+        internal NewItemUIW NewItemWindow;
 
         internal UIImageButton ModifyWB;
 
@@ -34,15 +34,15 @@ namespace ItemModifier.UI
 
             ModifyWindow = new ItemModifyUIW
             {
-                Top = new StyleDimension(0f, 0.2f),
+                Top = ChangelogWindow.Top,
                 Left = new StyleDimension(ChangelogWindow.OuterDimensions.Width + 10f, 0.1f), // + 10 is spacing between windows
                 ParentInterface = this
             };
 
-            GenerateItemWindow = new NewItemUIW
+            NewItemWindow = new NewItemUIW
             {
-                Left = ModifyWindow.Left,
-                Top = new StyleDimension(ModifyWindow.OuterDimensions.Height + 10f, 0.2f), // + 10 is spacing between window
+                Top = ChangelogWindow.Top,
+                Left = new StyleDimension(ModifyWindow.Left.Pixels + ModifyWindow.OuterDimensions.Width + 10f, 0.1f), // + 10 is spacing between windows
                 ParentInterface = this
             };
 
@@ -61,7 +61,7 @@ namespace ItemModifier.UI
             };
             NewItemWB.Top = new StyleDimension(ModifyWB.Top.Pixels - NewItemWB.Height.Pixels - 5f);
             NewItemWB.ParentInterface = this;
-            NewItemWB.OnLeftClick += (source, e) => GenerateItemWindow.Visible = !GenerateItemWindow.Visible;
+            NewItemWB.OnLeftClick += (source, e) => NewItemWindow.Visible = !NewItemWindow.Visible;
             NewItemWB.WhileMouseHover += (source, e) => ItemModifier.Instance.Tooltip = "New Item";
 
             WikiWB = new UIImageButton(ItemModifier.Textures.Wiki)

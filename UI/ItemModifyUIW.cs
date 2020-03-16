@@ -3,15 +3,12 @@ using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
+using static ItemModifier.ItemModifier;
 
 namespace ItemModifier.UI
 {
     public class ItemModifyUIW : UIWindow
     {
-        public event UIEventHandler<int> OnSelectedIndexChanged;
-
-        internal List<UICategory> Categories = new List<UICategory>();
-
         private Item DefaultItem = new Item();
 
         internal Item ModifiedItem
@@ -55,18 +52,6 @@ namespace ItemModifier.UI
                 return modifiedItem;
             }
         }
-
-        internal UICategory AllCategory;
-
-        internal UICategory PotionsCategory;
-
-        internal UICategory ToolsCategory;
-
-        internal UICategory WeaponsCategory;
-
-        internal UICategory ArmorCategory;
-
-        internal UICategory AccessoryCategory;
 
         internal UIBool AutoReuse;
 
@@ -198,166 +183,104 @@ namespace ItemModifier.UI
 
         internal UIImage ClearModifications;
 
-        public bool LiveSync { get; set; } = true;
+        internal UICategory AllCategory;
 
-        public UICategory ActiveCategory
-        {
-            get
-            {
-                for (int i = 0; i < Categories.Count; i++)
-                {
-                    if (Categories[i].Visible)
-                    {
-                        return Categories[i];
-                    }
-                }
-                return null;
-            }
-        }
+        internal UICategory ToolsCategory;
+
+        internal UICategory WeaponsCategory;
+
+        internal UICategory PotionsCategory;
+
+        internal UICategory ArmorCategory;
+
+        internal UICategory AccessoriesCategory;
+
+        internal UIContainer CategoryContainer;
+
+        internal List<UICategory> Categories;
 
         private int categoryIndex;
 
-        public int CategoryIndex
+        internal int CategoryIndex
         {
-            get => categoryIndex;
+            get
+            {
+                return categoryIndex;
+            }
 
             set
             {
-                categoryIndex = value > Categories.Count - 1 ? 0 : value < 0 ? Categories.Count - 1 : value;
-                UpdateCategory();
-                OnSelectedIndexChanged?.Invoke(this, categoryIndex);
+                categoryIndex = value < 0 ? Categories.Count - 1 : value >= Categories.Count ? 0 : value;
+                CategoryContainer.RemoveAllChildren();
+                Categories[CategoryIndex].AppendProperties(CategoryContainer);
+                CategoryContainer.Recalculate();
+                CategoryName.Text = Categories[CategoryIndex].Name;
+                CategoryName.Left = new StyleDimension(-CategoryName.Width.Pixels * 0.5f, 0.5f);
             }
         }
 
-        public ItemModifyUIW() : base("Item Modifier") => (InheritVisibility, Visible, Width, Height) = (false, false, new StyleDimension(740f), new StyleDimension(325f));
+        public StyleDimension[] PropertyHeights { get; } = new StyleDimension[]
+        {
+            new StyleDimension(0f),
+            new StyleDimension(113f),
+            new StyleDimension(226f),
+            new StyleDimension(339f)
+        };
+
+        public bool LiveSync { get; set; } = true;
+
+        public ItemModifyUIW() : base("Item Modifier")
+        {
+            InheritVisibility = false;
+            Visible = false;
+            Width = new StyleDimension(300f);
+            Height = new StyleDimension(485f);
+        }
 
         public override void OnInitialize()
         {
             base.OnInitialize();
 
-            CategoryName = new UIText("");
-            CategoryName.Left = new StyleDimension((Width.Pixels - CategoryName.Width.Pixels) * 0.5f);
+            CategoryName = new UIText("There's a problem")
+            {
+                SkipDescenderCheck = true
+            };
+            CategoryName.Left = new StyleDimension(-CategoryName.Width.Pixels * 0.5f, 0.5f);
             CategoryName.Parent = this;
 
-            PreviousCategory = new UIImageButton(ItemModifier.Textures.LeftArrow)
+            PreviousCategory = new UIImageButton(Textures.LeftArrow)
             {
                 ColorTint = new Color(0, 100, 255),
                 Parent = this
             };
-            PreviousCategory.OnLeftClick += (source, e) => CategoryIndex -= 1;
-            PreviousCategory.OnRightClick += (source, e) => CategoryIndex += 1;
-            PreviousCategory.WhileMouseHover += (source, e) => ItemModifier.Instance.Tooltip = "Previous Category";
+            PreviousCategory.OnLeftClick += (source, e) => CategoryIndex--;
+            PreviousCategory.OnRightClick += (source, e) => CategoryIndex++;
+            PreviousCategory.WhileMouseHover += (source, e) => Instance.Tooltip = "Previous Category";
 
-            NextCategory = new UIImageButton(ItemModifier.Textures.RightArrow)
+            NextCategory = new UIImageButton(Textures.RightArrow)
             {
                 ColorTint = new Color(255, 100, 0)
             };
             NextCategory.Left = new StyleDimension(Width.Pixels - NextCategory.Width.Pixels);
             NextCategory.Parent = this;
-            NextCategory.OnLeftClick += (source, e) => CategoryIndex += 1;
-            NextCategory.OnRightClick += (source, e) => CategoryIndex -= 1;
-            NextCategory.WhileMouseHover += (source, e) => ItemModifier.Instance.Tooltip = "Next Category";
-
-            AllCategory = new UICategory("All")
-            {
-                Top = new StyleDimension(22f),
-                Width = new StyleDimension(Width.Pixels),
-                InheritVisibility = false,
-                Visible = false
-            };
-            AllCategory.Height = new StyleDimension(Height.Pixels - AllCategory.Top.Pixels);
-            AllCategory.Parent = this;
-            Categories.Add(AllCategory);
-
-            ToolsCategory = new UICategory("Tools")
-            {
-                Top = new StyleDimension(22f),
-                Width = new StyleDimension(InnerDimensions.Width),
-                InheritVisibility = false,
-                Visible = false
-            };
-            ToolsCategory.Height = new StyleDimension(InnerDimensions.Height - ToolsCategory.Top.Pixels);
-            ToolsCategory.Parent = this;
-            Categories.Add(ToolsCategory);
-
-            WeaponsCategory = new UICategory("Weapons")
-            {
-                Top = new StyleDimension(22f),
-                Width = new StyleDimension(Width.Pixels),
-                InheritVisibility = false,
-                Visible = false
-            };
-            WeaponsCategory.Height = new StyleDimension(Height.Pixels - WeaponsCategory.Top.Pixels);
-            WeaponsCategory.Parent = this;
-            Categories.Add(WeaponsCategory);
-
-            PotionsCategory = new UICategory("Potions")
-            {
-                Top = new StyleDimension(22f),
-                Width = new StyleDimension(Width.Pixels),
-                InheritVisibility = false,
-                Visible = false
-            };
-            PotionsCategory.Parent = this;
-            PotionsCategory.Height = new StyleDimension(Height.Pixels - PotionsCategory.Top.Pixels);
-            Categories.Add(PotionsCategory);
-
-            ArmorCategory = new UICategory("Armor")
-            {
-                Top = new StyleDimension(22f),
-                Width = new StyleDimension(Width.Pixels),
-                InheritVisibility = false,
-                Visible = false
-            };
-            ArmorCategory.Height = new StyleDimension(Height.Pixels - ArmorCategory.Top.Pixels);
-            ArmorCategory.Parent = this;
-            Categories.Add(ArmorCategory);
-
-            AccessoryCategory = new UICategory("Accessories")
-            {
-                Top = new StyleDimension(22f),
-                Width = new StyleDimension(Width.Pixels),
-                InheritVisibility = false,
-                Visible = false
-            };
-            AccessoryCategory.Height = new StyleDimension(Height.Pixels - AccessoryCategory.Top.Pixels);
-            AccessoryCategory.Parent = this;
-            Categories.Add(AccessoryCategory);
+            NextCategory.OnLeftClick += (source, e) => CategoryIndex++;
+            NextCategory.OnRightClick += (source, e) => CategoryIndex--;
+            NextCategory.WhileMouseHover += (source, e) => Instance.Tooltip = "Next Category";
 
             AutoReuse = new UIBool();
             AutoReuse.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.autoReuse = value;
             AutoReuse.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.autoReuse = DefaultItem.autoReuse;
-            PAutoReuse = new UICategory.UIProperty("Auto Use:")
-            {
-                InputElement = AutoReuse
-            };
-            PAutoReuse.Recalculate();
-            AllCategory.AddProperty(PAutoReuse);
-            ToolsCategory.AddProperty(PAutoReuse);
-            WeaponsCategory.AddProperty(PAutoReuse);
+            PAutoReuse = new UICategory.UIProperty(Textures.AutoReuse, "Auto Use:", AutoReuse);
 
             Consumable = new UIBool();
             Consumable.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.consumable = value;
             Consumable.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.consumable = DefaultItem.consumable;
-            PConsumable = new UICategory.UIProperty("Consumable:")
-            {
-                InputElement = Consumable
-            };
-            PConsumable.Recalculate();
-            AllCategory.AddProperty(PConsumable);
-            PotionsCategory.AddProperty(PConsumable);
-            WeaponsCategory.AddProperty(PConsumable);
+            PConsumable = new UICategory.UIProperty(Textures.Consumable, "Consumable:", Consumable);
 
             Potion = new UIBool();
             Potion.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.potion = value;
             Potion.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.potion = DefaultItem.potion;
-            PPotion = new UICategory.UIProperty("Potion Sickness:")
-            {
-                InputElement = Potion
-            };
-            PPotion.Recalculate();
-            AllCategory.AddProperty(PPotion);
-            PotionsCategory.AddProperty(PPotion);
+            PPotion = new UICategory.UIProperty(Textures.PotionSickness, "Potion Sickness:", Potion);
 
             DamageType = new UISelection(default, "Melee", "Magic", "Ranged", "Summon", "Thrown");
             DamageType.Choices[0].OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.melee = value;
@@ -373,265 +296,124 @@ namespace ItemModifier.UI
                 Main.LocalPlayer.HeldItem.summon = DefaultItem.summon;
                 Main.LocalPlayer.HeldItem.thrown = DefaultItem.thrown;
             };
-            PDamageType = new UICategory.UIProperty("Damage Type:")
-            {
-                InputElement = DamageType
-            };
-            AllCategory.AddProperty(PDamageType);
-            WeaponsCategory.AddProperty(PDamageType);
+            PDamageType = new UICategory.UIProperty(Textures.DamageType, "Damage Type:", DamageType);
 
             Accessory = new UIBool();
             Accessory.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.accessory = value;
             Accessory.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.accessory = DefaultItem.accessory;
-            PAccessory = new UICategory.UIProperty("Accessory:")
-            {
-                InputElement = Accessory
-            };
-            PAccessory.Recalculate();
-            AllCategory.AddProperty(PAccessory);
-            AccessoryCategory.AddProperty(PAccessory);
+            PAccessory = new UICategory.UIProperty(Textures.Accessory, "Accessory:", Accessory);
 
             Damage = new UIIntTextbox() { MinThreshold = -1 };
             Damage.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.damage = value;
             Damage.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.damage = DefaultItem.damage;
-            PDamage = new UICategory.UIProperty("Damage:")
-            {
-                InputElement = Damage
-            };
-            PDamage.Recalculate();
-            AllCategory.AddProperty(PDamage);
-            WeaponsCategory.AddProperty(PDamage);
+            PDamage = new UICategory.UIProperty(Textures.Damage, "Damage:", Damage);
 
             Critical = new UIIntTextbox();
             Critical.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.crit = value;
             Critical.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.crit = DefaultItem.crit;
-            PCritical = new UICategory.UIProperty("Crit Chance:")
-            {
-                InputElement = Critical
-            };
-            PCritical.Recalculate();
-            AllCategory.AddProperty(PCritical);
-            WeaponsCategory.AddProperty(PCritical);
+            PCritical = new UICategory.UIProperty(Textures.CritChance, "Crit Chance:", Critical);
 
             KnockBack = new UIFloatTextbox();
             KnockBack.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.knockBack = value;
             KnockBack.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.knockBack = DefaultItem.knockBack;
-            PKnockBack = new UICategory.UIProperty("KnockBack:")
-            {
-                InputElement = KnockBack
-            };
-            PKnockBack.Recalculate();
-            AllCategory.AddProperty(PKnockBack);
-            WeaponsCategory.AddProperty(PKnockBack);
+            PKnockBack = new UICategory.UIProperty(Textures.Knockback, "KnockBack:", KnockBack);
 
             Shoot = new UIIntTextbox(0, ProjectileLoader.ProjectileCount - 1) { Sign = false, Negatable = false };
             Shoot.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.shoot = value;
             Shoot.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.shoot = DefaultItem.shoot;
-            PShoot = new UICategory.UIProperty("Projectile Shot:")
-            {
-                InputElement = Shoot
-            };
-            PShoot.Recalculate();
-            AllCategory.AddProperty(PShoot);
-            WeaponsCategory.AddProperty(PShoot);
+            PShoot = new UICategory.UIProperty(Textures.ProjectileShot, "Projectile Shot:", Shoot);
 
             ShootSpeed = new UIFloatTextbox();
             ShootSpeed.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.shootSpeed = value;
             ShootSpeed.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.shootSpeed = DefaultItem.shootSpeed;
-            PShootSpeed = new UICategory.UIProperty("Shoot Speed:")
-            {
-                InputElement = ShootSpeed
-            };
-            PShootSpeed.Recalculate();
-            AllCategory.AddProperty(PShootSpeed);
-            WeaponsCategory.AddProperty(PShootSpeed);
+            PShootSpeed = new UICategory.UIProperty(Textures.ProjectileSpeed, "Shoot Speed:", ShootSpeed);
 
             Tile = new UIIntTextbox(-1, TileLoader.TileCount - 1);
             Tile.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.createTile = value;
             Tile.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.createTile = DefaultItem.createTile;
-            PTile = new UICategory.UIProperty("Place Tile:")
-            {
-                InputElement = Tile
-            };
-            PTile.Recalculate();
-            AllCategory.AddProperty(PTile);
+            PTile = new UICategory.UIProperty(Textures.CreateTile, "Place Tile:", Tile);
 
             TileBoost = new UIIntTextbox();
             TileBoost.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.tileBoost = value;
             TileBoost.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.tileBoost = DefaultItem.tileBoost;
-            PTileBoost = new UICategory.UIProperty("Added Range:")
-            {
-                InputElement = TileBoost
-            };
+            PTileBoost = new UICategory.UIProperty(Textures.AddedRange, "Added Range:", TileBoost);
             PTileBoost.Recalculate();
-            AllCategory.AddProperty(PTileBoost);
 
             Buff = new UIIntTextbox(0, BuffLoader.BuffCount - 1) { Sign = false, Negatable = false };
             Buff.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.buffType = value;
             Buff.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.buffType = DefaultItem.buffType;
-            PBuff = new UICategory.UIProperty("Buff Inflicted:")
-            {
-                InputElement = Buff
-            };
-            PBuff.Recalculate();
-            AllCategory.AddProperty(PBuff);
-            PotionsCategory.AddProperty(PBuff);
+            PBuff = new UICategory.UIProperty(Textures.BuffType, "Buff Inflicted:", Buff);
 
             BuffTime = new UIIntTextbox() { Sign = false, Negatable = false };
             BuffTime.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.buffTime = value;
             BuffTime.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.buffTime = DefaultItem.buffTime;
-            PBuffTime = new UICategory.UIProperty("Buff Duration:")
-            {
-                InputElement = BuffTime
-            };
-            PBuffTime.Recalculate();
-            AllCategory.AddProperty(PBuffTime);
-            PotionsCategory.AddProperty(PBuffTime);
+            PBuffTime = new UICategory.UIProperty(Textures.BuffDuration, "Buff Duration:", BuffTime);
 
             HealHP = new UIIntTextbox() { Sign = false, Negatable = false };
             HealHP.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.healLife = value;
             HealHP.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.healLife = DefaultItem.healLife;
-            PHealHP = new UICategory.UIProperty("HP Healed:")
-            {
-                InputElement = HealHP
-            };
-            PHealHP.Recalculate();
-            AllCategory.AddProperty(PHealHP);
-            PotionsCategory.AddProperty(PHealHP);
+            PHealHP = new UICategory.UIProperty(Textures.HPHealed, "HP Healed:", HealHP);
 
             HealMP = new UIIntTextbox() { Sign = false, Negatable = false };
             HealMP.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.healMana = value;
             HealMP.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.healMana = DefaultItem.healMana;
-            PHealMP = new UICategory.UIProperty("Mana Healed:")
-            {
-                InputElement = HealMP
-            };
-            PHealMP.Recalculate();
-            AllCategory.AddProperty(PHealMP);
-            PotionsCategory.AddProperty(PHealMP);
+            PHealMP = new UICategory.UIProperty(Textures.MPHealed, "Mana Healed:", HealMP);
 
             AxePower = new UIIntTextbox() { Sign = false, Negatable = false };
             AxePower.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.axe = value;
             AxePower.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.axe = DefaultItem.axe;
-            PAxePower = new UICategory.UIProperty("Axe Power:")
-            {
-                InputElement = AxePower
-            };
-            PAxePower.Recalculate();
-            AllCategory.AddProperty(PAxePower);
-            ToolsCategory.AddProperty(PAxePower);
+            PAxePower = new UICategory.UIProperty(Textures.AxePower, "Axe Power:", AxePower);
 
             PickaxePower = new UIIntTextbox() { Sign = false, Negatable = false };
             PickaxePower.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.pick = value;
             PickaxePower.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.pick = DefaultItem.pick;
-            PPickaxePower = new UICategory.UIProperty("Pickaxe Power:")
-            {
-                InputElement = PickaxePower
-            };
-            PPickaxePower.Recalculate();
-            AllCategory.AddProperty(PPickaxePower);
-            ToolsCategory.AddProperty(PPickaxePower);
+            PPickaxePower = new UICategory.UIProperty(Textures.PickaxePower, "Pickaxe Power:", PickaxePower);
 
             HammerPower = new UIIntTextbox() { Sign = false, Negatable = false };
             HammerPower.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.hammer = value;
             HammerPower.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.hammer = DefaultItem.hammer;
-            PHammerPower = new UICategory.UIProperty("Hammer Power;")
-            {
-                InputElement = HammerPower
-            };
-            PHammerPower.Recalculate();
-            AllCategory.AddProperty(PHammerPower);
-            ToolsCategory.AddProperty(PHammerPower);
+            PHammerPower = new UICategory.UIProperty(Textures.HammerPower, "Hammer Power:", HammerPower);
 
             Stack = new UIIntTextbox() { Sign = false, Negatable = false };
             Stack.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.stack = value;
             Stack.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.stack = DefaultItem.stack;
-            PStack = new UICategory.UIProperty("Amount:")
-            {
-                InputElement = Stack
-            };
-            AllCategory.AddProperty(PStack);
+            PStack = new UICategory.UIProperty(Textures.Stack, "Amount:", Stack);
 
             MaxStack = new UIIntTextbox() { Sign = false, Negatable = false };
             MaxStack.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.maxStack = value;
             MaxStack.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.maxStack = DefaultItem.maxStack;
-            PMaxStack = new UICategory.UIProperty("Max Stack:")
-            {
-                InputElement = MaxStack
-            };
-            PMaxStack.Recalculate();
-            AllCategory.AddProperty(PMaxStack);
+            PMaxStack = new UICategory.UIProperty(Textures.MaxStack, "Max Stack:", MaxStack);
 
             UseAnimation = new UIIntTextbox() { Sign = false, Negatable = false };
             UseAnimation.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.useAnimation = value;
             UseAnimation.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.useAnimation = DefaultItem.useAnimation;
-            PUseAnimation = new UICategory.UIProperty("Animation Duration:")
-            {
-                InputElement = UseAnimation
-            };
-            PUseAnimation.Recalculate();
-            AllCategory.AddProperty(PUseAnimation);
-            ToolsCategory.AddProperty(PUseAnimation);
-            WeaponsCategory.AddProperty(PUseAnimation);
+            PUseAnimation = new UICategory.UIProperty(Textures.UseAnimation, "Animation Duration:", UseAnimation);
 
             UseTime = new UIIntTextbox() { Sign = false, Negatable = false };
             UseTime.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.useTime = value;
             UseTime.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.useTime = DefaultItem.useTime;
-            PUseTime = new UICategory.UIProperty("Use Duration:")
-            {
-                InputElement = UseTime
-            };
-            PUseTime.Recalculate();
-            AllCategory.AddProperty(PUseTime);
-            ToolsCategory.AddProperty(PUseTime);
-            WeaponsCategory.AddProperty(PUseTime);
+            PUseTime = new UICategory.UIProperty(Textures.UseTime, "Use Duration:", UseTime);
 
             Defense = new UIIntTextbox();
             Defense.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.defense = value;
             Defense.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.defense = DefaultItem.defense;
-            PDefense = new UICategory.UIProperty("Defense:")
-            {
-                InputElement = Defense
-            };
-            PDefense.Recalculate();
-            AllCategory.AddProperty(PDefense);
-            ArmorCategory.AddProperty(PDefense);
-            AccessoryCategory.AddProperty(PDefense);
+            PDefense = new UICategory.UIProperty(Textures.Defense, "Defense:", Defense);
 
             FishingPower = new UIIntTextbox();
             FishingPower.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.fishingPole = value;
             FishingPower.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.fishingPole = DefaultItem.fishingPole;
-            PFishingPower = new UICategory.UIProperty("Fishing Power")
-            {
-                InputElement = FishingPower
-            };
-            PFishingPower.Recalculate();
-            AllCategory.AddProperty(PFishingPower);
-            ToolsCategory.AddProperty(PFishingPower);
+            PFishingPower = new UICategory.UIProperty(Textures.FishingPower, "Fishing Power", FishingPower);
 
             Scale = new UIFloatTextbox();
             Scale.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.scale = value;
             Scale.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.scale = DefaultItem.scale;
-            PScale = new UICategory.UIProperty("Item Scale")
-            {
-                InputElement = Scale
-            };
-            PScale.Recalculate();
-            AllCategory.AddProperty(PScale);
+            PScale = new UICategory.UIProperty(Textures.ItemScale, "Item Scale", Scale);
 
             UseStyle = new UISelection(default, "Swing", "Drink", "Stab", "Above Head", "Held");
             UseStyle.OnSelectedChanged += (source, newSelected) => Main.LocalPlayer.HeldItem.useStyle = UseStyle.Choices.FindIndex(choice => choice.ID == newSelected.ID) + 1;
-            PUseStyle = new UICategory.UIProperty("Use Style")
-            {
-                InputElement = UseStyle
-            };
-            PUseStyle.Recalculate();
-            AllCategory.AddProperty(PUseStyle);
-            PotionsCategory.AddProperty(PUseStyle);
-            ToolsCategory.AddProperty(PUseStyle);
-            WeaponsCategory.AddProperty(PUseStyle);
+            PUseStyle = new UICategory.UIProperty(Textures.UseStyle, "Use Style", UseStyle);
 
-            ToggleLiveSync = new UIImageButton(ItemModifier.Textures.Sync, new Color(20, 255, 20))
+            ToggleLiveSync = new UIImageButton(Textures.Sync, new Color(20, 255, 20))
             {
                 Width = new StyleDimension(16f),
                 Height = new StyleDimension(16f),
@@ -639,22 +421,10 @@ namespace ItemModifier.UI
             };
             ToggleLiveSync.Left = new StyleDimension(Width.Pixels - CloseButton.Width.Pixels - ToggleLiveSync.Width.Pixels - 6); // -3 spacing, -3 spacing
             ToggleLiveSync.Parent = this;
-            ToggleLiveSync.OnLeftClick += (source, e) => { LiveSync = !LiveSync; if (!LiveSync) GrayBG.Visible = false; };
-            ToggleLiveSync.WhileMouseHover += (source, e) => ItemModifier.Instance.Tooltip = "Toggle Live Sync";
+            ToggleLiveSync.OnLeftClick += (source, e) => { LiveSync = !LiveSync; if (!LiveSync) { GrayBG.Visible = false; } };
+            ToggleLiveSync.WhileMouseHover += (source, e) => Instance.Tooltip = "Toggle Live Sync";
 
-            GrayBG = new UIContainer(new Color(47, 79, 79, 150), new Vector2(InnerDimensions.Width, InnerDimensions.Height))
-            {
-                InheritVisibility = false,
-                Parent = this
-            };
-            GrayBG.OnVisibilityChanged += (source, value) => LockImage.Visible = value;
-
-            LockImage = new UIImage(ItemModifier.Textures.Lock);
-            LockImage.Left = new StyleDimension((GrayBG.Width.Pixels - LockImage.Width.Pixels) * 0.5f);
-            LockImage.Top = new StyleDimension((GrayBG.Height.Pixels - LockImage.Height.Pixels) * 0.5f);
-            LockImage.Parent = GrayBG;
-
-            ClearModifications = new UIImageButton(ItemModifier.Textures.ClearModifications)
+            ClearModifications = new UIImageButton(Textures.ClearModifications)
             {
                 Width = new StyleDimension(16f),
                 Height = new StyleDimension(16f),
@@ -663,16 +433,128 @@ namespace ItemModifier.UI
             ClearModifications.Left = new StyleDimension(Width.Pixels - CloseButton.Width.Pixels - ToggleLiveSync.Width.Pixels - ClearModifications.Width.Pixels - 9); // -3 spacing, -3 spacing, -3 spacing
             ClearModifications.Parent = this;
             ClearModifications.OnLeftClick += (source, e) => Main.LocalPlayer.HeldItem.SetDefaults(Main.LocalPlayer.HeldItem.type);
-            ClearModifications.WhileMouseHover += (source, e) => ItemModifier.Instance.Tooltip = "Clear Modifications";
+            ClearModifications.WhileMouseHover += (source, e) => Instance.Tooltip = "Clear Modifications";
 
-            AllCategory.Visible = true;
-            UpdateCategory();
+            AllCategory = new UICategory("All", new List<UICategory.UIProperty> {
+                PAutoReuse,
+                PAxePower,
+                PPickaxePower,
+                PHammerPower,
+                PDamageType,
+                PDamage,
+                PCritical,
+                PKnockBack,
+                PShoot,
+                PShootSpeed,
+                PAccessory,
+                PDefense,
+                PTileBoost,
+                PTile,
+                PConsumable,
+                PPotion,
+                PBuff,
+                PBuffTime,
+                PHealHP,
+                PHealMP,
+                PStack,
+                PMaxStack,
+                PUseAnimation,
+                PUseTime,
+                PUseStyle,
+                PFishingPower,
+                PScale
+            });
+
+            ToolsCategory = new UICategory("Tools", new List<UICategory.UIProperty>
+            {
+                PAutoReuse,
+                PAxePower,
+                PPickaxePower,
+                PHammerPower,
+                PUseAnimation,
+                PUseTime,
+                PUseStyle,
+                PFishingPower
+            });
+
+            WeaponsCategory = new UICategory("Weapons", new List<UICategory.UIProperty>
+            {
+                PAutoReuse,
+                PDamageType,
+                PDamage,
+                PCritical,
+                PKnockBack,
+                PConsumable,
+                PShoot,
+                PShootSpeed,
+                PUseAnimation,
+                PUseAnimation,
+                PUseStyle
+            });
+
+            PotionsCategory = new UICategory("Potions", new List<UICategory.UIProperty>
+            {
+                PConsumable,
+                PPotion,
+                PBuff,
+                PBuffTime,
+                PHealHP,
+                PHealMP,
+                PUseStyle
+            });
+
+            ArmorCategory = new UICategory("Armor", new List<UICategory.UIProperty>
+            {
+                PDefense
+            });
+
+            AccessoriesCategory = new UICategory("Accessories", new List<UICategory.UIProperty>
+            {
+                PAccessory,
+                PDefense
+            });
+
+            Categories = new List<UICategory>
+            {
+                AllCategory,
+                ToolsCategory,
+                WeaponsCategory,
+                PotionsCategory,
+                ArmorCategory,
+                AccessoriesCategory
+            };
+
+            CategoryContainer = new UIContainer(new Vector2(290f, 450f))
+            {
+                Parent = this,
+                Left = new StyleDimension(5f),
+                Top = new StyleDimension(30f),
+                OverflowHidden = true
+            };
+
+            GrayBG = new UIContainer(new Color(47, 79, 79, 150), new Vector2(InnerDimensions.Width, InnerDimensions.Height))
+            {
+                InheritVisibility = false,
+                Parent = this
+            };
+            GrayBG.OnVisibilityChanged += (source, value) => LockImage.Visible = value;
+
+            LockImage = new UIImage(Textures.Lock);
+            LockImage.Left = new StyleDimension((GrayBG.Width.Pixels - LockImage.Width.Pixels) * 0.5f);
+            LockImage.Top = new StyleDimension((GrayBG.Height.Pixels - LockImage.Height.Pixels) * 0.5f);
+            LockImage.Parent = GrayBG;
+
+            CategoryIndex = 0;
         }
 
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            if (DefaultItem.type != Main.LocalPlayer.HeldItem.type) DefaultItem.SetDefaults(Main.LocalPlayer.HeldItem.type);
+            if (DefaultItem.type != Main.LocalPlayer.HeldItem.type)
+            {
+                DefaultItem.SetDefaults(Main.LocalPlayer.HeldItem.type);
+            }
+
             if (LiveSync)
             {
                 AutoReuse.Value = Main.LocalPlayer.HeldItem.autoReuse;
@@ -684,27 +566,111 @@ namespace ItemModifier.UI
                 DamageType.Choices[2].Value = Main.LocalPlayer.HeldItem.ranged;
                 DamageType.Choices[3].Value = Main.LocalPlayer.HeldItem.summon;
                 DamageType.Choices[4].Value = Main.LocalPlayer.HeldItem.thrown;
-                if (!Shoot.Focused) Shoot.Value = Main.LocalPlayer.HeldItem.shoot;
-                if (!Tile.Focused) Tile.Value = Main.LocalPlayer.HeldItem.createTile;
-                if (!TileBoost.Focused) TileBoost.Value = Main.LocalPlayer.HeldItem.tileBoost;
-                if (!Buff.Focused) Buff.Value = Main.LocalPlayer.HeldItem.buffType;
-                if (!BuffTime.Focused) BuffTime.Value = Main.LocalPlayer.HeldItem.buffTime;
-                if (!Damage.Focused) Damage.Value = Main.LocalPlayer.HeldItem.damage;
-                if (!Critical.Focused) Critical.Value = Main.LocalPlayer.HeldItem.crit;
-                if (!ShootSpeed.Focused) ShootSpeed.Value = Main.LocalPlayer.HeldItem.shootSpeed;
-                if (!KnockBack.Focused) KnockBack.Value = Main.LocalPlayer.HeldItem.knockBack;
-                if (!HealHP.Focused) HealHP.Value = Main.LocalPlayer.HeldItem.healLife;
-                if (!HealMP.Focused) HealMP.Value = Main.LocalPlayer.HeldItem.healMana;
-                if (!AxePower.Focused) AxePower.Value = Main.LocalPlayer.HeldItem.axe;
-                if (!PickaxePower.Focused) PickaxePower.Value = Main.LocalPlayer.HeldItem.pick;
-                if (!HammerPower.Focused) HammerPower.Value = Main.LocalPlayer.HeldItem.hammer;
-                if (!Stack.Focused) Stack.Value = Main.LocalPlayer.HeldItem.stack;
-                if (!MaxStack.Focused) MaxStack.Value = Main.LocalPlayer.HeldItem.maxStack;
-                if (!UseAnimation.Focused) UseAnimation.Value = Main.LocalPlayer.HeldItem.useAnimation;
-                if (!UseTime.Focused) UseTime.Value = Main.LocalPlayer.HeldItem.useTime;
-                if (!Defense.Focused) Defense.Value = Main.LocalPlayer.HeldItem.defense;
-                if (!FishingPower.Focused) FishingPower.Value = Main.LocalPlayer.HeldItem.fishingPole;
-                if (!Scale.Focused) Scale.Value = Main.LocalPlayer.HeldItem.scale;
+                if (!Shoot.Focused)
+                {
+                    Shoot.Value = Main.LocalPlayer.HeldItem.shoot;
+                }
+
+                if (!Tile.Focused)
+                {
+                    Tile.Value = Main.LocalPlayer.HeldItem.createTile;
+                }
+
+                if (!TileBoost.Focused)
+                {
+                    TileBoost.Value = Main.LocalPlayer.HeldItem.tileBoost;
+                }
+
+                if (!Buff.Focused)
+                {
+                    Buff.Value = Main.LocalPlayer.HeldItem.buffType;
+                }
+
+                if (!BuffTime.Focused)
+                {
+                    BuffTime.Value = Main.LocalPlayer.HeldItem.buffTime;
+                }
+
+                if (!Damage.Focused)
+                {
+                    Damage.Value = Main.LocalPlayer.HeldItem.damage;
+                }
+
+                if (!Critical.Focused)
+                {
+                    Critical.Value = Main.LocalPlayer.HeldItem.crit;
+                }
+
+                if (!ShootSpeed.Focused)
+                {
+                    ShootSpeed.Value = Main.LocalPlayer.HeldItem.shootSpeed;
+                }
+
+                if (!KnockBack.Focused)
+                {
+                    KnockBack.Value = Main.LocalPlayer.HeldItem.knockBack;
+                }
+
+                if (!HealHP.Focused)
+                {
+                    HealHP.Value = Main.LocalPlayer.HeldItem.healLife;
+                }
+
+                if (!HealMP.Focused)
+                {
+                    HealMP.Value = Main.LocalPlayer.HeldItem.healMana;
+                }
+
+                if (!AxePower.Focused)
+                {
+                    AxePower.Value = Main.LocalPlayer.HeldItem.axe;
+                }
+
+                if (!PickaxePower.Focused)
+                {
+                    PickaxePower.Value = Main.LocalPlayer.HeldItem.pick;
+                }
+
+                if (!HammerPower.Focused)
+                {
+                    HammerPower.Value = Main.LocalPlayer.HeldItem.hammer;
+                }
+
+                if (!Stack.Focused)
+                {
+                    Stack.Value = Main.LocalPlayer.HeldItem.stack;
+                }
+
+                if (!MaxStack.Focused)
+                {
+                    MaxStack.Value = Main.LocalPlayer.HeldItem.maxStack;
+                }
+
+                if (!UseAnimation.Focused)
+                {
+                    UseAnimation.Value = Main.LocalPlayer.HeldItem.useAnimation;
+                }
+
+                if (!UseTime.Focused)
+                {
+                    UseTime.Value = Main.LocalPlayer.HeldItem.useTime;
+                }
+
+                if (!Defense.Focused)
+                {
+                    Defense.Value = Main.LocalPlayer.HeldItem.defense;
+                }
+
+                if (!FishingPower.Focused)
+                {
+                    FishingPower.Value = Main.LocalPlayer.HeldItem.fishingPole;
+                }
+
+                if (!Scale.Focused)
+                {
+                    Scale.Value = Main.LocalPlayer.HeldItem.scale;
+                }
+
                 if (Main.LocalPlayer.HeldItem.useStyle == 0)
                 {
                     UseStyle.DeselectAll();
@@ -715,15 +681,6 @@ namespace ItemModifier.UI
                 }
                 GrayBG.Visible = Main.LocalPlayer.HeldItem.type == 0;
             }
-        }
-
-        private void UpdateCategory()
-        {
-            if (ActiveCategory != null) ActiveCategory.Visible = false;
-            CategoryName.Text = Categories[CategoryIndex].Name;
-            CategoryName.Left = new StyleDimension((Width.Pixels - CategoryName.Width.Pixels) * 0.5f);
-            if (Categories[CategoryIndex] != null) Categories[CategoryIndex].Visible = true;
-            Categories[CategoryIndex].GatherProperties();
         }
     }
 }

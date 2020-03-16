@@ -6,121 +6,130 @@ using Terraria;
 
 namespace ItemModifier.UI
 {
-    public class UICategory : UIElement
+    public class UICategory
     {
         public class UIProperty : UIElement
         {
+            private string label;
+
             public string Label
             {
-                get => label;
+                get
+                {
+                    return label;
+                }
 
                 set
                 {
                     label = value;
-                    RecalculateSize();
+                    Recalculate();
                 }
             }
 
-            private string label;
+            private UIImage imageLabel;
+
+            public Texture2D ImageLabel
+            {
+                get
+                {
+                    return imageLabel.Image;
+                }
+
+                set
+                {
+                    imageLabel.Image = value;
+                }
+            }
 
             private UIElement inputElement;
 
             internal UIElement InputElement
             {
-                get => inputElement;
+                get
+                {
+                    return inputElement;
+                }
 
                 set
                 {
-                    inputElement = null;
                     inputElement = value;
+                    InputElement.Left = new StyleDimension(20 + KRUtils.MeasureTextAccurate(Label, true).X + 4f);
                     inputElement.Parent = this;
                     Recalculate();
                 }
             }
 
-            public Vector2 NameSize => KRUtils.MeasureTextAccurate(Label, true);
-
             public Color TextColor { get; set; } = Color.White;
 
-            public UIProperty(string Label)
+            public UIProperty(Texture2D ImageLabel, string Label, UIElement InputElement)
             {
-                this.Label = Label;
+                (imageLabel, this.Label, this.InputElement) = (new UIImage(ImageLabel) { Parent = this }, Label, InputElement);
             }
 
-            public float RecalculateSize()
+            private void RecalculateSize()
             {
-                if (InputElement != null)
+                Vector2 labelSize = KRUtils.MeasureTextAccurate(Label, true);
+                float titleSize = 20 + labelSize.X;
+                if (InputElement == null)
                 {
-                    Width = new StyleDimension(NameSize.X + 5f + InputElement.OuterDimensions.Width);
-                    InputElement.Left = new StyleDimension(NameSize.X + 5);
-                    Height = new StyleDimension(NameSize.Y > InputElement.Height.Pixels ? NameSize.Y : InputElement.Height.Pixels);
+                    Width = new StyleDimension(titleSize);
+                    Height = new StyleDimension(labelSize.Y);
                 }
                 else
                 {
-                    Width = new StyleDimension(NameSize.X + 5f);
-                    Height = new StyleDimension(NameSize.Y);
+                    Width = new StyleDimension(titleSize + 4f + InputElement.Width.Pixels);
+                    Height = new StyleDimension(labelSize.Y > InputElement.Height.Pixels ? labelSize.Y : InputElement.Height.Pixels);
                 }
-                return Width.Pixels;
             }
 
             protected override void DrawSelf(SpriteBatch sb)
             {
-                Utils.DrawBorderString(sb, Label, Dimensions.Position, TextColor);
+                Utils.DrawBorderString(sb, Label, new Vector2(Dimensions.Position.X + 20, Dimensions.Position.Y), TextColor);
             }
 
             public override void Recalculate()
             {
-                base.Recalculate();
                 RecalculateSize();
+                base.Recalculate();
             }
         }
-
-        public List<UIProperty> Properties = new List<UIProperty>();
 
         public string Name { get; set; }
-        
-        public float RowSpacing { get; set; } = 0;
-       
-        public float ColumnSpacing { get; set; } = 8;
 
-        public UICategory(string Name) => this.Name = Name;
+        public List<UIProperty> Properties { get; }
 
-        public void AddProperty(UIProperty Property)
+        public UICategory(string Name, List<UIProperty> Properties)
         {
-            Properties.Add(Property);
+            this.Name = Name;
+            this.Properties = Properties ?? new List<UIProperty>();
         }
 
-        public void GatherProperties()
+        public UIProperty this[int index]
         {
-            float SpaceOccupiedY = 0f;
-            float SpaceOccupiedX = 0f;
-            float BiggestInColumnXAxis = 0f;
-
-            for (int i = 0; i < Properties.Count; i++)
+            get
             {
-                UIProperty property = Properties[i];
-                if (SpaceOccupiedY != 0) SpaceOccupiedY += RowSpacing;
-                if (SpaceOccupiedY + property.Height.Pixels > Height.Pixels)
-                {
-                    SpaceOccupiedY = 0;
-                    SpaceOccupiedX += BiggestInColumnXAxis + ColumnSpacing;
-                    BiggestInColumnXAxis = property.Width.Pixels;
-                }
-                else if (property.Width.Pixels > BiggestInColumnXAxis)
-                {
-                    BiggestInColumnXAxis = property.Width.Pixels;
-                }
-                property.Top = new StyleDimension(SpaceOccupiedY);
-                SpaceOccupiedY += property.Height.Pixels < 24 ? 24 : property.Height.Pixels;
-                property.Left = new StyleDimension(SpaceOccupiedX);
-                property.Visible = true;
-                property.Parent = this;
+                return Properties[index];
             }
         }
 
-        public void RemoveAllProperties()
+        public int Count
         {
-            Properties.Clear();
+            get
+            {
+                return Properties.Count;
+            }
+        }
+
+        public void AppendProperties(UIContainer container)
+        {
+            float SpaceOccupiedY = 0f;
+            for (int i = 0; i < Count; i++)
+            {
+                UIProperty property = this[i];
+                property.Top = new StyleDimension(SpaceOccupiedY);
+                property.Parent = container;
+                SpaceOccupiedY += property.Height.Pixels + 4f;
+            }
         }
     }
 }
