@@ -1,4 +1,5 @@
 ﻿using ItemModifier.UIKit;
+using ItemModifier.UIKit.Inputs;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Terraria;
@@ -9,13 +10,13 @@ namespace ItemModifier.UI
 {
     public class ItemModifyUIW : UIWindow
     {
-        private Item DefaultItem = new Item();
+        private Item DefaultItem { get; set; } = new Item();
 
         internal Item ModifiedItem
         {
             get
             {
-                Item modifiedItem = new Item
+                return new Item
                 {
                     autoReuse = AutoReuse.Value,
                     consumable = Consumable.Value,
@@ -40,16 +41,15 @@ namespace ItemModifier.UI
                     knockBack = KnockBack.Value,
                     accessory = Accessory.Value,
                     defense = Defense.Value,
-                    melee = DamageType.Choices[0].Value,
-                    magic = DamageType.Choices[1].Value,
-                    ranged = DamageType.Choices[2].Value,
-                    summon = DamageType.Choices[3].Value,
-                    thrown = DamageType.Choices[4].Value,
+                    melee = RMelee.Selected,
+                    magic = RMagic.Selected,
+                    ranged = RRanged.Selected,
+                    summon = RSummon.Selected,
+                    thrown = RThrown.Selected,
                     fishingPole = FishingPower.Value,
                     scale = Scale.Value,
-                    useStyle = UseStyle.Choices.FindIndex(choice => choice.ID == UseStyle.Selected.ID) + 1
+                    useStyle = RSwing.Selected ? 1 : RDrink.Selected ? 2 : RSwing.Selected ? 3 : RAboveHead.Selected ? 4 : RHeld.Selected ? 5 : 0
                 };
-                return modifiedItem;
             }
         }
 
@@ -107,9 +107,29 @@ namespace ItemModifier.UI
 
         internal UIFloatTextbox Scale;
 
-        internal UISelection DamageType;
+        internal UIContainer DamageType;
 
-        internal UISelection UseStyle;
+        internal UIRadioButton RMelee;
+
+        internal UIRadioButton RMagic;
+
+        internal UIRadioButton RRanged;
+
+        internal UIRadioButton RSummon;
+
+        internal UIRadioButton RThrown;
+
+        internal UIContainer UseStyle;
+
+        internal UIRadioButton RSwing;
+
+        internal UIRadioButton RDrink;
+
+        internal UIRadioButton RStab;
+
+        internal UIRadioButton RAboveHead;
+
+        internal UIRadioButton RHeld;
 
         internal UICategory.UIProperty PAutoReuse;
 
@@ -212,40 +232,40 @@ namespace ItemModifier.UI
             {
                 categoryIndex = value < 0 ? Categories.Count - 1 : value >= Categories.Count ? 0 : value;
                 CategoryContainer.RemoveAllChildren();
+                //CategoryContainer.ScrollValue = 0;
                 Categories[CategoryIndex].AppendProperties(CategoryContainer);
                 CategoryContainer.Recalculate();
                 CategoryName.Text = Categories[CategoryIndex].Name;
-                CategoryName.Left = new StyleDimension(-CategoryName.Width.Pixels * 0.5f, 0.5f);
             }
         }
 
-        public StyleDimension[] PropertyHeights { get; } = new StyleDimension[]
+        public SizeDimension[] PropertyHeights { get; } = new SizeDimension[]
         {
-            new StyleDimension(0f),
-            new StyleDimension(113f),
-            new StyleDimension(226f),
-            new StyleDimension(339f)
+            new SizeDimension(0f),
+            new SizeDimension(113f),
+            new SizeDimension(226f),
+            new SizeDimension(339f)
         };
 
         public bool LiveSync { get; set; } = true;
 
         public ItemModifyUIW() : base("Item Modifier")
         {
-            InheritVisibility = false;
             Visible = false;
-            Width = new StyleDimension(300f);
-            Height = new StyleDimension(485f);
+            Width = new SizeDimension(300f);
+            Height = new SizeDimension(485f);
         }
 
         public override void OnInitialize()
         {
             base.OnInitialize();
+            ItemModifier instance = ModContent.GetInstance<ItemModifier>();
 
             CategoryName = new UIText("There's a problem")
             {
-                SkipDescenderCheck = true
+                SkipDescenderCheck = true,
+                HorizontalAlign = 0.5f
             };
-            CategoryName.Left = new StyleDimension(-CategoryName.Width.Pixels * 0.5f, 0.5f);
             CategoryName.Parent = this;
 
             PreviousCategory = new UIImageButton(Textures.LeftArrow)
@@ -255,17 +275,17 @@ namespace ItemModifier.UI
             };
             PreviousCategory.OnLeftClick += (source, e) => CategoryIndex--;
             PreviousCategory.OnRightClick += (source, e) => CategoryIndex++;
-            PreviousCategory.WhileMouseHover += (source, e) => Instance.Tooltip = "Previous Category";
+            PreviousCategory.WhileMouseHover += (source, e) => instance.Tooltip = "Previous Category";
 
             NextCategory = new UIImageButton(Textures.RightArrow)
             {
                 ColorTint = new Color(255, 100, 0)
             };
-            NextCategory.Left = new StyleDimension(Width.Pixels - NextCategory.Width.Pixels);
+            NextCategory.XOffset = new SizeDimension(InnerWidth - NextCategory.OuterWidth);
             NextCategory.Parent = this;
             NextCategory.OnLeftClick += (source, e) => CategoryIndex++;
             NextCategory.OnRightClick += (source, e) => CategoryIndex--;
-            NextCategory.WhileMouseHover += (source, e) => Instance.Tooltip = "Next Category";
+            NextCategory.WhileMouseHover += (source, e) => instance.Tooltip = "Next Category";
 
             AutoReuse = new UIBool();
             AutoReuse.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.autoReuse = value;
@@ -282,12 +302,17 @@ namespace ItemModifier.UI
             Potion.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.potion = DefaultItem.potion;
             PPotion = new UICategory.UIProperty(Textures.PotionSickness, "Potion Sickness:", Potion);
 
-            DamageType = new UISelection(default, "Melee", "Magic", "Ranged", "Summon", "Thrown");
-            DamageType.Choices[0].OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.melee = value;
-            DamageType.Choices[1].OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.magic = value;
-            DamageType.Choices[2].OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.ranged = value;
-            DamageType.Choices[3].OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.summon = value;
-            DamageType.Choices[4].OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.thrown = value;
+            DamageType = new UIContainer();
+            RMelee = new UIRadioButton("Melee") { Parent = DamageType };
+            RMelee.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.melee = e;
+            RMagic = new UIRadioButton("Magic") { Parent = DamageType };
+            RMagic.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.magic = e;
+            RRanged = new UIRadioButton("Ranged") { Parent = DamageType };
+            RRanged.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.ranged = e;
+            RSummon = new UIRadioButton("Summon") { Parent = DamageType };
+            RSummon.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.summon = e;
+            RThrown = new UIRadioButton("Thrown") { Parent = DamageType };
+            RThrown.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.thrown = e;
             DamageType.OnRightClick += (source, e) =>
             {
                 Main.LocalPlayer.HeldItem.melee = DefaultItem.melee;
@@ -303,7 +328,7 @@ namespace ItemModifier.UI
             Accessory.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.accessory = DefaultItem.accessory;
             PAccessory = new UICategory.UIProperty(Textures.Accessory, "Accessory:", Accessory);
 
-            Damage = new UIIntTextbox() { MinThreshold = -1 };
+            Damage = new UIIntTextbox(minValue: -1);
             Damage.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.damage = value;
             Damage.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.damage = DefaultItem.damage;
             PDamage = new UICategory.UIProperty(Textures.Damage, "Damage:", Damage);
@@ -318,7 +343,7 @@ namespace ItemModifier.UI
             KnockBack.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.knockBack = DefaultItem.knockBack;
             PKnockBack = new UICategory.UIProperty(Textures.Knockback, "KnockBack:", KnockBack);
 
-            Shoot = new UIIntTextbox(0, ProjectileLoader.ProjectileCount - 1) { Sign = false, Negatable = false };
+            Shoot = new UIIntTextbox(0, ProjectileLoader.ProjectileCount - 1) { Negateable = false };
             Shoot.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.shoot = value;
             Shoot.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.shoot = DefaultItem.shoot;
             PShoot = new UICategory.UIProperty(Textures.ProjectileShot, "Projectile Shot:", Shoot);
@@ -339,57 +364,57 @@ namespace ItemModifier.UI
             PTileBoost = new UICategory.UIProperty(Textures.AddedRange, "Added Range:", TileBoost);
             PTileBoost.Recalculate();
 
-            Buff = new UIIntTextbox(0, BuffLoader.BuffCount - 1) { Sign = false, Negatable = false };
+            Buff = new UIIntTextbox(0, BuffLoader.BuffCount - 1) { Negateable = false };
             Buff.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.buffType = value;
             Buff.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.buffType = DefaultItem.buffType;
             PBuff = new UICategory.UIProperty(Textures.BuffType, "Buff Inflicted:", Buff);
 
-            BuffTime = new UIIntTextbox() { Sign = false, Negatable = false };
+            BuffTime = new UIIntTextbox() { Negateable = false };
             BuffTime.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.buffTime = value;
             BuffTime.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.buffTime = DefaultItem.buffTime;
             PBuffTime = new UICategory.UIProperty(Textures.BuffDuration, "Buff Duration:", BuffTime);
 
-            HealHP = new UIIntTextbox() { Sign = false, Negatable = false };
+            HealHP = new UIIntTextbox() { Negateable = false };
             HealHP.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.healLife = value;
             HealHP.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.healLife = DefaultItem.healLife;
             PHealHP = new UICategory.UIProperty(Textures.HPHealed, "HP Healed:", HealHP);
 
-            HealMP = new UIIntTextbox() { Sign = false, Negatable = false };
+            HealMP = new UIIntTextbox() { Negateable = false };
             HealMP.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.healMana = value;
             HealMP.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.healMana = DefaultItem.healMana;
             PHealMP = new UICategory.UIProperty(Textures.MPHealed, "Mana Healed:", HealMP);
 
-            AxePower = new UIIntTextbox() { Sign = false, Negatable = false };
+            AxePower = new UIIntTextbox() { Negateable = false };
             AxePower.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.axe = value;
             AxePower.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.axe = DefaultItem.axe;
             PAxePower = new UICategory.UIProperty(Textures.AxePower, "Axe Power:", AxePower);
 
-            PickaxePower = new UIIntTextbox() { Sign = false, Negatable = false };
+            PickaxePower = new UIIntTextbox() { Negateable = false };
             PickaxePower.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.pick = value;
             PickaxePower.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.pick = DefaultItem.pick;
             PPickaxePower = new UICategory.UIProperty(Textures.PickaxePower, "Pickaxe Power:", PickaxePower);
 
-            HammerPower = new UIIntTextbox() { Sign = false, Negatable = false };
+            HammerPower = new UIIntTextbox() { Negateable = false };
             HammerPower.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.hammer = value;
             HammerPower.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.hammer = DefaultItem.hammer;
             PHammerPower = new UICategory.UIProperty(Textures.HammerPower, "Hammer Power:", HammerPower);
 
-            Stack = new UIIntTextbox() { Sign = false, Negatable = false };
+            Stack = new UIIntTextbox() { Negateable = false };
             Stack.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.stack = value;
             Stack.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.stack = DefaultItem.stack;
             PStack = new UICategory.UIProperty(Textures.Stack, "Amount:", Stack);
 
-            MaxStack = new UIIntTextbox() { Sign = false, Negatable = false };
+            MaxStack = new UIIntTextbox() { Negateable = false };
             MaxStack.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.maxStack = value;
             MaxStack.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.maxStack = DefaultItem.maxStack;
             PMaxStack = new UICategory.UIProperty(Textures.MaxStack, "Max Stack:", MaxStack);
 
-            UseAnimation = new UIIntTextbox() { Sign = false, Negatable = false };
+            UseAnimation = new UIIntTextbox() { Negateable = false };
             UseAnimation.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.useAnimation = value;
             UseAnimation.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.useAnimation = DefaultItem.useAnimation;
             PUseAnimation = new UICategory.UIProperty(Textures.UseAnimation, "Animation Duration:", UseAnimation);
 
-            UseTime = new UIIntTextbox() { Sign = false, Negatable = false };
+            UseTime = new UIIntTextbox() { Negateable = false };
             UseTime.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.useTime = value;
             UseTime.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.useTime = DefaultItem.useTime;
             PUseTime = new UICategory.UIProperty(Textures.UseTime, "Use Duration:", UseTime);
@@ -409,31 +434,42 @@ namespace ItemModifier.UI
             Scale.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.scale = DefaultItem.scale;
             PScale = new UICategory.UIProperty(Textures.ItemScale, "Item Scale", Scale);
 
-            UseStyle = new UISelection(default, "Swing", "Drink", "Stab", "Above Head", "Held");
-            UseStyle.OnSelectedChanged += (source, newSelected) => Main.LocalPlayer.HeldItem.useStyle = UseStyle.Choices.FindIndex(choice => choice.ID == newSelected.ID) + 1;
+            UseStyle = new UIContainer();
+            RSwing = new UIRadioButton("Swing") { Parent = UseStyle };
+            RSwing.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.useStyle = 1;
+            RDrink = new UIRadioButton("Drink") { Parent = UseStyle };
+            RDrink.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.useStyle = 2;
+            RStab = new UIRadioButton("Stab") { Parent = UseStyle };
+            RStab.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.useStyle = 3;
+            RAboveHead = new UIRadioButton("Above Head") { Parent = UseStyle };
+            RAboveHead.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.useStyle = 4;
+            RHeld = new UIRadioButton("Held") { Parent = UseStyle };
+            RHeld.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.useStyle = 5;
             PUseStyle = new UICategory.UIProperty(Textures.UseStyle, "Use Style", UseStyle);
 
-            ToggleLiveSync = new UIImageButton(Textures.Sync, new Color(20, 255, 20))
+            ToggleLiveSync = new UIImageButton(Textures.Sync, false, new Color(20, 255, 20))
             {
-                Width = new StyleDimension(16f),
-                Height = new StyleDimension(16f),
-                Top = new StyleDimension(-19f)
+                Width = new SizeDimension(16f),
+                Height = new SizeDimension(16f),
+                YOffset = CloseButton.YOffset
             };
-            ToggleLiveSync.Left = new StyleDimension(Width.Pixels - CloseButton.Width.Pixels - ToggleLiveSync.Width.Pixels - 6); // -3 spacing, -3 spacing
+            ToggleLiveSync.Recalculate();
+            ToggleLiveSync.XOffset = new SizeDimension(CloseButton.CalculatedXOffset - ToggleLiveSync.OuterWidth - 3); // -3 spacing
             ToggleLiveSync.Parent = this;
             ToggleLiveSync.OnLeftClick += (source, e) => { LiveSync = !LiveSync; if (!LiveSync) { GrayBG.Visible = false; } };
-            ToggleLiveSync.WhileMouseHover += (source, e) => Instance.Tooltip = "Toggle Live Sync";
+            ToggleLiveSync.WhileMouseHover += (source, e) => instance.Tooltip = "Toggle Live Sync";
 
-            ClearModifications = new UIImageButton(Textures.ClearModifications)
+            ClearModifications = new UIImageButton(Textures.ClearModifications, false)
             {
-                Width = new StyleDimension(16f),
-                Height = new StyleDimension(16f),
-                Top = new StyleDimension(-19f)
+                Width = new SizeDimension(16f),
+                Height = new SizeDimension(16f),
+                YOffset = CloseButton.YOffset
             };
-            ClearModifications.Left = new StyleDimension(Width.Pixels - CloseButton.Width.Pixels - ToggleLiveSync.Width.Pixels - ClearModifications.Width.Pixels - 9); // -3 spacing, -3 spacing, -3 spacing
+            ClearModifications.Recalculate();
+            ClearModifications.XOffset = new SizeDimension(ToggleLiveSync.CalculatedXOffset - ClearModifications.OuterWidth - 3); // -3 spacing
             ClearModifications.Parent = this;
             ClearModifications.OnLeftClick += (source, e) => Main.LocalPlayer.HeldItem.SetDefaults(Main.LocalPlayer.HeldItem.type);
-            ClearModifications.WhileMouseHover += (source, e) => Instance.Tooltip = "Clear Modifications";
+            ClearModifications.WhileMouseHover += (source, e) => instance.Tooltip = "Clear Modifications";
 
             AllCategory = new UICategory("All", new List<UICategory.UIProperty> {
                 PAutoReuse,
@@ -524,45 +560,58 @@ namespace ItemModifier.UI
                 AccessoriesCategory
             };
 
-            CategoryContainer = new UIContainer(new Vector2(290f, 450f))
+            CategoryContainer = new UIContainer()
             {
-                Parent = this,
-                Left = new StyleDimension(5f),
-                Top = new StyleDimension(30f),
-                OverflowHidden = true
+                Width = new SizeDimension(290f),
+                Height = new SizeDimension(450f),
+                XOffset = new SizeDimension(5f),
+                YOffset = new SizeDimension(30f),
+                OverflowHidden = true,
+                Parent = this
+            };
+            CategoryContainer.OnChildAdded += (source, e) =>
+            {
+                if (source.ChildrenCount == 1)
+                {
+                    source[0].YOffset = new SizeDimension(0f);
+                }
+                else
+                {
+                    UIElement lastChild = source[source.ChildrenCount - 2];
+                    source[source.ChildrenCount - 1].YOffset = new SizeDimension(lastChild.CalculatedYOffset + lastChild.OuterHeight);
+                }
             };
 
-            GrayBG = new UIContainer(new Color(47, 79, 79, 150), new Vector2(InnerDimensions.Width, InnerDimensions.Height))
+            GrayBG = new UIContainer(new Color(47, 79, 79, 150))
             {
-                InheritVisibility = false,
+                Width = new SizeDimension(InnerWidth),
+                Height = new SizeDimension(InnerHeight - CategoryName.OuterHeight),
                 Parent = this
             };
             GrayBG.OnVisibilityChanged += (source, value) => LockImage.Visible = value;
 
             LockImage = new UIImage(Textures.Lock);
-            LockImage.Left = new StyleDimension((GrayBG.Width.Pixels - LockImage.Width.Pixels) * 0.5f);
-            LockImage.Top = new StyleDimension((GrayBG.Height.Pixels - LockImage.Height.Pixels) * 0.5f);
+            LockImage.XOffset = new SizeDimension((GrayBG.InnerWidth - LockImage.OuterWidth) * 0.5f);
+            LockImage.YOffset = new SizeDimension((GrayBG.InnerHeight - LockImage.OuterHeight) * 0.5f);
             LockImage.Parent = GrayBG;
 
             CategoryIndex = 0;
         }
 
-        public override void Update(GameTime gameTime)
+        public override void UpdateSelf(GameTime gameTime)
         {
-            base.Update(gameTime);
             if (DefaultItem.type != Main.LocalPlayer.HeldItem.type) DefaultItem.SetDefaults(Main.LocalPlayer.HeldItem.type);
-
-            if (LiveSync)
+            if (Visible && LiveSync)
             {
                 AutoReuse.Value = Main.LocalPlayer.HeldItem.autoReuse;
                 Consumable.Value = Main.LocalPlayer.HeldItem.consumable;
                 Potion.Value = Main.LocalPlayer.HeldItem.potion;
                 Accessory.Value = Main.LocalPlayer.HeldItem.accessory;
-                DamageType.Choices[0].Value = Main.LocalPlayer.HeldItem.melee;
-                DamageType.Choices[1].Value = Main.LocalPlayer.HeldItem.magic;
-                DamageType.Choices[2].Value = Main.LocalPlayer.HeldItem.ranged;
-                DamageType.Choices[3].Value = Main.LocalPlayer.HeldItem.summon;
-                DamageType.Choices[4].Value = Main.LocalPlayer.HeldItem.thrown;
+                RMelee.Selected = Main.LocalPlayer.HeldItem.melee;
+                RMagic.Selected = Main.LocalPlayer.HeldItem.magic;
+                RRanged.Selected = Main.LocalPlayer.HeldItem.ranged;
+                RSummon.Selected = Main.LocalPlayer.HeldItem.summon;
+                RThrown.Selected = Main.LocalPlayer.HeldItem.thrown;
                 if (!Shoot.Focused) Shoot.Value = Main.LocalPlayer.HeldItem.shoot;
                 if (!Tile.Focused) Tile.Value = Main.LocalPlayer.HeldItem.createTile;
                 if (!TileBoost.Focused) TileBoost.Value = Main.LocalPlayer.HeldItem.tileBoost;
@@ -584,8 +633,8 @@ namespace ItemModifier.UI
                 if (!Defense.Focused) Defense.Value = Main.LocalPlayer.HeldItem.defense;
                 if (!FishingPower.Focused) FishingPower.Value = Main.LocalPlayer.HeldItem.fishingPole;
                 if (!Scale.Focused) Scale.Value = Main.LocalPlayer.HeldItem.scale;
-                if (Main.LocalPlayer.HeldItem.useStyle == 0) UseStyle.DeselectAll();
-                else UseStyle.Select(Main.LocalPlayer.HeldItem.useStyle - 1);
+                if (Main.LocalPlayer.HeldItem.useStyle == 0) UseStyle.DeselectAllRadio();
+                else UseStyle.SelectRadio((UIRadioButton)UseStyle[Main.LocalPlayer.HeldItem.useStyle - 1]);
                 GrayBG.Visible = Main.LocalPlayer.HeldItem.type == 0;
             }
         }

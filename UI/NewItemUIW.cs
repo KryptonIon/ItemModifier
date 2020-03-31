@@ -1,12 +1,14 @@
 ﻿using ItemModifier.UIKit;
+using ItemModifier.UIKit.Inputs;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
+using static ItemModifier.UIKit.Utils;
 
 namespace ItemModifier.UI
 {
-    public class NewItemUIW : UIWindow
+    /* public class NewItemUIW : UIWindow
     {
         internal class ItemMatch : UIElement
         {
@@ -27,14 +29,14 @@ namespace ItemModifier.UI
 
             public ItemMatch(int ItemID)
             {
-                Width = new StyleDimension(20f);
-                Height = new StyleDimension(20f);
+                Width = new SizeDimension(20f);
+                Height = Width;
                 ItemDisplay = new UIItemDisplay(new Vector2(20f), ItemID)
                 {
                     Center = true,
                     Parent = this
                 };
-                WhileMouseHover += (source, e) => ItemModifier.Instance.Tooltip = Lang.GetItemName(Item.type).Value;
+                WhileMouseHover += (source, e) => ModContent.GetInstance<ItemModifier>().Tooltip = Lang.GetItemName(Item.type).Value;
             }
         }
 
@@ -85,25 +87,25 @@ namespace ItemModifier.UI
         public NewItemUIW() : base("New Item")
         {
             Visible = false;
-            Width = new StyleDimension(425f);
-            Height = new StyleDimension(100f);
+            Width = new SizeDimension(425f);
+            Height = new SizeDimension(100f);
         }
 
         public override void OnInitialize()
         {
             base.OnInitialize();
+            ItemModifier instance = ModContent.GetInstance<ItemModifier>();
             ItemDisplay = new UIItemDisplay(new Vector2(20f)) { Center = true };
             ItemDisplay.Parent = this;
 
             ItemNameTextbox = new UITextbox()
             {
                 Text = "Air",
-                Box = false,
-                Width = new StyleDimension(320f),
-                Left = new StyleDimension(ItemDisplay.Width.Pixels + 4f),
+                Width = new SizeDimension(320f),
+                XOffset = new SizeDimension(ItemDisplay.ActualWidth.Pixels + 4f),
                 Parent = this
             };
-            ItemNameTextbox.WhileMouseHover += (source, e) => ItemModifier.Instance.Tooltip = "Item Name";
+            ItemNameTextbox.WhileMouseHover += (source, e) => instance.Tooltip = "Item Name";
             ItemNameTextbox.OnTextChangedByUser += (source, value) =>
             {
                 if (string.IsNullOrEmpty(value))
@@ -113,7 +115,7 @@ namespace ItemModifier.UI
                 else
                 {
                     ClearMatches();
-                    matchIDs = KRUtils.FindItemsByName(value);
+                    matchIDs = FindItemsByName(value);
                     if (matchIDs.Count == 0)
                     {
                         Label2.Visible = true;
@@ -140,12 +142,11 @@ namespace ItemModifier.UI
             {
                 Sign = false,
                 Box = false,
-                LimitType = UITextbox.CharacterLimitType.DynamicLimit,
-                Width = new StyleDimension(51f),
-                Left = new StyleDimension(ItemNameTextbox.Left.Pixels + ItemNameTextbox.Width.Pixels + 4f),
+                ActualWidth = new SizeDimension(51f),
+                XOffset = new SizeDimension(ItemNameTextbox.CalculatedXOffset + ItemNameTextbox.OuterWidth + 4f),
                 Parent = this
             };
-            ItemIDTextbox.WhileMouseHover += (source, e) => ItemModifier.Instance.Tooltip = "Item ID";
+            ItemIDTextbox.WhileMouseHover += (source, e) => instance.Tooltip = "Item ID";
             ItemIDTextbox.OnValueChanged += (source, value) =>
             {
                 ItemNameTextbox.Text = value == 0 ? "Air" : Lang.GetItemName(value).Value;
@@ -156,22 +157,24 @@ namespace ItemModifier.UI
             Label1 = new UIText("Use Modified Properties:")
             {
                 SkipDescenderCheck = true,
-                Top = new StyleDimension(ItemNameTextbox.Height.Pixels),
+                YOffset = new SizeDimension(ItemNameTextbox.OuterWidth),
                 Parent = this
             };
 
             UseModifiedProperties = new UICheckbox
             {
-                Top = new StyleDimension(Label1.Top.Pixels),
-                Left = new StyleDimension(Label1.Width.Pixels + 4f),
+                YOffset = Label1.YOffset,
+                XOffset = new SizeDimension(Label1.OuterWidth + 4f),
                 Parent = this
             };
 
-            Matches = new UIContainer(KRUtils.UIBackgroundColor, new Vector2(ItemNameTextbox.Width.Pixels, InnerDimensions.Height - ItemNameTextbox.Height.Pixels - 8))
+            Matches = new UIContainer(UIBackgroundColor)
             {
                 Visible = false,
-                Left = new StyleDimension(ItemNameTextbox.Left.Pixels),
-                Top = new StyleDimension(ItemNameTextbox.Height.Pixels),
+                Width = ItemNameTextbox.Width,
+                Height = new SizeDimension(InnerHeight - ItemNameTextbox.CalculatedYOffset - 8),
+                XOffset = ItemNameTextbox.XOffset,
+                YOffset = ItemNameTextbox.YOffset,
                 Parent = this
             };
             Matches.OnScrollWheel += (source, e) => ColumnIndex += e.ScrollWheelValue / -120;
@@ -182,8 +185,8 @@ namespace ItemModifier.UI
             {
                 ItemMatches[matchIndex] = new ItemMatch(0)
                 {
-                    Top = new StyleDimension(row * 25),
-                    Left = new StyleDimension(column * 25),
+                    XOffset = new SizeDimension(column * 25),
+                    YOffset = new SizeDimension(row * 25),
                     Parent = Matches
                 };
                 ItemMatches[matchIndex].OnLeftClick += MatchClick;
@@ -202,16 +205,16 @@ namespace ItemModifier.UI
 
             Generate = new UIImageButton(ItemModifier.Textures.NewItem)
             {
-                Width = new StyleDimension(22f),
-                Height = new StyleDimension(22f),
-                Left = new StyleDimension(ItemIDTextbox.Left.Pixels + ItemIDTextbox.Width.Pixels + 4f),
+                Width = new SizeDimension(22f),
+                Height = new SizeDimension(22f),
+                XOffset = new SizeDimension(ItemIDTextbox.XOffset.Pixels + ItemIDTextbox.ActualWidth.Pixels + 4f),
                 Parent = this
             };
-            Generate.WhileMouseHover += (source, e) => ItemModifier.Instance.Tooltip = "Generate Item";
+            Generate.WhileMouseHover += (source, e) => instance.Tooltip = "Generate Item";
             Generate.OnLeftClick += (source, e) =>
             {
                 int itemIndex = Item.NewItem(Main.LocalPlayer.getRect(), ItemIDTextbox.Value, 1, true);
-                if (UseModifiedProperties.Value) Main.item[itemIndex].CopyItemProperties(ItemModifier.Instance.MainUI.ModifyWindow.ModifiedItem);
+                if (UseModifiedProperties.Value) Main.item[itemIndex].CopyItemProperties(instance.MainUI.ModifyWindow.ModifiedItem);
             };
         }
 
@@ -236,5 +239,5 @@ namespace ItemModifier.UI
             }
             Label2.Visible = false;
         }
-    }
+    } */
 }

@@ -1,7 +1,9 @@
 ﻿using ItemModifier.UIKit;
+using ItemModifier.UIKit.Inputs;
 using System.Diagnostics;
 using System.Threading;
 using Terraria;
+using Terraria.ModLoader;
 
 namespace ItemModifier.UI
 {
@@ -11,7 +13,7 @@ namespace ItemModifier.UI
 
         internal ChangelogUIW ChangelogWindow;
 
-        internal NewItemUIW NewItemWindow;
+        //internal NewItemUIW NewItemWindow;
 
         internal UIImageButton ModifyWB;
 
@@ -25,81 +27,83 @@ namespace ItemModifier.UI
 
         public override void OnInitialize()
         {
+            ItemModifier instance = ModContent.GetInstance<ItemModifier>();
+
             ChangelogWindow = new ChangelogUIW
             {
-                Top = new StyleDimension(0f, 0.2f),
-                Left = new StyleDimension(0f, 0.1f),
-                ParentInterface = this
+                XOffset = new SizeDimension(0f, 0.1f),
+                YOffset = new SizeDimension(0f, 0.2f),
+                ParentUI = this
             };
 
             ModifyWindow = new ItemModifyUIW
             {
-                Top = ChangelogWindow.Top,
-                Left = new StyleDimension(ChangelogWindow.OuterDimensions.Width + 10f, 0.1f), // + 10 is spacing between windows
-                ParentInterface = this
+                XOffset = new SizeDimension(ChangelogWindow.OuterWidth + 10f, 0.1f), // + 10 is spacing between windows
+                YOffset = ChangelogWindow.YOffset,
+                ParentUI = this
             };
 
-            NewItemWindow = new NewItemUIW
+            /*NewItemWindow = new NewItemUIW
             {
-                Top = ChangelogWindow.Top,
-                Left = new StyleDimension(ModifyWindow.Left.Pixels + ModifyWindow.OuterDimensions.Width + 10f, 0.1f), // + 10 is spacing between windows
-                ParentInterface = this
-            };
+                XOffset = new SizeDimension(ModifyWindow.CalculatedXOffset + ModifyWindow.OuterWidth + 10f, 0.1f), // + 10 is spacing between windows
+                YOffset = ChangelogWindow.YOffset,
+                ParentUI = this
+            };*/
 
             ModifyWB = new UIImageButton(ItemModifier.Textures.ModifyItem)
             {
-                Left = new StyleDimension(12f)
+                XOffset = new SizeDimension(12f)
             };
-            ModifyWB.Top = new StyleDimension(Main.screenHeight - ModifyWB.Height.Pixels - 5f);
-            ModifyWB.ParentInterface = this;
+            ModifyWB.YOffset = new SizeDimension(Main.screenHeight - ModifyWB.OuterHeight - 5f);
+            ModifyWB.ParentUI = this;
             ModifyWB.OnLeftClick += (source, e) => ModifyWindow.Visible = !ModifyWindow.Visible;
-            ModifyWB.WhileMouseHover += (source, e) => ItemModifier.Instance.Tooltip = "Modify Items";
+            ModifyWB.WhileMouseHover += (source, e) => instance.Tooltip = "Modify Items";
 
             NewItemWB = new UIImageButton(ItemModifier.Textures.NewItem)
             {
-                Left = new StyleDimension(12f)
+                XOffset = new SizeDimension(12f)
             };
-            NewItemWB.Top = new StyleDimension(ModifyWB.Top.Pixels - NewItemWB.Height.Pixels - 5f);
-            NewItemWB.ParentInterface = this;
-            NewItemWB.OnLeftClick += (source, e) => NewItemWindow.Visible = !NewItemWindow.Visible;
-            NewItemWB.WhileMouseHover += (source, e) => ItemModifier.Instance.Tooltip = "New Item";
+            NewItemWB.YOffset = new SizeDimension(ModifyWB.CalculatedYOffset - NewItemWB.OuterHeight - 5f);
+            NewItemWB.ParentUI = this;
+            //NewItemWB.OnLeftClick += (source, e) => NewItemWindow.Visible = !NewItemWindow.Visible;
+            NewItemWB.WhileMouseHover += (source, e) => instance.Tooltip = "New Item";
 
             WikiWB = new UIImageButton(ItemModifier.Textures.Wiki)
             {
-                Left = new StyleDimension(20f)
+                XOffset = new SizeDimension(20f)
             };
-            WikiWB.Top = new StyleDimension(NewItemWB.Top.Pixels - WikiWB.Height.Pixels - 12f);
-            WikiWB.ParentInterface = this;
+            WikiWB.YOffset = new SizeDimension(NewItemWB.CalculatedYOffset - WikiWB.OuterHeight - 12f);
+            WikiWB.ParentUI = this;
             WikiWB.OnLeftClick += (source, e) => new Thread(() => Process.Start("https://kryptonion.github.io/ItemModifier/")).Start();
-            WikiWB.WhileMouseHover += (source, e) => ItemModifier.Instance.Tooltip = "Open Wiki";
+            WikiWB.WhileMouseHover += (source, e) => instance.Tooltip = "Open Wiki";
 
             ChangelogWB = new UIImageButton(ItemModifier.Textures.ChangelogIcon)
             {
-                Left = new StyleDimension(20f)
+                XOffset = new SizeDimension(20f)
             };
-            ChangelogWB.Top = new StyleDimension(WikiWB.Top.Pixels - ChangelogWB.Height.Pixels - 12f);
-            ChangelogWB.ParentInterface = this;
+            ChangelogWB.YOffset = new SizeDimension(WikiWB.CalculatedYOffset - ChangelogWB.OuterHeight - 12f);
+            ChangelogWB.ParentUI = this;
             ChangelogWB.OnLeftClick += (source, e) => ChangelogWindow.Visible = !ChangelogWindow.Visible;
-            ChangelogWB.WhileMouseHover += (source, e) => ItemModifier.Instance.Tooltip = "Changelog";
+            ChangelogWB.WhileMouseHover += (source, e) => instance.Tooltip = "Changelog";
 
             DiscordLink = new UIImageButton(ItemModifier.Textures.DiscordIcon, activeTransparency: 1.5f, inactiveTransparency: 0.6f)
             {
-                Left = new StyleDimension(17f)
+                XOffset = new SizeDimension(17f)
             };
-            DiscordLink.Top = new StyleDimension(ChangelogWB.Top.Pixels - DiscordLink.Height.Pixels - 13.5f);
-            DiscordLink.ParentInterface = this;
+            DiscordLink.YOffset = new SizeDimension(ChangelogWB.CalculatedYOffset - DiscordLink.OuterHeight - 13.5f);
+            DiscordLink.ParentUI = this;
             DiscordLink.OnLeftClick += (source, e) => new Thread(() => Process.Start("https://discord.gg/UjQWNC2")).Start();
-            DiscordLink.WhileMouseHover += (source, e) => ItemModifier.Instance.Tooltip = "Discord";
+            DiscordLink.WhileMouseHover += (source, e) => instance.Tooltip = "Discord";
 
             if (KRConfig.Instance.HelpMessage)
             {
-                UIWindow messageBox = new UIWindow("", false, draggable: false)
+                UIWindow messageBox = new UIWindow(false)
                 {
-                    Width = new StyleDimension(350f),
-                    Height = new StyleDimension(21f),
-                    Top = new StyleDimension(Main.screenHeight - 112),
-                    Left = new StyleDimension(Main.screenWidth * 0.05f),
-                    ParentInterface = this
+                    Width = new SizeDimension(350f),
+                    Height = new SizeDimension(21f),
+                    XOffset = new SizeDimension(Main.screenWidth * 0.05f),
+                    YOffset = new SizeDimension(Main.screenHeight - 112),
+                    ParentUI = this
                 };
                 messageBox.Initialize();
                 messageBox.OnVisibilityChanged += (source, value) => { if (!value) { messageBox.Parent = null; messageBox = null; } };
