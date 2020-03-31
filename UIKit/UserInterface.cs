@@ -4,331 +4,289 @@ using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.GameInput;
+using Terraria.ModLoader;
 
 namespace ItemModifier.UIKit
 {
     public class UserInterface
     {
-        private const double DOUBLE_CLICK_TIME = 500.0;
+        private const double DOUBLE_CLICK_MAX_GAP = 500.0;
 
         private const double STATE_CHANGE_CLICK_DISABLE_TIME = 200.0;
 
-        public static UserInterface ActiveInstance { get; set; } = new UserInterface();
+        public Vector2 MousePosition { get; set; }
 
-        public Vector2 MousePosition;
+        private bool wasLeftdown;
 
-        private bool _wasMouseDown;
+        private bool wasRightDown;
 
-        private bool _wasRightMouseDown;
+        private bool wasMiddleDown;
 
-        private bool _wasMiddleMouseDown;
+        private bool wasBackDown;
 
-        private bool _wasBackMouseDown;
+        private bool wasForwardDown;
 
-        private bool _wasForwardMouseDown;
+        private UIElement lastHover;
 
-        private UIElement _lastElementHover;
+        private UIElement lastLeftClick;
 
-        private UIElement _lastElementDown;
+        private UIElement lastLeftDown;
 
-        private UIElement _lastElementRightDown;
+        private UIElement lastRightClick;
 
-        private UIElement _lastElementMiddleDown;
+        private UIElement lastRightDown;
 
-        private UIElement _lastElementBackDown;
+        private UIElement lastMiddleClick;
 
-        private UIElement _lastElementForwardDown;
+        private UIElement lastMiddleDown;
 
-        private UIElement _lastElementClicked;
+        private UIElement lastBackClick;
 
-        private UIElement _lastElementRightClicked;
+        private UIElement lastBackDown;
 
-        private UIElement _lastElementMiddleClicked;
+        private UIElement lastForwardClick;
 
-        private UIElement _lastElementBackClicked;
+        private UIElement lastForwardDown;
 
-        private UIElement _lastElementForwardClicked;
+        private UIElement lastFocused;
 
-        private double _lastMouseDownTime;
+        private double lastLeftClickTime;
 
-        private double _lastMouseRightDownTime;
+        private double lastRightClickTime;
 
-        private double _lastMouseMiddleDownTime;
+        private double lastMiddleClickTime;
 
-        private double _lastMouseBackDownTime;
+        private double lastBackClickTime;
 
-        private double _lastMouseForwardDownTime;
+        private double lastForwardClickTime;
 
-        private double _clickDisabledTimeRemaining;
+        private double clickDisabledTime;
 
-        public bool Initialized { get; private set; }
-
-        internal List<UIElement> Children = new List<UIElement>();
-
-        public Dimensions Dimensions { get; } = new Dimensions(0f, 0f, Main.screenWidth, Main.screenHeight);
+        internal List<UIElement> Children { get; } = new List<UIElement>();
 
         public bool Visible { get; set; } = true;
 
+        public bool Initialized { get; set; }
+
         public UserInterface()
         {
-            ActiveInstance = this;
-        }
-
-        public void Use()
-        {
-            if (ActiveInstance != this)
-            {
-                ActiveInstance = this;
-                Recalculate();
-                return;
-            }
-            ActiveInstance = this;
         }
 
         public void ResetLasts()
         {
-            _lastElementHover?.MouseOut(new UIMouseEventArgs(_lastElementHover, MousePosition));
-            _lastElementHover = null;
-            _lastElementDown = null;
-            _lastElementClicked = null;
-            _lastElementRightDown = null;
-            _lastElementRightClicked = null;
-            _lastElementMiddleDown = null;
-            _lastElementMiddleClicked = null;
-            _lastElementBackDown = null;
-            _lastElementBackClicked = null;
-            _lastElementForwardDown = null;
-            _lastElementForwardClicked = null;
-            _lastMouseDownTime = 0.0;
-            _lastMouseRightDownTime = 0.0;
-            _lastMouseMiddleDownTime = 0.0;
-            _lastMouseBackDownTime = 0.0;
-            _lastMouseForwardDownTime = 0.0;
+            lastHover?.MouseOut(new UIMouseEventArgs(lastHover, MousePosition));
+            lastHover = null;
+            lastLeftClick = null;
+            lastLeftDown = null;
+            lastRightClick = null;
+            lastRightDown = null;
+            lastMiddleClick = null;
+            lastMiddleDown = null;
+            lastBackClick = null;
+            lastBackDown = null;
+            lastForwardClick = null;
+            lastForwardDown = null;
+            lastLeftClickTime = 0d;
+            lastRightClickTime = 0d;
+            lastMiddleClickTime = 0d;
+            lastBackClickTime = 0d;
+            lastForwardClickTime = 0d;
         }
 
         private void ResetState()
         {
             MousePosition = new Vector2(Main.mouseX, Main.mouseY);
-            _wasMouseDown = Main.mouseLeft;
-            _wasRightMouseDown = Main.mouseRight;
-            _wasMiddleMouseDown = Main.mouseMiddle;
-            _wasBackMouseDown = Main.mouseXButton1;
-            _wasForwardMouseDown = Main.mouseXButton2;
+            wasLeftdown = Main.mouseLeft;
+            wasRightDown = Main.mouseRight;
+            wasMiddleDown = Main.mouseMiddle;
+            wasBackDown = Main.mouseXButton1;
+            wasForwardDown = Main.mouseXButton2;
             ResetLasts();
-            _clickDisabledTimeRemaining = Math.Max(_clickDisabledTimeRemaining, STATE_CHANGE_CLICK_DISABLE_TIME);
+            clickDisabledTime = Math.Max(clickDisabledTime, STATE_CHANGE_CLICK_DISABLE_TIME);
         }
 
         public void Update(GameTime gameTime)
         {
             MousePosition = new Vector2(Main.mouseX, Main.mouseY);
+            ItemModifier instance = ModContent.GetInstance<ItemModifier>();
             bool leftDown = Main.mouseLeft && Main.hasFocus;
             bool rightDown = Main.mouseRight && Main.hasFocus;
             bool middleDown = Main.mouseMiddle && Main.hasFocus;
             bool backDown = Main.mouseXButton1 && Main.hasFocus;
             bool forwardDown = Main.mouseXButton2 && Main.hasFocus;
             UIElement target = Main.hasFocus ? GetElementAt(MousePosition) : null;
-            if (target != null)
+            if (target == null)
             {
-                Main.LocalPlayer.mouseInterface = true;
-                ItemModifier.Instance.MouseWheelDisabled = true;
-                ItemModifier.Instance.ItemAtCursorDisabled = true;
+                instance.MouseWheelDisabled = false;
+                instance.ItemAtCursorDisabled = false;
             }
             else
             {
-                ItemModifier.Instance.MouseWheelDisabled = false;
-                ItemModifier.Instance.ItemAtCursorDisabled = false;
+                Main.LocalPlayer.mouseInterface = true;
+                instance.MouseWheelDisabled = true;
+                instance.ItemAtCursorDisabled = true;
             }
-            _clickDisabledTimeRemaining = Math.Max(0.0, _clickDisabledTimeRemaining - gameTime.ElapsedGameTime.TotalMilliseconds);
-            bool clickDisabled = _clickDisabledTimeRemaining > 0.0;
-            if (target != _lastElementHover)
+            clickDisabledTime = Math.Max(0.0, clickDisabledTime - gameTime.ElapsedGameTime.TotalMilliseconds);
+            bool clickDisabled = clickDisabledTime > 0.0;
+            if (target != lastHover)
             {
-                _lastElementHover?.MouseOut(new UIMouseEventArgs(_lastElementHover, MousePosition));
+                lastHover?.MouseOut(new UIMouseEventArgs(lastHover, MousePosition));
                 target?.MouseOver(new UIMouseEventArgs(target, MousePosition));
-                _lastElementHover = target;
+                lastHover = target;
             }
             target?.MouseHover(new UIMouseEventArgs(target, MousePosition));
             if (!clickDisabled)
             {
-                if (leftDown && !_wasMouseDown && target != null)
+                if (leftDown && !wasLeftdown && target != null)
                 {
-                    _lastElementDown = target;
+                    if (lastFocused != null && lastFocused != target) lastFocused.Focused = false;
+                    lastLeftDown = target;
+                    lastFocused = target;
+                    target.Focused = true;
                     target.LeftMouseDown(new UIMouseEventArgs(target, MousePosition));
-                    if (_lastElementClicked == target && gameTime.TotalGameTime.TotalMilliseconds - _lastMouseDownTime < DOUBLE_CLICK_TIME)
+                    if (lastLeftClick == target && gameTime.TotalGameTime.TotalMilliseconds - lastLeftClickTime < DOUBLE_CLICK_MAX_GAP)
                     {
                         target.LeftDoubleClick(new UIMouseEventArgs(target, MousePosition));
-                        _lastElementClicked = null;
+                        lastLeftClick = null;
                     }
-                    _lastMouseDownTime = gameTime.TotalGameTime.TotalMilliseconds;
+                    lastLeftClickTime = gameTime.TotalGameTime.TotalMilliseconds;
                 }
-                else if (!leftDown && _wasMouseDown && _lastElementDown != null)
+                else if (!leftDown && wasLeftdown && lastLeftDown != null)
                 {
-                    UIElement lastElementDown = _lastElementDown;
-                    if (lastElementDown.ContainsPoint(MousePosition))
+                    if (lastLeftDown.ContainsPoint(MousePosition))
                     {
-                        lastElementDown.LeftClick(new UIMouseEventArgs(lastElementDown, MousePosition));
-                        _lastElementClicked = _lastElementDown;
+                        lastLeftDown.LeftClick(new UIMouseEventArgs(lastLeftDown, MousePosition));
+                        lastLeftClick = lastLeftDown;
                     }
-                    lastElementDown.LeftMouseUp(new UIMouseEventArgs(lastElementDown, MousePosition));
-                    _lastElementDown = null;
+                    lastLeftDown.LeftMouseUp(new UIMouseEventArgs(lastLeftDown, MousePosition));
+                    lastLeftDown = null;
                 }
-                if (rightDown && !_wasRightMouseDown && target != null)
+                if (rightDown && !wasRightDown && target != null)
                 {
-                    _lastElementRightDown = target;
+                    lastRightDown = target;
                     target.RightMouseDown(new UIMouseEventArgs(target, MousePosition));
-                    if (_lastElementRightClicked == target && gameTime.TotalGameTime.TotalMilliseconds - _lastMouseRightDownTime < DOUBLE_CLICK_TIME)
+                    if (lastRightClick == target && gameTime.TotalGameTime.TotalMilliseconds - lastRightClickTime < DOUBLE_CLICK_MAX_GAP)
                     {
                         target.RightDoubleClick(new UIMouseEventArgs(target, MousePosition));
-                        _lastElementRightClicked = null;
+                        lastRightClick = null;
                     }
-                    _lastMouseRightDownTime = gameTime.TotalGameTime.TotalMilliseconds;
+                    lastRightClickTime = gameTime.TotalGameTime.TotalMilliseconds;
                 }
-                else if (!rightDown && _wasRightMouseDown && _lastElementRightDown != null)
+                else if (!rightDown && wasRightDown && lastRightDown != null)
                 {
-                    UIElement lastElementRightDown = _lastElementRightDown;
-                    if (lastElementRightDown.ContainsPoint(MousePosition))
+                    if (lastRightDown.ContainsPoint(MousePosition))
                     {
-                        lastElementRightDown.RightClick(new UIMouseEventArgs(lastElementRightDown, MousePosition));
-                        _lastElementRightClicked = _lastElementRightDown;
+                        lastRightDown.RightClick(new UIMouseEventArgs(lastRightDown, MousePosition));
+                        lastRightClick = lastRightDown;
                     }
-                    lastElementRightDown.RightMouseUp(new UIMouseEventArgs(lastElementRightDown, MousePosition));
-                    _lastElementRightDown = null;
+                    lastRightDown.RightMouseUp(new UIMouseEventArgs(lastRightDown, MousePosition));
+                    lastRightDown = null;
                 }
-                if (middleDown && !_wasMiddleMouseDown && target != null)
+                if (middleDown && !wasMiddleDown && target != null)
                 {
-                    _lastElementMiddleDown = target;
+                    lastMiddleDown = target;
                     target.MiddleMouseDown(new UIMouseEventArgs(target, MousePosition));
-                    if (_lastElementMiddleClicked == target && gameTime.TotalGameTime.TotalMilliseconds - _lastMouseMiddleDownTime < DOUBLE_CLICK_TIME)
+                    if (lastMiddleClick == target && gameTime.TotalGameTime.TotalMilliseconds - lastMiddleClickTime < DOUBLE_CLICK_MAX_GAP)
                     {
                         target.MiddleDoubleClick(new UIMouseEventArgs(target, MousePosition));
-                        _lastElementMiddleClicked = null;
+                        lastMiddleClick = null;
                     }
-                    _lastMouseMiddleDownTime = gameTime.TotalGameTime.TotalMilliseconds;
+                    lastMiddleClickTime = gameTime.TotalGameTime.TotalMilliseconds;
                 }
-                else if (!middleDown && _wasMiddleMouseDown && _lastElementMiddleDown != null)
+                else if (!middleDown && wasMiddleDown && lastMiddleDown != null)
                 {
-                    UIElement lastElementMiddleDown = _lastElementMiddleDown;
-                    if (lastElementMiddleDown.ContainsPoint(MousePosition))
+                    if (lastMiddleDown.ContainsPoint(MousePosition))
                     {
-                        lastElementMiddleDown.MiddleClick(new UIMouseEventArgs(lastElementMiddleDown, MousePosition));
-                        _lastElementMiddleClicked = _lastElementMiddleDown;
+                        lastMiddleDown.MiddleClick(new UIMouseEventArgs(lastMiddleDown, MousePosition));
+                        lastMiddleClick = lastMiddleDown;
                     }
-                    lastElementMiddleDown.MiddleMouseUp(new UIMouseEventArgs(lastElementMiddleDown, MousePosition));
-                    _lastElementMiddleDown = null;
+                    lastMiddleDown.MiddleMouseUp(new UIMouseEventArgs(lastMiddleDown, MousePosition));
+                    lastMiddleDown = null;
                 }
-                if (backDown && !_wasBackMouseDown && target != null)
+                if (backDown && !wasBackDown && target != null)
                 {
-                    _lastElementBackDown = target;
+                    lastBackDown = target;
                     target.BackDown(new UIMouseEventArgs(target, MousePosition));
-                    if (_lastElementBackClicked == target && gameTime.TotalGameTime.TotalMilliseconds - _lastMouseBackDownTime < DOUBLE_CLICK_TIME)
+                    if (lastBackClick == target && gameTime.TotalGameTime.TotalMilliseconds - lastBackClickTime < DOUBLE_CLICK_MAX_GAP)
                     {
                         target.BackDoubleClick(new UIMouseEventArgs(target, MousePosition));
-                        _lastElementBackClicked = null;
+                        lastBackClick = null;
                     }
-                    _lastMouseBackDownTime = gameTime.TotalGameTime.TotalMilliseconds;
+                    lastBackClickTime = gameTime.TotalGameTime.TotalMilliseconds;
                 }
-                else if (!backDown && _wasBackMouseDown && _lastElementBackDown != null)
+                else if (!backDown && wasBackDown && lastBackDown != null)
                 {
-                    UIElement lastElementXButton1Down = _lastElementBackDown;
-                    if (lastElementXButton1Down.ContainsPoint(MousePosition))
+                    if (lastBackDown.ContainsPoint(MousePosition))
                     {
-                        lastElementXButton1Down.BackClick(new UIMouseEventArgs(lastElementXButton1Down, MousePosition));
-                        _lastElementBackClicked = _lastElementBackDown;
+                        lastBackDown.BackClick(new UIMouseEventArgs(lastBackDown, MousePosition));
+                        lastBackClick = lastBackDown;
                     }
-                    lastElementXButton1Down.BackUp(new UIMouseEventArgs(lastElementXButton1Down, MousePosition));
-                    _lastElementBackDown = null;
+                    lastBackDown.BackUp(new UIMouseEventArgs(lastBackDown, MousePosition));
+                    lastBackDown = null;
                 }
-                if (forwardDown && !_wasForwardMouseDown && target != null)
+                if (forwardDown && !wasForwardDown && target != null)
                 {
-                    _lastElementForwardDown = target;
+                    lastForwardDown = target;
                     target.ForwardDown(new UIMouseEventArgs(target, MousePosition));
-                    if (_lastElementForwardClicked == target && gameTime.TotalGameTime.TotalMilliseconds - _lastMouseForwardDownTime < DOUBLE_CLICK_TIME)
+                    if (lastForwardClick == target && gameTime.TotalGameTime.TotalMilliseconds - lastForwardClickTime < DOUBLE_CLICK_MAX_GAP)
                     {
                         target.ForwardDoubleClick(new UIMouseEventArgs(target, MousePosition));
-                        _lastElementForwardClicked = null;
+                        lastForwardClick = null;
                     }
-                    _lastMouseForwardDownTime = gameTime.TotalGameTime.TotalMilliseconds;
+                    lastForwardClickTime = gameTime.TotalGameTime.TotalMilliseconds;
                 }
-                else if (!forwardDown && _wasForwardMouseDown && _lastElementForwardDown != null)
+                else if (!forwardDown && wasForwardDown && lastForwardDown != null)
                 {
-                    UIElement lastElementXButton2Down = _lastElementForwardDown;
-                    if (lastElementXButton2Down.ContainsPoint(MousePosition))
+                    if (lastForwardDown.ContainsPoint(MousePosition))
                     {
-                        lastElementXButton2Down.ForwardClick(new UIMouseEventArgs(lastElementXButton2Down, MousePosition));
-                        _lastElementForwardClicked = _lastElementForwardDown;
+                        lastForwardDown.ForwardClick(new UIMouseEventArgs(lastForwardDown, MousePosition));
+                        lastForwardClick = lastForwardDown;
                     }
-                    lastElementXButton2Down.ForwardUp(new UIMouseEventArgs(lastElementXButton2Down, MousePosition));
-                    _lastElementForwardDown = null;
+                    lastForwardDown.ForwardUp(new UIMouseEventArgs(lastForwardDown, MousePosition));
+                    lastForwardDown = null;
                 }
             }
             if (PlayerInput.ScrollWheelDeltaForUI != 0) target?.ScrollWheel(new UIScrollWheelEventArgs(target, MousePosition, PlayerInput.ScrollWheelDeltaForUI));
-            _wasMouseDown = leftDown;
-            _wasRightMouseDown = rightDown;
-            _wasMiddleMouseDown = middleDown;
-            _wasBackMouseDown = backDown;
-            _wasForwardMouseDown = forwardDown;
-            Children.ForEach(child => child.Update(gameTime));
+            wasLeftdown = leftDown;
+            wasRightDown = rightDown;
+            wasMiddleDown = middleDown;
+            wasBackDown = backDown;
+            wasForwardDown = forwardDown;
+            for (int i = 0; i < Children.Count; i++) Children[i].Update(gameTime);
         }
 
         public void Draw(SpriteBatch sb)
         {
             if (Visible)
             {
-                Use();
-                Children.ForEach(child => child.Draw(sb));
-                if (ItemModifier.Instance.DimensionsView && _lastElementHover != null) sb.Draw(ItemModifier.Textures.WindowBackground, (ItemModifier.Instance.DimensionsType == 1 ? _lastElementHover.OuterDimensions : ItemModifier.Instance.DimensionsType == 2 ? _lastElementHover.Dimensions : _lastElementHover.InnerDimensions).Rectangle, new Color(255, 255, 255, 50));
+                for (int i = 0; i < Children.Count; i++) Children[i].Draw(sb);
             }
         }
 
         internal void RefreshState()
         {
-            Children.ForEach(child => child.Deactivate());
+            for (int i = 0; i < Children.Count; i++) Children[i].Deactivate();
             ResetState();
-            Children.ForEach(child =>
-            {
-                child.Activate();
-                child.Recalculate();
-            });
+            for (int i = 0; i < Children.Count; i++) Children[i].Activate();
         }
 
         public void Recalculate()
         {
-            Children.ForEach(child => child.Recalculate());
-        }
-
-        public bool RemoveChild(UIElement Child)
-        {
-            Child.ParentInterface = null;
-            return Children.Remove(Child);
+            for (int i = 0; i < Children.Count; i++) Children[i].Recalculate();
         }
 
         public void RemoveAllChildren()
         {
-            for (int i = 0; i < Children.Count; i++)
-            {
-                Children[i].ParentInterface = null;
-            }
+            for (int i = 0; i < Children.Count; i++) Children[i].ParentUI = null;
             Children.Clear();
-        }
-
-        public UIElement GetElementAt(Vector2 point)
-        {
-            for (int i = Children.Count - 1; i > -1; i--)
-            {
-                UIElement element = Children[i];
-                if (element.Visible && element.ContainsPoint(point))
-                {
-                    return element.GetElementAt(point);
-                }
-            }
-            return null;
         }
 
         public void Activate()
         {
+            Recalculate();
             if (!Initialized) Initialize();
             OnActivate();
-            Children.ForEach(child => child.Activate());
-            Recalculate();
+            for (int i = 0; i < Children.Count; i++) Children[i].Activate();
         }
 
         public virtual void OnActivate()
@@ -339,7 +297,7 @@ namespace ItemModifier.UIKit
         public void Deactivate()
         {
             OnDeactivate();
-            Children.ForEach(child => child.Deactivate());
+            for (int i = 0; i < Children.Count; i++) Children[i].Deactivate();
         }
 
         public virtual void OnDeactivate()
@@ -356,6 +314,16 @@ namespace ItemModifier.UIKit
         public virtual void OnInitialize()
         {
 
+        }
+
+        public UIElement GetElementAt(Vector2 point)
+        {
+            for (int i = Children.Count - 1; i >= 0; i--)
+            {
+                UIElement element = Children[i];
+                if (element.Visible && element.ContainsPoint(point)) return element.GetElementAt(point);
+            }
+            return null;
         }
     }
 }

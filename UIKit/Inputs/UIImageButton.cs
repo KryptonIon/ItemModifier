@@ -3,41 +3,45 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 
-namespace ItemModifier.UIKit
+namespace ItemModifier.UIKit.Inputs
 {
     public class UIImageButton : UIImage
     {
-        private float _activeTransparency;
+        private float activeTransparency = 1f;
 
         public float ActiveTransparency
         {
             get
             {
-                return _activeTransparency;
+                return activeTransparency;
             }
 
             set
             {
-                _activeTransparency = MathHelper.Clamp(value, 0f, 1f);
+                activeTransparency = MathHelper.Clamp(value, 0f, 1f);
             }
         }
 
-        private float _inactiveTransparency;
+        private float inactiveTransparency = 0.4f;
 
         public float InactiveTransparency
         {
             get
             {
-                return _inactiveTransparency;
+                return inactiveTransparency;
             }
 
             set
             {
-                _inactiveTransparency = MathHelper.Clamp(value, 0f, 1f);
+                inactiveTransparency = MathHelper.Clamp(value, 0f, 1f);
             }
         }
 
-        public UIImageButton(Texture2D image, Color? colorTint = null, float activeTransparency = 1f, float inactiveTransparency = 0.4f, Vector4 margin = default) : base(image, colorTint, margin)
+        public UIImageButton(Texture2D image, bool autoScale = true, Color? colorTint = null) : base(image, autoScale, colorTint)
+        {
+        }
+
+        public UIImageButton(Texture2D image, float activeTransparency, float inactiveTransparency, bool autoScale = true, Color? colorTint = null) : base(image, autoScale, colorTint)
         {
             ActiveTransparency = activeTransparency;
             InactiveTransparency = inactiveTransparency;
@@ -51,13 +55,13 @@ namespace ItemModifier.UIKit
 
         public override void LeftClick(UIMouseEventArgs e)
         {
-            OnLeftClick += (source, e) => Main.PlaySound(SoundID.MenuTick);
+            Main.PlaySound(SoundID.MenuTick);
             base.LeftClick(e);
         }
 
         protected override void DrawSelf(SpriteBatch sb)
         {
-            sb.Draw(Image, Dimensions.Rectangle, ColorTint * (MouseHovering ? ActiveTransparency : InactiveTransparency));
+            sb.Draw(Image, InnerRect, ColorTint * (MouseHovering ? ActiveTransparency : InactiveTransparency));
         }
     }
 }

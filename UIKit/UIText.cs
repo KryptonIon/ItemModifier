@@ -1,11 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Terraria;
+using static ItemModifier.UIKit.Utils;
+using static Terraria.Utils;
 
 namespace ItemModifier.UIKit
 {
     public class UIText : UIElement
     {
+        private string text;
+
         public string Text
         {
             get
@@ -20,38 +23,46 @@ namespace ItemModifier.UIKit
             }
         }
 
-        private string text;
-
         public Color TextColor { get; set; } = Color.White;
 
-        public bool SkipDescenderCheck { get; set; } = false;
+        public bool SkipDescenderCheck { get; set; }
 
-        public UIText(string text, Vector4 padding = default, Vector4 margin = default) : base(padding, margin)
+        public float Scale { get; set; } = 1f;
+
+        public Vector2 Anchor { get; set; }
+
+        public UIText(string text)
         {
             Text = text;
         }
 
-        public UIText(string text, Color textColor, Vector4 padding = default, Vector4 margin = default) : this(text, padding, margin)
+        public UIText(string text, Color textColor) : this(text)
         {
             TextColor = textColor;
         }
 
-        public override void Recalculate()
+        public UIText(string text, Color textColor, float scale, Vector2 anchor, int maxCharacters) : this(text, textColor)
         {
-            RecalculateSize();
-            base.Recalculate();
+            Scale = scale;
+            Anchor = anchor;
         }
 
-        private void RecalculateSize()
+        protected internal override void RecalculateSelf()
         {
-            Vector2 size = KRUtils.MeasureTextAccurate(Text, SkipDescenderCheck);
-            Width = new StyleDimension(size.X);
-            Height = new StyleDimension(size.Y);
+            RecalculateTextSize();
+            base.RecalculateSelf();
+        }
+
+        protected virtual void RecalculateTextSize()
+        {
+            Vector2 size = MeasureString2(Text, SkipDescenderCheck);
+            Width = new SizeDimension(size.X);
+            Height = new SizeDimension(size.Y);
         }
 
         protected override void DrawSelf(SpriteBatch sb)
         {
-            Utils.DrawBorderString(sb, Text, Dimensions.Position, TextColor);
+            DrawBorderString(sb, Text, InnerPosition, TextColor, Scale, Anchor.X, Anchor.Y);
         }
     }
 }

@@ -19,9 +19,9 @@ namespace ItemModifier
 
             public string Website { get; }
 
-            public string[] Raw { get; }
+            public string Raw { get; }
 
-            public Changelog(string version, string[] raw, string title = "", string website = "")
+            public Changelog(string version, string raw, string title = "", string website = "")
             {
                 Version = version;
                 Raw = raw;
@@ -40,7 +40,7 @@ namespace ItemModifier
                 {
                     using (BinaryReader reader = new BinaryReader(mStream))
                     {
-                        return new Changelog(reader.ReadString(), reader.ReadString().Split('\n'), reader.ReadString(), reader.ReadString());
+                        return new Changelog(reader.ReadString(), reader.ReadString(), reader.ReadString(), reader.ReadString());
                     }
                 }
             }
@@ -90,21 +90,7 @@ namespace ItemModifier
 
             public static Texture2D Checkbox { get; private set; }
 
-            public static Texture2D CircleSelect { get; private set; }
-
-            public static Texture2D FlatButton { get; private set; }
-
-            public static Texture2D FlatButtonSmall { get; private set; }
-
-            public static Texture2D RoundButton { get; private set; }
-
-            public static Texture2D RoundButtonSmall { get; private set; }
-
             public static Texture2D HorizontalLine { get; private set; }
-
-            public static Texture2D VerticalLine { get; private set; }
-
-            public static Texture2D LineTextbox { get; private set; }
 
             public static Texture2D Textbox { get; private set; }
 
@@ -176,6 +162,8 @@ namespace ItemModifier
 
             public static Texture2D ScrollInside { get; private set; }
 
+            public static Texture2D SquareSelect { get; private set; }
+
             public static void Load()
             {
                 ModifyItem = ModContent.GetTexture("ItemModifier/UI/ModifyItem");
@@ -198,20 +186,13 @@ namespace ItemModifier
                 Sync = ModContent.GetTexture("ItemModifier/UI/Sync");
                 DiscordIcon = ModContent.GetTexture("ItemModifier/UI/DiscordIcon");
                 Reset = ModContent.GetTexture("ItemModifier/UI/Reset");
-                Checkbox = ModContent.GetTexture("ItemModifier/UIKit/Checkbox");
-                CircleSelect = ModContent.GetTexture("ItemModifier/UIKit/CircleSelect");
-                FlatButton = ModContent.GetTexture("ItemModifier/UIKit/FlatButton");
-                FlatButtonSmall = ModContent.GetTexture("ItemModifier/UIKit/FlatButtonSmall");
-                RoundButton = ModContent.GetTexture("ItemModifier/UIKit/RoundButton");
-                RoundButtonSmall = ModContent.GetTexture("ItemModifier/UIKit/RoundButtonSmall");
+                Checkbox = ModContent.GetTexture("ItemModifier/UIKit/Inputs/Checkbox");
                 HorizontalLine = ModContent.GetTexture("ItemModifier/UIKit/HorizontalLine");
-                LineTextbox = ModContent.GetTexture("ItemModifier/UIKit/LineTextbox");
-                Textbox = ModContent.GetTexture("ItemModifier/UIKit/Textbox");
+                Textbox = ModContent.GetTexture("ItemModifier/UIKit/Inputs/Textbox");
                 WindowBackground = ModContent.GetTexture("ItemModifier/UIKit/WindowBackground");
                 WindowBorder = ModContent.GetTexture("ItemModifier/UIKit/WindowBorder");
                 X = ModContent.GetTexture("ItemModifier/UIKit/X");
-                VerticalLine = ModContent.GetTexture("ItemModifier/UIKit/VerticalLine");
-                Caret = ModContent.GetTexture("ItemModifier/UIKit/Caret");
+                Caret = ModContent.GetTexture("ItemModifier/UIKit/Inputs/Caret");
                 Air = ModContent.GetTexture("ItemModifier/UIKit/Air");
                 AutoReuse = ModContent.GetTexture("ItemModifier/UI/AutoReuse");
                 Consumable = ModContent.GetTexture("ItemModifier/UI/Consumable");
@@ -244,6 +225,7 @@ namespace ItemModifier
                 ScrollInside = new Texture2D(Main.graphics.GraphicsDevice, 1, 1);
                 ScrollBorder.SetData(new Color[] { new Color(43, 56, 101) });
                 ScrollInside.SetData(new Color[] { Color.White });
+                SquareSelect = ModContent.GetTexture("ItemModifier/UIKit/Inputs/SquareSelect");
             }
 
             public static void Unload()
@@ -269,28 +251,47 @@ namespace ItemModifier
                 DiscordIcon = null;
                 Reset = null;
                 Checkbox = null;
-                CircleSelect = null;
-                FlatButton = null;
-                FlatButtonSmall = null;
-                RoundButton = null;
-                RoundButtonSmall = null;
                 HorizontalLine = null;
-                LineTextbox = null;
                 Textbox = null;
                 WindowBackground = null;
                 WindowBorder = null;
                 X = null;
-                VerticalLine = null;
                 Caret = null;
                 Air = null;
+                AutoReuse = null;
+                Consumable = null;
+                PotionSickness = null;
+                DamageType = null;
+                Accessory = null;
+                Damage = null;
+                CritChance = null;
+                Knockback = null;
+                ProjectileShot = null;
+                ProjectileSpeed = null;
+                CreateTile = null;
+                AddedRange = null;
+                BuffDuration = null;
+                BuffType = null;
+                HPHealed = null;
+                MPHealed = null;
+                AxePower = null;
+                PickaxePower = null;
+                HammerPower =null;
+                Stack = null;
+                MaxStack = null;
+                UseAnimation = null;
+                UseTime = null;
+                Defense = null;
+                FishingPower = null;
+                ItemScale = null;
+                UseStyle = null;
+                ScrollBorder = null;
+                ScrollInside = null;
+                SquareSelect = null;
             }
         }
 
-        public static ItemModifier Instance { get; private set; }
-
         internal MainInterface MainUI;
-
-        public static readonly string WikiPage = "https://github.com/KryptonIon/ItemModifier/wiki";
 
         internal string Tooltip { get; set; }
 
@@ -298,16 +299,10 @@ namespace ItemModifier
 
         public bool ItemAtCursorDisabled { get; set; } = false;
 
-        public bool DimensionsView { get; set; }
-
-        public byte DimensionsType { get; set; }
-
         public static List<Changelog> Changelogs { get; private set; }
 
         public override void Load()
         {
-            Instance = ModContent.GetInstance<ItemModifier>();
-
             Textures.Load();
             Changelogs = new List<Changelog> {
                 Changelog.Read("ItemModifier/Changelogs/1.0.0.clog"),
@@ -323,18 +318,14 @@ namespace ItemModifier
                 //Changelog.Read("ItemModifier/Changelogs/1.1.0.clog")
             };
 
-            if (!Main.dedServ)
-            {
-                MainUI = new MainInterface();
-                MainUI.Activate();
-            }
+            if (!Main.dedServ) (MainUI = new MainInterface()).Activate();
         }
 
         public override void Unload()
         {
             Textures.Unload();
             Changelogs = null;
-            Instance = null;
+            MainUI = null;
         }
 
         public override void UpdateUI(GameTime gameTime)
@@ -347,22 +338,18 @@ namespace ItemModifier
             if (ItemAtCursorDisabled)
             {
                 int mouseItemIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Interact Item Icon"));
-                if (mouseItemIndex != -1)
-                {
-                    layers.RemoveAt(mouseItemIndex);
-                }
+                if (mouseItemIndex != -1) layers.RemoveAt(mouseItemIndex);
             }
             int mouseIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Hotbar"));
             if (mouseIndex != -1)
             {
-                mouseIndex -= 1;
-                layers.Insert(mouseIndex, new LegacyGameInterfaceLayer(
+                layers.Insert(mouseIndex - 1, new LegacyGameInterfaceLayer(
                     "ItemModifier: ItemModifierUI",
                     delegate
                     {
-                        MainUI.Draw(Main.spriteBatch);
+                        MainUI?.Draw(Main.spriteBatch);
                         Vector2 pos = new Vector2(Main.mouseX, Main.mouseY) + new Vector2(16);
-                        Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontMouseText, Tooltip ?? "", pos.X, pos.Y, Color.White, Color.Black, Vector2.Zero);
+                        Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontMouseText, Tooltip ?? string.Empty, pos.X, pos.Y, Color.White, Color.Black, Vector2.Zero);
                         Tooltip = null;
                         return true;
                     },

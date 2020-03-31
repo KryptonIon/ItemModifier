@@ -23,6 +23,7 @@ namespace ItemModifier.UIKit
             set
             {
                 scrollValue = value < 0 ? 0 : value > MaxScrollValue ? MaxScrollValue : value;
+                RecalculateChildren();
             }
         }
 
@@ -38,13 +39,12 @@ namespace ItemModifier.UIKit
 
         private bool DraggingScrollInner;
 
-        public UIContainer(Vector2 size, Vector4 padding = default, Vector4 margin = default) : base(padding, margin)
+        public UIContainer()
         {
-            Width = new StyleDimension(size.X);
-            Height = new StyleDimension(size.Y);
+
         }
 
-        public UIContainer(Color backgroundColor, Vector2 size, Vector4 padding = default, Vector4 margin = default) : this(size, padding, margin)
+        public UIContainer(Color backgroundColor)
         {
             BackgroundColor = backgroundColor;
         }
@@ -53,12 +53,12 @@ namespace ItemModifier.UIKit
         {
             if (BackgroundColor.A < 255)
             {
-                sb.Draw(ItemModifier.Textures.WindowBackground, Dimensions.Rectangle, BackgroundColor);
+                sb.Draw(ItemModifier.Textures.WindowBackground, PadRect, BackgroundColor);
             }
             if (OverflowHidden)
             {
-                Point scrollBarPos = new Point((int)(Dimensions.X + Width.Pixels - 2f), (int)(Dimensions.Y + 2f));
-                sb.Draw(ItemModifier.Textures.ScrollBorder, new Rectangle(scrollBarPos.X, scrollBarPos.Y, 4, (int)(Height.Pixels - 4f)), Color.White);
+                Point scrollBarPos = new Point((int)(InnerX + InnerWidth - 4f), (int)(InnerY + 2f));
+                sb.Draw(ItemModifier.Textures.ScrollBorder, new Rectangle(scrollBarPos.X, scrollBarPos.Y, 4, (int)(InnerHeight - 4f)), Color.White);
                 if (DraggingScrollInner)
                 {
                     ScrollValue = tempScrollValue + (Main.mouseY - DragOrigin.Y) * scrollPerPixel;
@@ -75,24 +75,21 @@ namespace ItemModifier.UIKit
             if (OverflowHidden)
             {
                 float lowestPoint = 0f;
-                for (int i = 0; i < Count; i++)
+                for (int i = 0; i < Children.Count; i++)
                 {
-                    float ySize = this[i].Top.CalculateValue(Height.Pixels) + this[i].OuterDimensions.Height;
-                    if (lowestPoint < ySize)
-                    {
-                        lowestPoint = ySize;
-                    }
+                    float ySize = Children[i].OuterY + Children[i].OuterHeight - InnerY;
+                    if (lowestPoint < ySize) lowestPoint = ySize;
                 }
-                MaxScrollValue = Math.Max(0, lowestPoint - Height.Pixels);
-                scrollPerPixel = lowestPoint / (Height.Pixels - 4f);
-                scrollInnerSize = (int)((Height.Pixels - 4f) * (Height.Pixels / (Height.Pixels + MaxScrollValue)));
+                ScrollValue = ScrollValue;
+                MaxScrollValue = Math.Max(0, lowestPoint - InnerHeight);
+                scrollPerPixel = lowestPoint / (InnerHeight - 4f);
+                scrollInnerSize = (int)((InnerHeight - 4f) * (InnerHeight / (InnerHeight + MaxScrollValue)));
             }
         }
 
         public override void ScrollWheel(UIScrollWheelEventArgs e)
         {
             ScrollValue -= e.ScrollWheelValue;
-            RecalculateChildren();
             base.ScrollWheel(e);
         }
 

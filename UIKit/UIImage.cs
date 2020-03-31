@@ -17,24 +17,29 @@ namespace ItemModifier.UIKit
             set
             {
                 image = value;
-                Width = new StyleDimension(image.Width);
-                Height = new StyleDimension(image.Height);
+                if (AutoScale)
+                {
+                    Width = new SizeDimension(Image.Width);
+                    Height = new SizeDimension(Image.Height);
+                    Recalculate();
+                }
             }
         }
 
-        public Color ColorTint;
+        public bool AutoScale { get; set; }
 
-        public UIImage(Texture2D image, Color? colorTint = null, Vector4 margin = default) : base(margin: margin)
+        public Color ColorTint { get; set; }
+
+        public UIImage(Texture2D image, bool autoScale = true, Color? colorTint = null)
         {
+            AutoScale = autoScale;
             Image = image;
-            ColorTint = colorTint;
-            Width = new StyleDimension(image.Width);
-            Height = new StyleDimension(image.Height);
+            ColorTint = colorTint ?? Color.White;
         }
 
         protected override void DrawSelf(SpriteBatch sb)
         {
-            sb.Draw(Image, Dimensions.Rectangle, ColorTint);
+            sb.Draw(Image, InnerRect, ColorTint);
         }
     }
 }

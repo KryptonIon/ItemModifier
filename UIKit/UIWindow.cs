@@ -1,123 +1,139 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ItemModifier.UIKit.Inputs;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
-using Terraria.ID;
+using Terraria.ModLoader;
+using static ItemModifier.ItemModifier;
+using static Terraria.Utils;
 
 namespace ItemModifier.UIKit
 {
     public class UIWindow : UIElement
     {
-        public string Title { get; protected set; } = "";
-
-        public bool Dragging { get; private set; }
-
-        public bool Draggable { get; set; } = true;
-
-        private Vector2 DragPos;
-
-        public Texture2D BorderTexture { get; set; } = ItemModifier.Textures.WindowBorder;
+        public string Title { get; set; } = string.Empty;
 
         public Color BorderColor { get; set; } = Color.Black;
 
-        public Texture2D BackgroundTexture { get; set; } = ItemModifier.Textures.WindowBackground;
+        public Color BackgroundColor { get; set; } = Utils.UIBackgroundColor;
 
-        public Color BackgroundColor = KRUtils.UIBackgroundColor;
+        public int BorderSize { get; protected set; } = 2;
 
-        public const int TitleBarHeight = 21;
+        private bool dragging;
 
-        private bool useTitle = false;
+        public bool Draggable { get; set; }
 
-        public bool UseTitle
-        {
-            get
-            {
-                return useTitle;
-            }
-
-            set
-            {
-                useTitle = value;
-                Recalculate();
-            }
-        }
-
-        private bool hasBorder = true;
-
-        public bool HasBorder
-        {
-            get
-            {
-                return hasBorder;
-            }
-
-            set
-            {
-                hasBorder = value;
-                Recalculate();
-            }
-        }
+        private Vector2 localDragPosition;
 
         protected UIImageButton CloseButton;
 
-        public Dimensions? TitleBarDimensions { get; protected set; }
+        public float TitleX { get; protected set; }
 
-        public UIWindow(string title, bool useTitle = true, bool hasCloseButton = true, bool hasBorder = true, bool draggable = true, Vector4 padding = default, Vector4 margin = default) : base(padding, margin)
+        public float TitleY { get; protected set; }
+
+        private float titleHeight;
+
+        public float TitleHeight
         {
-            UseTitle = useTitle;
-            Title = title;
-            if (hasCloseButton) CloseButton = new UIImageButton(ItemModifier.Textures.X);
-            this.hasBorder = hasBorder;
+            get
+            {
+                return titleHeight;
+            }
+
+            protected set
+            {
+                if (titleHeight != value)
+                {
+                    titleHeight = value;
+                    Recalculate();
+                }
+            }
+        }
+
+        public UIWindow(bool draggable = true)
+        {
             Draggable = draggable;
-            Width = new StyleDimension(300f);
-            Height = new StyleDimension(200f);
+            Width = new SizeDimension(300f);
+            Height = new SizeDimension(200f);
+        }
+
+        public UIWindow(string title, bool hasCloseButton = true, bool draggable = true) : this(draggable)
+        {
+            titleHeight = 21f;
+            Title = title;
+            if (hasCloseButton) CloseButton = new UIImageButton(Textures.X);
+        }
+
+        protected internal override void RecalculateSelf()
+        {
+            base.RecalculateSelf();
+            if (BorderSize > 0)
+            {
+                OuterWidth += BorderSize + BorderSize;
+                OuterHeight += BorderSize + BorderSize;
+                PadWidth += BorderSize + BorderSize;
+                PadHeight += BorderSize + BorderSize;
+                InnerX += BorderSize;
+            }
+            if (TitleHeight != 0)
+            {
+                TitleX = InnerX;
+                TitleY = InnerY;
+                OuterHeight += TitleHeight;
+                PadHeight += TitleHeight;
+                InnerY += TitleHeight;
+            }
+            else
+            {
+                TitleX = -1;
+                TitleY = -1;
+            }
         }
 
         protected override void DrawSelf(SpriteBatch sb)
         {
-            if (Dragging)
+            if (dragging)
             {
-                Left = new StyleDimension(Main.mouseX - DragPos.X, Left.Percent);
-                Top = new StyleDimension(Main.mouseY - DragPos.Y, Top.Percent);
+                XOffset = new SizeDimension(Main.mouseX - localDragPosition.X, XOffset.Percent);
+                YOffset = new SizeDimension(Main.mouseY - localDragPosition.Y, YOffset.Percent);
                 Recalculate();
             }
-            Point dimensionsPoint = new Point((int)Dimensions.X, (int)Dimensions.Y);
-            sb.Draw(BackgroundTexture, new Rectangle(dimensionsPoint.X, dimensionsPoint.Y, (int)Dimensions.Width, (int)Dimensions.Height), BackgroundColor);
-            if (HasBorder)
+            int padX = (int)PadX;
+            int padY = (int)PadY;
+            int padWidth = (int)PadWidth;
+            int padHeight = (int)PadHeight;
+            int backgroundX = padX + BorderSize;
+            int backgroundY = padY + BorderSize;
+            int backgroundWidth = padWidth - BorderSize - BorderSize;
+            if (BorderSize > 0)
             {
-                Point borderpointTL = new Point(dimensionsPoint.X - 2, dimensionsPoint.Y - 2);
-                int BarSizeTop = (int)Dimensions.Width - 8 - 8 + 4;
-                int BarSizeBottom = (int)Dimensions.Width - 8 - 8 + 4;
-                int BarSizeLeft = (int)Dimensions.Height - 8 - 8 + 4;
-                int BarSizeRight = (int)Dimensions.Height - 8 - 8 + 4;
-                sb.Draw(BorderTexture, new Rectangle(borderpointTL.X, borderpointTL.Y, 8, 8), new Rectangle(0, 0, 8, 8), BorderColor);
-                sb.Draw(BorderTexture, new Rectangle(borderpointTL.X + 8, borderpointTL.Y, BarSizeTop, 8), new Rectangle(8, 0, 12, 8), BorderColor);
-                sb.Draw(BorderTexture, new Rectangle(borderpointTL.X + 8 + BarSizeTop, borderpointTL.Y, 8, 8), new Rectangle(20, 0, 8, 8), BorderColor);
-                sb.Draw(BorderTexture, new Rectangle(borderpointTL.X, borderpointTL.Y + 8, 8, BarSizeLeft), new Rectangle(0, 8, 8, 12), BorderColor);
-                sb.Draw(BorderTexture, new Rectangle(borderpointTL.X + 8 + BarSizeTop, borderpointTL.Y + 8, 8, BarSizeRight), new Rectangle(20, 8, 8, 12), BorderColor);
-                sb.Draw(BorderTexture, new Rectangle(borderpointTL.X, borderpointTL.Y + 8 + BarSizeLeft, 8, 8), new Rectangle(0, 20, 8, 8), BorderColor);
-                sb.Draw(BorderTexture, new Rectangle(borderpointTL.X + 8, borderpointTL.Y + 8 + BarSizeLeft, BarSizeBottom, 8), new Rectangle(8, 20, 8, 8), BorderColor);
-                sb.Draw(BorderTexture, new Rectangle(borderpointTL.X + 8 + BarSizeBottom, borderpointTL.Y + 8 + BarSizeRight, 8, 8), new Rectangle(20, 20, 8, 8), BorderColor);
+                int verticalPosition = padY + BorderSize;
+                int verticalLength = padHeight - BorderSize - BorderSize;
+                sb.Draw(Textures.WindowBorder, new Rectangle(padX, padY, padWidth, BorderSize), new Rectangle(0, 0, 28, 2), BorderColor);
+                sb.Draw(Textures.WindowBorder, new Rectangle(padX, verticalPosition, BorderSize, verticalLength), new Rectangle(0, 2, 2, 24), BorderColor);
+                sb.Draw(Textures.WindowBorder, new Rectangle((int)(PadX + PadWidth) - BorderSize, verticalPosition, BorderSize, verticalLength), new Rectangle(26, 2, 2, 24), BorderColor);
+                sb.Draw(Textures.WindowBorder, new Rectangle(padX, (int)(PadY + PadHeight) - BorderSize, padWidth, BorderSize), new Rectangle(0, 26, 28, 2), BorderColor);
             }
-            if (UseTitle)
+            sb.Draw(Textures.WindowBackground, new Rectangle(backgroundX, backgroundY, backgroundWidth, padHeight - BorderSize - BorderSize), BackgroundColor);
+            if (TitleHeight != 0)
             {
-                sb.Draw(ItemModifier.Textures.WindowBackground, new Rectangle(dimensionsPoint.X, dimensionsPoint.Y, (int)Dimensions.Width, TitleBarHeight), KRUtils.UIBackgroundColor);
-                Utils.DrawBorderString(sb, Title, new Vector2(Dimensions.X + 2, Dimensions.Y + 1), Color.White);
+                sb.Draw(Textures.WindowBackground, new Rectangle(backgroundX, backgroundY, backgroundWidth, (int)TitleHeight), Utils.UIBackgroundColor);
+                DrawBorderString(sb, Title, new Vector2(PadX + BorderSize + 2f, PadY + BorderSize + 1f), Color.White);
             }
         }
 
         public override void LeftMouseDown(UIMouseEventArgs e)
         {
-            if (Draggable && TitleBarDimensions.Value.Rectangle.Contains(e.MousePosition.ToPoint()))
+            if (Draggable && (TitleHeight != 0 && e.MousePosition.X >= TitleX && e.MousePosition.Y >= TitleY && e.MousePosition.X <= TitleX + PadWidth - BorderSize - BorderSize && e.MousePosition.Y <= TitleY + TitleHeight || e.MousePosition.X >= PadX && e.MousePosition.Y >= PadY && e.MousePosition.X <= PadX + PadWidth - BorderSize && e.MousePosition.Y <= PadY + BorderSize))
             {
-                DragPos = new Vector2(e.MousePosition.X - Left.Pixels, e.MousePosition.Y - Top.Pixels);
-                Dragging = true;
+                localDragPosition = new Vector2(e.MousePosition.X - XOffset.Pixels, e.MousePosition.Y - YOffset.Pixels);
+                dragging = true;
             }
             base.LeftMouseDown(e);
         }
 
         public override void LeftMouseUp(UIMouseEventArgs e)
         {
-            Dragging = false;
+            dragging = false;
             Recalculate();
             base.LeftMouseUp(e);
         }
@@ -126,32 +142,12 @@ namespace ItemModifier.UIKit
         {
             if (CloseButton != null)
             {
-                CloseButton.Left = new StyleDimension(-CloseButton.Width.Pixels - 3f, 1f);
-                CloseButton.Top = new StyleDimension(UseTitle ? -19f : 2f);
+                CloseButton.XOffset = new SizeDimension(-CloseButton.Width.Pixels - 3f, 1f);
+                CloseButton.YOffset = new SizeDimension(TitleHeight != 0 ? -19f : 2f);
                 CloseButton.OnLeftClick += (source, e) => Visible = false;
-                CloseButton.WhileMouseHover += (source, e) => ItemModifier.Instance.Tooltip = "Close";
+                CloseButton.WhileMouseHover += (source, e) => ModContent.GetInstance<ItemModifier>().Tooltip = "Close";
                 CloseButton.Parent = this;
             }
-        }
-
-        public override void Recalculate()
-        {
-            Dimensions ParentInnerDimension = Parent?.InnerDimensions ?? ParentInterface?.Dimensions ?? UserInterface.ActiveInstance.Dimensions;
-            float width = MathHelper.Clamp(Width.CalculateValue(ParentInnerDimension.Width), MinWidth.CalculateValue(ParentInnerDimension.Width), MaxWidth.CalculateValue(ParentInnerDimension.Width)) + Padding.X + Padding.Z + Margin.X + Margin.Z + 4; // +4 is border, 2 sides
-            float height = MathHelper.Clamp(Height.CalculateValue(ParentInnerDimension.Height), MinHeight.CalculateValue(ParentInnerDimension.Height), MaxHeight.CalculateValue(ParentInnerDimension.Height)) + Padding.Y + Padding.W + Margin.Y + Margin.W + (UseTitle ? 25 : 4); // +4 is border, 2 sides
-            OuterDimensions = new Dimensions(Left.CalculateValue(ParentInnerDimension.Width) + ParentInnerDimension.X + ParentInnerDimension.Width * HorizontalAlign - width * HorizontalAlign, Top.CalculateValue(ParentInnerDimension.Height) + ParentInnerDimension.Y + ParentInnerDimension.Height * VerticalAlign - height * VerticalAlign, width, height);
-            Dimensions = new Dimensions(OuterDimensions.X + Margin.X + 2, OuterDimensions.Y + Margin.Y + 2, OuterDimensions.Width - Margin.X - Margin.Z - 4, OuterDimensions.Height - Margin.Y - Margin.W - 4);
-            if (UseTitle)
-            {
-                InnerDimensions = new Dimensions(Dimensions.X + Padding.X, Dimensions.Y + Padding.Y + TitleBarHeight, Dimensions.Width - Padding.X - Padding.Z, Dimensions.Height - Padding.Y - Padding.W - TitleBarHeight);
-                TitleBarDimensions = new Dimensions(Dimensions.X + Padding.X, Dimensions.Y + Padding.Y, Dimensions.Width - Padding.X - Padding.Z, TitleBarHeight);
-            }
-            else
-            {
-                InnerDimensions = new Dimensions(Dimensions.X + Padding.X, Dimensions.Y + Padding.Y, Dimensions.Width - Padding.X - Padding.Z, Dimensions.Height - Padding.Y - Padding.W);
-                TitleBarDimensions = null;
-            }
-            RecalculateChildren();
         }
     }
 }

@@ -1,162 +1,18 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ItemModifier.UIKit.Inputs;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using Terraria;
+using static ItemModifier.UIKit.Utils;
 
 namespace ItemModifier.UIKit
 {
-    public abstract class UIElement : IComparable<UIElement>, IEnumerable<UIElement>
+    public class UIElement : IEnumerable<UIElement>
     {
-        public delegate void UIEventHandler<T>(UIElement source, T args);
+        public delegate void UIEventHandler(UIElement sender);
 
-        public string ID { get; private set; }
-
-        private UIElement parent;
-
-        public UIElement Parent
-        {
-            get
-            {
-                return parent;
-            }
-
-            set
-            {
-                if (value == null)
-                {
-                    parent?.RemoveChild(this);
-                }
-                else
-                {
-                    parent?.Children.Remove(this);
-                    parent = value;
-                    parent.Children.Add(this);
-                    parentInterface = parent.parentInterface;
-                }
-                Recalculate();
-            }
-        }
-
-        private UserInterface parentInterface;
-
-        public UserInterface ParentInterface
-        {
-            get
-            {
-                return parentInterface;
-            }
-
-            set
-            {
-                if (value == null)
-                {
-                    parentInterface?.RemoveChild(this);
-                }
-                else
-                {
-                    parentInterface?.Children.Remove(this);
-                    parentInterface = value;
-                    parentInterface.Children.Add(this);
-                }
-                Children.ForEach(child => child.parentInterface = parentInterface);
-                Recalculate();
-            }
-        }
-
-        protected List<UIElement> Children = new List<UIElement>();
-
-        public StyleDimension Top { get; set; }
-
-        public StyleDimension Left { get; set; }
-
-        public StyleDimension Width { get; set; }
-
-        public StyleDimension Height { get; set; }
-
-        public StyleDimension MaxWidth { get; set; } = StyleDimension.Fill;
-
-        public StyleDimension MaxHeight { get; set; } = StyleDimension.Fill;
-
-        public StyleDimension MinWidth { get; set; } = StyleDimension.Empty;
-
-        public StyleDimension MinHeight { get; set; } = StyleDimension.Empty;
-
-        public Vector4 Padding;
-
-        public Vector4 Margin;
-
-        public bool OverflowHidden { get; set; }
-
-        public float HorizontalAlign { get; set; }
-
-        public float VerticalAlign { get; set; }
-
-        public Dimensions InnerDimensions { get; protected set; }
-
-        public Dimensions Dimensions { get; protected set; }
-
-        public Dimensions OuterDimensions { get; protected set; }
-
-        public static RasterizerState OverflowHiddenRasterizerState { get; protected set; }
-
-        private SnapPoint _snapPoint;
-
-        public virtual List<SnapPoint> SnapPoints
-        {
-            get
-            {
-                List<SnapPoint> list = new List<SnapPoint>();
-
-                if (GetSnapPoint(out SnapPoint item))
-                {
-                    list.Add(item);
-                }
-
-                Children.ForEach(element => list.AddRange(element.SnapPoints));
-
-                return list;
-            }
-        }
-
-        public bool UseImmediateMode { get; protected set; }
-
-        public bool Initialized { get; private set; }
-
-        public bool MouseHovering { get; protected set; }
-
-        public bool IsLeftDown { get; protected set; }
-
-        public bool IsRightDown { get; protected set; }
-
-        public bool IsMiddleDown { get; protected set; }
-
-        public bool IsBackDown { get; protected set; }
-
-        public bool IsForwardDown { get; protected set; }
-
-        private bool visible = true;
-
-        public bool Visible
-        {
-            get
-            {
-                return visible;
-            }
-
-            set
-            {
-                if (visible != value)
-                {
-                    visible = value;
-                    Children.ForEach(child => child.Visible = visible);
-                    OnVisibilityChanged?.Invoke(this, visible);
-                }
-            }
-        }
-
-        #region MouseEvents
+        public delegate void UIEventHandler<T>(UIElement sender, T e);
 
         public event UIEventHandler<UIMouseEventArgs> OnMouseOver;
 
@@ -208,34 +64,270 @@ namespace ItemModifier.UIKit
 
         public event UIEventHandler<bool> OnVisibilityChanged;
 
-        #endregion
+        public event UIEventHandler<bool> OnFocusChanged;
 
-        public int Count
+        public event UIEventHandler<UIElement> OnChildAdded;
+
+        protected List<UIElement> Children { get; } = new List<UIElement>();
+
+        private UIElement parent;
+
+        public UIElement Parent
         {
             get
             {
-                return Children.Count;
+                return parent;
             }
-        }
 
-        public UIElement(Vector4 padding = default, Vector4 margin = default)
-        {
-            ID = Guid.NewGuid().ToString();
-            Padding = padding;
-            Margin = margin;
-            if (OverflowHiddenRasterizerState == null)
+            set
             {
-                OverflowHiddenRasterizerState = new RasterizerState
+                Parent?.Children.Remove(this);
+                parent = value;
+                if (Parent != null)
                 {
-                    CullMode = CullMode.None,
-                    ScissorTestEnable = true
-                };
+                    Parent.Children.Add(this);
+                    parentUI = Parent.ParentUI;
+                    Parent.OnChildAdded?.Invoke(Parent, this);
+                }
+                Recalculate();
             }
         }
 
-        public int CompareTo(UIElement element)
+        private UserInterface parentUI;
+
+        public UserInterface ParentUI
         {
-            return ID.CompareTo(element.ID);
+            get
+            {
+                return parentUI;
+            }
+
+            set
+            {
+                ParentUI?.Children.Remove(this);
+                parentUI = value;
+                ParentUI?.Children.Add(this);
+                for (int i = 0; i < Children.Count; i++) Children[i].parentUI = ParentUI;
+                Recalculate();
+            }
+        }
+
+        public SizeDimension Width { get; set; }
+
+        public SizeDimension Height { get; set; }
+
+        public SizeDimension XOffset { get; set; }
+
+        public SizeDimension YOffset { get; set; }
+
+        public Thickness Margin { get; set; }
+
+        public Thickness Padding { get; set; }
+
+        public float VerticalAlign { get; set; }
+
+        public float HorizontalAlign { get; set; }
+
+        // Calculated X
+
+        public float OuterX { get; protected set; }
+
+        // Calculated Y
+
+        public float OuterY { get; protected set; }
+
+        // Marginated Width
+
+        public float OuterWidth { get; protected set; }
+
+        // Marginated Height
+
+        public float OuterHeight { get; protected set; }
+
+        // Marginated X
+
+        public float PadX { get; protected set; }
+
+        // Marginated Y
+
+        public float PadY { get; protected set; }
+
+        // Padded Width
+
+        public float PadWidth { get; protected set; }
+
+        // Padded Height
+
+        public float PadHeight { get; protected set; }
+
+        // Padded X
+
+        public float InnerX { get; protected set; }
+
+        // Padded Y
+
+        public float InnerY { get; protected set; }
+
+        // Calculated Width
+
+        public float InnerWidth { get; protected set; }
+
+        // Calculated Height
+
+        public float InnerHeight { get; protected set; }
+
+        // Calculated X Offset
+
+        public float CalculatedXOffset { get; protected set; }
+
+        // Calculated Y Offset
+
+        public float CalculatedYOffset { get; protected set; }
+
+        // Position
+
+        public Vector2 OuterPosition
+        {
+            get
+            {
+                return new Vector2(OuterX, OuterY);
+            }
+        }
+
+        // PosPoint
+
+        public Point OuterPoint
+        {
+            get
+            {
+                return new Point((int)OuterX, (int)OuterY);
+            }
+        }
+
+        // Marginated Position
+
+        public Vector2 PadPosition
+        {
+            get
+            {
+                return new Vector2(PadX, PadY);
+            }
+        }
+
+        // Marginated Point
+
+        public Point PadPoint
+        {
+            get
+            {
+                return new Point((int)PadX, (int)PadY);
+            }
+        }
+
+        // Padded Position
+
+        public Vector2 InnerPosition
+        {
+            get
+            {
+                return new Vector2(InnerX, InnerY);
+            }
+        }
+
+        // Padded Point
+
+        public Point InnerPoint
+        {
+            get
+            {
+                return new Point((int)InnerX, (int)InnerY);
+            }
+        }
+
+        public Rectangle OuterRect
+        {
+            get
+            {
+                return new Rectangle((int)OuterX, (int)OuterY, (int)OuterWidth, (int)OuterHeight);
+            }
+        }
+
+        public Rectangle PadRect
+        {
+            get
+            {
+                return new Rectangle((int)PadX, (int)PadY, (int)PadWidth, (int)PadHeight);
+            }
+        }
+
+        public Rectangle InnerRect
+        {
+            get
+            {
+                return new Rectangle((int)InnerX, (int)InnerY, (int)InnerWidth, (int)InnerHeight);
+            }
+        }
+
+        public bool OverflowHidden { get; set; }
+
+        public static RasterizerState OverflowHiddenRasterizerState { get; } = new RasterizerState
+        {
+            CullMode = CullMode.None,
+            ScissorTestEnable = true
+        };
+
+        protected bool UseImmediateMode { get; set; }
+
+        public bool Initialized { get; private set; }
+
+        public bool MouseHovering { get; protected set; }
+
+        public bool IsLeftDown { get; protected set; }
+
+        public bool IsRightDown { get; protected set; }
+
+        public bool IsMiddleDown { get; protected set; }
+
+        public bool IsBackDown { get; protected set; }
+
+        public bool IsForwardDown { get; protected set; }
+
+        private bool visible = true;
+
+        public bool Visible
+        {
+            get
+            {
+                return visible;
+            }
+
+            set
+            {
+                if (Visible != value)
+                {
+                    visible = value;
+                    OnVisibilityChanged?.Invoke(this, Visible);
+                }
+            }
+        }
+
+        private bool focused;
+
+        public bool Focused
+        {
+            get
+            {
+                return focused;
+            }
+
+            set
+            {
+                if (Focused != value)
+                {
+                    focused = value;
+                    OnFocusChanged?.Invoke(this, Focused);
+                }
+            }
         }
 
         public UIElement this[int index]
@@ -246,58 +338,63 @@ namespace ItemModifier.UIKit
             }
         }
 
-        public Rectangle GetClippingRectangle(SpriteBatch sb)
+        public int ChildrenCount
         {
-            Vector2 vector = Vector2.Transform(new Vector2(InnerDimensions.X, InnerDimensions.Y), Main.UIScaleMatrix);
-            Vector2 position = Vector2.Transform(new Vector2(InnerDimensions.Width, InnerDimensions.Height) + vector, Main.UIScaleMatrix);
-            int width = sb.GraphicsDevice.Viewport.Width;
-            int height = sb.GraphicsDevice.Viewport.Height;
-            Rectangle result = new Rectangle(Utils.Clamp((int)vector.X, 0, width), Utils.Clamp((int)vector.Y, 0, height), (int)(position.X - vector.X), (int)(position.Y - vector.Y));
-            result.Width = Utils.Clamp(result.Width, 0, width - result.X);
-            result.Height = Utils.Clamp(result.Height, 0, height - result.Y);
-            return result;
+            get
+            {
+                return Children.Count;
+            }
+        }
+
+        public UIElement()
+        {
+
+        }
+
+        public bool HasChild(UIElement child)
+        {
+            return Children.Contains(child);
         }
 
         public virtual bool ContainsPoint(Vector2 point)
         {
-            return point.X >= Dimensions.X && point.Y >= Dimensions.Y && point.X <= Dimensions.X + Dimensions.Width && point.Y <= Dimensions.Y + Dimensions.Height;
+            return point.X >= PadX && point.Y >= PadY && point.X <= PadX + PadWidth && point.Y <= PadY + PadHeight;
+        }
+
+        public virtual bool ContainsPoint(Point point)
+        {
+            return point.X >= PadX && point.Y >= PadY && point.X <= PadX + PadWidth && point.Y <= PadY + PadHeight;
         }
 
         public UIElement GetElementAt(Vector2 point)
         {
-            for (int i = Children.Count - 1; i > -1; i--)
+            for (int i = Children.Count - 1; i >= 0; i--)
             {
                 UIElement element = Children[i];
-                if (element.Visible && element.ContainsPoint(point))
-                {
-                    return element.GetElementAt(point);
-                }
+                if (element.Visible && element.ContainsPoint(point)) return element.GetElementAt(point);
             }
             return this;
         }
 
-        public bool GetSnapPoint(out SnapPoint point)
+        public UIElement GetElementAt(Point point)
         {
-            point = _snapPoint;
-            _snapPoint?.Calculate(this);
-            return _snapPoint != null;
+            for (int i = Children.Count - 1; i >= 0; i--)
+            {
+                UIElement element = Children[i];
+                if (element.Visible && element.ContainsPoint(point)) return element.GetElementAt(point);
+            }
+            return this;
         }
 
-        public void SetSnapPoint(string name, int id, Vector2? anchor = null, Vector2? offset = null)
+        public void Update(GameTime gameTime)
         {
-            if (!anchor.HasValue) anchor = new Vector2(0.5f);
-            if (!offset.HasValue) offset = Vector2.Zero;
-            _snapPoint = new SnapPoint(name, id, anchor.Value, offset.Value);
+            UpdateSelf(gameTime);
+            for (int i = 0; i < Children.Count; i++) Children[i].Update(gameTime);
         }
 
-        public void SetPadding(float pixels)
+        public virtual void UpdateSelf(GameTime gameTime)
         {
-            Padding = new Vector4(pixels);
-        }
 
-        public virtual void Update(GameTime gameTime)
-        {
-            Children.ForEach(element => element.Update(gameTime));
         }
 
         public virtual void Draw(SpriteBatch sb)
@@ -321,7 +418,7 @@ namespace ItemModifier.UIKit
                 {
                     Rectangle scissorRectangle = sb.GraphicsDevice.ScissorRectangle;
                     sb.End();
-                    sb.GraphicsDevice.ScissorRectangle = Rectangle.Intersect(GetClippingRectangle(sb), sb.GraphicsDevice.ScissorRectangle);
+                    sb.GraphicsDevice.ScissorRectangle = Rectangle.Intersect(GetClippingRectangle(sb, InnerRect), sb.GraphicsDevice.ScissorRectangle);
                     sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, OverflowHiddenRasterizerState, null, Main.UIScaleMatrix);
                     DrawChildren(sb);
                     sb.End();
@@ -342,52 +439,62 @@ namespace ItemModifier.UIKit
 
         protected virtual void DrawChildren(SpriteBatch sb)
         {
-            Children.ForEach(element => element.Draw(sb));
-        }
-
-        public bool RemoveChild(UIElement Child)
-        {
-            Child.parent = null;
-            return Children.Remove(Child);
+            for (int i = 0; i < Children.Count; i++) Children[i].Draw(sb);
         }
 
         public void RemoveAllChildren()
         {
-            for (int i = 0; i < Children.Count; i++)
-            {
-                Children[i].Parent = null;
-            }
-            Children.Clear();
-        }
-
-        public bool Contains(UIElement child)
-        {
-            return Children.Contains(child);
+            while (Children.Count > 0) Children[0].Parent = null;
         }
 
         public virtual void Recalculate()
         {
-            Dimensions ParentInnerDimension;
+            RecalculateSelf();
+            RecalculateChildren();
+        }
+
+        protected internal virtual void RecalculateSelf()
+        {
+            float baseX;
+            float baseY;
+            float baseWidth;
+            float baseHeight;
             if (Parent == null)
             {
-                ParentInnerDimension = ParentInterface?.Dimensions ?? UserInterface.ActiveInstance.Dimensions;
+                baseX = 0;
+                baseY = 0;
+                baseWidth = Main.screenWidth;
+                baseHeight = Main.screenHeight;
             }
             else
             {
-                ParentInnerDimension = Parent.InnerDimensions;
-                if (Parent is UIContainer container) ParentInnerDimension = new Dimensions(ParentInnerDimension.X, ParentInnerDimension.Y - container.ScrollValue, ParentInnerDimension.Width, float.MaxValue);
+                baseX = Parent.InnerX;
+                baseY = Parent.InnerY;
+                baseWidth = Parent.InnerWidth;
+                baseHeight = Parent.InnerHeight;
             }
-            float width = MathHelper.Clamp(Width.CalculateValue(ParentInnerDimension.Width), MinWidth.CalculateValue(ParentInnerDimension.Width), MaxWidth.CalculateValue(ParentInnerDimension.Width)) + Padding.X + Padding.Z + Margin.X + Margin.Z;
-            float height = MathHelper.Clamp(Height.CalculateValue(ParentInnerDimension.Height), MinHeight.CalculateValue(ParentInnerDimension.Height), MaxHeight.CalculateValue(ParentInnerDimension.Height)) + Padding.Y + Padding.W + Margin.Y + Margin.W;
-            OuterDimensions = new Dimensions(Left.CalculateValue(ParentInnerDimension.Width) + ParentInnerDimension.X + ParentInnerDimension.Width * HorizontalAlign - width * HorizontalAlign, Top.CalculateValue(ParentInnerDimension.Height) + ParentInnerDimension.Y + ParentInnerDimension.Height * VerticalAlign - height * VerticalAlign, width, height);
-            Dimensions = new Dimensions(OuterDimensions.X + Margin.X, OuterDimensions.Y + Margin.Y, OuterDimensions.Width - Margin.X - Margin.Z, OuterDimensions.Height - Margin.Y - Margin.W);
-            InnerDimensions = new Dimensions(Dimensions.X + Padding.X, Dimensions.Y + Padding.Y, Dimensions.Width - Padding.X - Padding.Z, Dimensions.Height - Padding.Y - Padding.W);
-            RecalculateChildren();
+            InnerWidth = Width.CalculateValue(baseWidth);
+            InnerHeight = Height.CalculateValue(baseHeight);
+            PadWidth = InnerWidth + Padding.Left + Padding.Right;
+            PadHeight = InnerHeight + Padding.Top + Padding.Bottom;
+            OuterWidth = PadWidth + Margin.Left + Margin.Right;
+            OuterHeight = PadHeight + Margin.Top + Margin.Bottom;
+            CalculatedXOffset = XOffset.CalculateValue(baseWidth);
+            OuterX = baseX + CalculatedXOffset;
+            if (HorizontalAlign != 0f) OuterX += (baseWidth - OuterWidth) * HorizontalAlign;
+            CalculatedYOffset = YOffset.CalculateValue(baseHeight);
+            OuterY = baseY + CalculatedYOffset;
+            if (VerticalAlign != 0f) OuterY += (baseHeight - OuterHeight) * VerticalAlign;
+            if (Parent is UIContainer container) OuterY -= container.ScrollValue;
+            PadX = OuterX + Margin.Left;
+            PadY = OuterY + Margin.Top;
+            InnerX = PadX + Padding.Left;
+            InnerY = PadY + Padding.Top;
         }
 
         public virtual void RecalculateChildren()
         {
-            Children.ForEach(element => element.Recalculate());
+            for (int i = 0; i < Children.Count; i++) Children[i].Recalculate();
         }
 
         #region MouseEventsInvokers
@@ -552,9 +659,10 @@ namespace ItemModifier.UIKit
 
         public void Activate()
         {
+            Recalculate();
             if (!Initialized) Initialize();
             OnActivate();
-            Children.ForEach(child => child.Activate());
+            for (int i = 0; i < Children.Count; i++) Children[i].Activate();
         }
 
         public virtual void OnActivate()
@@ -565,7 +673,7 @@ namespace ItemModifier.UIKit
         public void Deactivate()
         {
             OnDeactivate();
-            Children.ForEach(child => child.Deactivate());
+            for (int i = 0; i < Children.Count; i++) Children[i].Deactivate();
         }
 
         public virtual void OnDeactivate()
@@ -582,6 +690,22 @@ namespace ItemModifier.UIKit
         public virtual void OnInitialize()
         {
 
+        }
+
+        public virtual void SelectRadio(UIRadioButton radio)
+        {
+            for (int i = 0; i < Children.Count; i++)
+            {
+                if (Children[i] is UIRadioButton child && child != radio) child.Selected = false;
+            }
+        }
+
+        public virtual void DeselectAllRadio()
+        {
+            for (int i = 0; i < Children.Count; i++)
+            {
+                if (Children[i] is UIRadioButton child) child.Selected = false;
+            }
         }
 
         public IEnumerator<UIElement> GetEnumerator()

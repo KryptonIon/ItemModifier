@@ -3,45 +3,53 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 
-namespace ItemModifier.UIKit
+namespace ItemModifier.UIKit.Inputs
 {
     public class UICheckbox : UIElement, IInput<bool>
     {
         public event UIEventHandler<bool> OnValueChanged;
 
-        private bool PrivateValue;
+        private bool check;
 
-        public bool Value
+        public bool Check
         {
             get
             {
-                return PrivateValue;
+                return check;
             }
 
             set
             {
-                if (PrivateValue != value)
+                if (check != value)
                 {
-                    PrivateValue = value;
-                    OnValueChanged?.Invoke(this, PrivateValue);
+                    check = value;
+                    OnValueChanged?.Invoke(this, Check);
                 }
             }
         }
 
-        public UICheckbox(Vector4 margin = default) : base(margin)
+        bool IInput<bool>.Value
         {
-            Width = new StyleDimension(18f);
-            Height = Width;
+            get
+            {
+                return Check;
+            }
+
+            set
+            {
+                Check = value;
+            }
         }
 
-        public UICheckbox(bool value, Vector4 margin = default) : this(margin)
+        public UICheckbox() : base()
         {
-            Value = value;
+            Width = new SizeDimension(18f);
+            Height = Width;
         }
 
         public override void LeftClick(UIMouseEventArgs e)
         {
-            Value = !Value;
+            Check = !Check;
             Main.PlaySound(SoundID.MenuTick);
             base.LeftClick(e);
         }
@@ -54,7 +62,7 @@ namespace ItemModifier.UIKit
 
         protected override void DrawSelf(SpriteBatch sb)
         {
-            sb.Draw(ItemModifier.Textures.Checkbox, Dimensions.Position, new Rectangle(Value ? 20 : 0, 0, 18, 18), Color.White);
+            sb.Draw(ItemModifier.Textures.Checkbox, InnerPosition, new Rectangle(Check ? 20 : 0, 0, 18, 18), Color.White);
         }
     }
 }

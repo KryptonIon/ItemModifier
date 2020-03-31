@@ -3,14 +3,16 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using ReLogic.Graphics;
 using System.Collections.Generic;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.UI.Chat;
+using static Microsoft.Xna.Framework.Vector2;
+using static Terraria.ID.ItemID.Sets;
+using static Terraria.Lang;
+using static Terraria.Main;
+using static Terraria.ModLoader.ItemLoader;
+using static Terraria.Utils;
 
 namespace ItemModifier.UIKit
 {
-    public static class KRUtils
+    public static class Utils
     {
         public static Color UIBackgroundColor
         {
@@ -20,16 +22,16 @@ namespace ItemModifier.UIKit
             }
         }
 
-        public static Vector2 MeasureTextAccurate(string Text, bool SkipDescenderScaling = false)
+        public static Vector2 MeasureString2(string Text, bool SkipDescenderScaling = false)
         {
-            Vector2 Size = Main.fontMouseText.MeasureString(Text);
-            Size.Y = !SkipDescenderScaling ? Text.Contains("g") || Text.Contains("j") || Text.Contains("p") || Text.Contains("q") || Text.Contains("Q") || Text.Contains("y") ? 25 : 21 : 25;
+            Vector2 Size = fontMouseText.MeasureString(Text);
+            Size.Y -= !SkipDescenderScaling ? Text.Contains("g") || Text.Contains("j") || Text.Contains("p") || Text.Contains("q") || Text.Contains("Q") || Text.Contains("y") ? 3 : 7 : 3;
             return Size;
         }
 
         public static string TrimText(string Text, float MaxWidth, DynamicSpriteFont font)
         {
-            string result = "";
+            string result = string.Empty;
             float size = 0;
             float charSize;
             for (int j = Text.Length - 1; j >= 0 && size + (charSize = font.GetCharacterMetrics(Text[j]).KernedWidth) < MaxWidth; j--)
@@ -69,40 +71,31 @@ namespace ItemModifier.UIKit
             return false;
         }
 
-        public static Vector2 DrawString(SpriteBatch sb, DynamicSpriteFont font, string text, Vector2 pos, Color color, int maxChars = -1, float rotation = 0f, Vector2 origin = default, Vector2 scale = default, Vector2 anchor = default, /*SpriteEffects effects = SpriteEffects.None,*/ float layerDepth = 0f)
-        {
-            if (maxChars != -1 && text.Length > maxChars) text = text.Substring(0, maxChars);
-            Vector2 size = font.MeasureString(text);
-            ChatManager.DrawColorCodedStringWithShadow(sb, font, text, pos, color, 0f, anchor * size, scale, -1f, 1.5f);
-            sb.DrawString(font, text, pos, color, rotation, origin, scale, SpriteEffects.None, layerDepth);
-            return size * scale;
-        }
-
         public static Rectangle GetClippingRectangle(SpriteBatch sb, Rectangle rect)
         {
-            Vector2 vector = Vector2.Transform(new Vector2(rect.X, rect.Y), Main.UIScaleMatrix);
-            Vector2 position = Vector2.Transform(new Vector2(rect.Width, rect.Height) + vector, Main.UIScaleMatrix);
+            Vector2 topLeft = Transform(new Vector2(rect.X, rect.Y), UIScaleMatrix);
+            Vector2 bottomRight = Transform(topLeft + new Vector2(rect.Width, rect.Height), UIScaleMatrix);
             int width = sb.GraphicsDevice.Viewport.Width;
             int height = sb.GraphicsDevice.Viewport.Height;
-            Rectangle result = new Rectangle(Utils.Clamp((int)vector.X, 0, width), Utils.Clamp((int)vector.Y, 0, height), (int)(position.X - vector.X), (int)(position.Y - vector.Y));
-            result.Width = Utils.Clamp(result.Width, 0, width - result.X);
-            result.Height = Utils.Clamp(result.Height, 0, height - result.Y);
+            Rectangle result = new Rectangle(Clamp((int)topLeft.X, 0, width), Clamp((int)topLeft.Y, 0, height), (int)(bottomRight.X - topLeft.X), (int)(bottomRight.Y - topLeft.Y));
+            result.Width = Clamp(result.Width, 0, width - result.X);
+            result.Height = Clamp(result.Height, 0, height - result.Y);
             return result;
         }
 
         public static List<int> FindItemsByName(string Name, bool CaseSensitive = false, bool ExcludeDeprecated = true)
         {
             List<int> matches = new List<int>();
-            for (int i = 0; i < ItemLoader.ItemCount; i++)
+            for (int i = 0; i < ItemCount; i++)
             {
-                if (ExcludeDeprecated && ItemID.Sets.Deprecated[i]) continue;
+                if (ExcludeDeprecated && Deprecated[i]) continue;
                 if (CaseSensitive)
                 {
-                    if (Lang.GetItemName(i).Value.Contains(Name)) matches.Add(i);
+                    if (GetItemName(i).Value.Contains(Name)) matches.Add(i);
                 }
                 else
                 {
-                    if (Lang.GetItemName(i).Value.ToLower().Contains(Name.ToLower())) matches.Add(i);
+                    if (GetItemName(i).Value.ToLower().Contains(Name.ToLower())) matches.Add(i);
                 }
             }
             return matches;
