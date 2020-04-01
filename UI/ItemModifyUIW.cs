@@ -313,6 +313,15 @@ namespace ItemModifier.UI
             RSummon.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.summon = e;
             RThrown = new UIRadioButton("Thrown") { Parent = DamageType };
             RThrown.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.thrown = e;
+            float dTypeWidth = 0f;
+            for (int i = 0; i < DamageType.ChildrenCount; i++)
+            {
+                UIElement child = DamageType[i];
+                if (child.InnerWidth > dTypeWidth) dTypeWidth = child.InnerWidth;
+                child.YOffset = new SizeDimension(RMelee.InnerHeight * i);
+            }
+            DamageType.Width = new SizeDimension(dTypeWidth);
+            DamageType.Height = new SizeDimension(RMelee.InnerHeight * DamageType.ChildrenCount);
             DamageType.OnRightClick += (source, e) =>
             {
                 Main.LocalPlayer.HeldItem.melee = DefaultItem.melee;
@@ -427,12 +436,12 @@ namespace ItemModifier.UI
             FishingPower = new UIIntTextbox();
             FishingPower.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.fishingPole = value;
             FishingPower.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.fishingPole = DefaultItem.fishingPole;
-            PFishingPower = new UICategory.UIProperty(Textures.FishingPower, "Fishing Power", FishingPower);
+            PFishingPower = new UICategory.UIProperty(Textures.FishingPower, "Fishing Power:", FishingPower);
 
             Scale = new UIFloatTextbox();
             Scale.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.scale = value;
             Scale.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.scale = DefaultItem.scale;
-            PScale = new UICategory.UIProperty(Textures.ItemScale, "Item Scale", Scale);
+            PScale = new UICategory.UIProperty(Textures.ItemScale, "Item Scale:", Scale);
 
             UseStyle = new UIContainer();
             RSwing = new UIRadioButton("Swing") { Parent = UseStyle };
@@ -445,7 +454,16 @@ namespace ItemModifier.UI
             RAboveHead.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.useStyle = 4;
             RHeld = new UIRadioButton("Held") { Parent = UseStyle };
             RHeld.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.useStyle = 5;
-            PUseStyle = new UICategory.UIProperty(Textures.UseStyle, "Use Style", UseStyle);
+            float uStyleWidth = 0f;
+            for (int i = 0; i < UseStyle.ChildrenCount; i++)
+            {
+                UIElement child = UseStyle[i];
+                if (child.InnerWidth > uStyleWidth) uStyleWidth = child.InnerWidth;
+                child.YOffset = new SizeDimension(RSwing.InnerHeight * i);
+            }
+            UseStyle.Width = new SizeDimension(uStyleWidth);
+            UseStyle.Height = new SizeDimension(RSwing.InnerHeight * UseStyle.ChildrenCount);
+            PUseStyle = new UICategory.UIProperty(Textures.UseStyle, "Use Style:", UseStyle);
 
             ToggleLiveSync = new UIImageButton(Textures.Sync, false, new Color(20, 255, 20))
             {
@@ -560,7 +578,7 @@ namespace ItemModifier.UI
                 AccessoriesCategory
             };
 
-            CategoryContainer = new UIContainer()
+            CategoryContainer = new UIContainer(Color.White)
             {
                 Width = new SizeDimension(290f),
                 Height = new SizeDimension(450f),
@@ -582,6 +600,8 @@ namespace ItemModifier.UI
                 }
             };
 
+            new UITextbox() { Parent = this };
+
             GrayBG = new UIContainer(new Color(47, 79, 79, 150))
             {
                 Width = new SizeDimension(InnerWidth),
@@ -598,7 +618,7 @@ namespace ItemModifier.UI
             CategoryIndex = 0;
         }
 
-        public override void UpdateSelf(GameTime gameTime)
+        protected override void UpdateSelf(GameTime gameTime)
         {
             if (DefaultItem.type != Main.LocalPlayer.HeldItem.type) DefaultItem.SetDefaults(Main.LocalPlayer.HeldItem.type);
             if (Visible && LiveSync)

@@ -392,7 +392,18 @@ namespace ItemModifier.UIKit
             for (int i = 0; i < Children.Count; i++) Children[i].Update(gameTime);
         }
 
-        public virtual void UpdateSelf(GameTime gameTime)
+        protected virtual void UpdateSelf(GameTime gameTime)
+        {
+
+        }
+
+        public void PostUpdateInput()
+        {
+            PostUpdateInputSelf();
+            for (int i = 0; i < Children.Count; i++) Children[i].PostUpdateInput();
+        }
+
+        protected virtual void PostUpdateInputSelf()
         {
 
         }

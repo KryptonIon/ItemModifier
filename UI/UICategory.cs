@@ -53,7 +53,7 @@ namespace ItemModifier.UI
                 set
                 {
                     inputElement = value;
-                    InputElement.XOffset = new SizeDimension(20f + Utils.MeasureString2(Label, true).X + 4f);
+                    InputElement.XOffset = new SizeDimension(24f + Utils.MeasureString2(Label, true).X);
                     inputElement.Parent = this;
                     RecalculateSelf();
                 }
@@ -89,6 +89,7 @@ namespace ItemModifier.UI
                 {
                     Width = new SizeDimension(titleSize + 4f + InputElement.OuterWidth);
                     Height = new SizeDimension(labelSize.Y > InputElement.OuterWidth ? labelSize.Y : InputElement.OuterHeight);
+                    InputElement.XOffset = new SizeDimension(24f + labelSize.X);
                 }
                 base.RecalculateSelf();
             }
@@ -106,7 +107,10 @@ namespace ItemModifier.UI
 
         public void AppendProperties(UIContainer container)
         {
-            for (int i = 0; i < Properties.Count; i++) Properties[i].Parent = container;
+            for (int i = 0; i < Properties.Count; i++)
+            {
+                Properties[i].Parent = container;
+            }
         }
     }
 }

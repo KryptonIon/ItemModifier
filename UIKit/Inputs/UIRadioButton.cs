@@ -2,12 +2,32 @@
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
+using static Terraria.Utils;
+using static ItemModifier.UIKit.Utils;
 
 namespace ItemModifier.UIKit.Inputs
 {
-    public class UIRadioButton : UIText, IInput<bool>
+    public class UIRadioButton : UIElement, IInput<bool>
     {
         public event UIEventHandler<bool> OnValueChanged;
+
+        private string label;
+
+        public string Label
+        {
+            get
+            {
+                return label;
+            }
+
+            set
+            {
+                label = value;
+                Recalculate();
+            }
+        }
+
+        public Color LabelColor { get; set; } = Color.White;
 
         private bool selected;
 
@@ -41,9 +61,11 @@ namespace ItemModifier.UIKit.Inputs
             }
         }
 
-        public UIRadioButton(string label) : base(label)
-        {
+        public bool SkipDescenderCheck { get; set; }
 
+        public UIRadioButton(string label) : base()
+        {
+            Label = label;
         }
 
         public override void LeftClick(UIMouseEventArgs e)
@@ -60,15 +82,23 @@ namespace ItemModifier.UIKit.Inputs
             base.MouseOver(e);
         }
 
-        protected override void RecalculateTextSize()
+        protected internal override void RecalculateSelf()
         {
-            base.RecalculateTextSize();
-            Width = new SizeDimension(Width.Pixels + 14f);
+            RecalculateButtonSize();
+            base.RecalculateSelf();
+        }
+
+        protected virtual void RecalculateButtonSize()
+        {
+            Vector2 size = MeasureString2(Label, SkipDescenderCheck);
+            Width = new SizeDimension(size.X + 14f);
+            Height = new SizeDimension(size.Y);
         }
 
         protected override void DrawSelf(SpriteBatch sb)
         {
-            sb.Draw(ItemModifier.Textures.SquareSelect, new Vector2(PadY, PadY + 5), new Rectangle(Selected ? 12 : 0, 0, 10, 10), Color.White);
+            sb.Draw(ItemModifier.Textures.SquareSelect, new Vector2(InnerX, InnerY + 5), new Rectangle(Selected ? 12 : 0, 0, 10, 10), Color.White);
+            DrawBorderString(sb, Label, new Vector2(InnerX + 14f, InnerY), LabelColor);
         }
     }
 }

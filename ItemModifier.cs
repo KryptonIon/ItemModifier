@@ -333,6 +333,11 @@ namespace ItemModifier
             MainUI?.Update(gameTime);
         }
 
+        public override void PostUpdateInput()
+        {
+            MainUI?.PostUpdateInput();
+        }
+
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
             if (ItemAtCursorDisabled)

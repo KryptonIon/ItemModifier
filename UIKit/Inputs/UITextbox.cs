@@ -131,32 +131,32 @@ namespace ItemModifier.UIKit.Inputs
             sb.End();
             sb.GraphicsDevice.ScissorRectangle = Rectangle.Intersect(Utils.GetClippingRectangle(sb, innerRect), scissorRect);
             sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, OverflowHiddenRasterizerState, null, Main.UIScaleMatrix);
-            DrawBorderString(sb, Text, new Vector2(innerRect.X, innerRect.Y), TextColor, maxCharactersDisplayed: CharacterLimit);
+            Vector2 textSize = DrawBorderString(sb, Text, new Vector2(innerRect.X, innerRect.Y), TextColor, maxCharactersDisplayed: CharacterLimit);
             sb.End();
             sb.GraphicsDevice.ScissorRectangle = scissorRect;
             sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, sb.GraphicsDevice.RasterizerState, null, Main.UIScaleMatrix);
             if (Focused)
             {
-                if (CaretDelta < 20) sb.Draw(Textures.Caret, new Vector2(innerRect.X + 2 + Main.fontMouseText.MeasureString(Text).X, InnerY + 1), CaretColor);
+                if (CaretDelta < 20) sb.Draw(Textures.Caret, new Vector2(innerRect.X + 2 + textSize.X, InnerY + 1), CaretColor);
                 else if (CaretDelta >= 39) CaretDelta = 0;
                 CaretDelta++;
             }
         }
 
-        public override void UpdateSelf(GameTime gameTime)
+        protected override void PostUpdateInputSelf()
         {
             if (Focused)
             {
                 PlayerInput.WritingText = true;
                 Main.instance.HandleIME();
                 // Thanks to Magic Storage
-                string frontHalf = text.Substring(0, CaretPosition);
-                string newText = Main.GetInputText(frontHalf);
-                CaretPosition = newText.Length;
-                newText += text.Substring(CaretPosition);
+                string frontHalf = Text.Substring(0, CaretPosition);
+                string newText = Main.GetInputText(Text);
                 if (Text != newText)
                 {
-                    Text = newText;
+                    int caretPos = CaretPosition;
+                    CaretPosition = newText.Length;
+                    Text = newText + Text.Substring(caretPos);
                     OnTextChangedByUser?.Invoke(this, Text);
                 }
             }

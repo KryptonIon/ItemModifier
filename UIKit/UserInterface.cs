@@ -137,12 +137,15 @@ namespace ItemModifier.UIKit
             target?.MouseHover(new UIMouseEventArgs(target, MousePosition));
             if (!clickDisabled)
             {
-                if (leftDown && !wasLeftdown && target != null)
+                if (leftDown && !wasLeftdown || rightDown && !wasRightDown || middleDown && !wasMiddleDown || backDown && !wasBackDown || forwardDown && !wasForwardDown)
                 {
                     if (lastFocused != null && lastFocused != target) lastFocused.Focused = false;
-                    lastLeftDown = target;
                     lastFocused = target;
-                    target.Focused = true;
+                    if (target != null) target.Focused = true;
+                }
+                if (leftDown && !wasLeftdown && target != null)
+                {
+                    lastLeftDown = target;
                     target.LeftMouseDown(new UIMouseEventArgs(target, MousePosition));
                     if (lastLeftClick == target && gameTime.TotalGameTime.TotalMilliseconds - lastLeftClickTime < DOUBLE_CLICK_MAX_GAP)
                     {
@@ -253,6 +256,11 @@ namespace ItemModifier.UIKit
             wasBackDown = backDown;
             wasForwardDown = forwardDown;
             for (int i = 0; i < Children.Count; i++) Children[i].Update(gameTime);
+        }
+
+        public void PostUpdateInput()
+        {
+            for (int i = 0; i < Children.Count; i++) Children[i].PostUpdateInput();
         }
 
         public void Draw(SpriteBatch sb)
