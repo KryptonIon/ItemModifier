@@ -600,12 +600,12 @@ namespace ItemModifier.UI
                 }
             };
 
-            new UITextbox() { Parent = this };
-
             GrayBG = new UIContainer(new Color(47, 79, 79, 150))
             {
-                Width = new SizeDimension(InnerWidth),
-                Height = new SizeDimension(InnerHeight - CategoryName.OuterHeight),
+                Width = CategoryContainer.Width,
+                Height = CategoryContainer.Height,
+                XOffset = CategoryContainer.XOffset,
+                YOffset = CategoryContainer.YOffset,
                 Parent = this
             };
             GrayBG.OnVisibilityChanged += (source, value) => LockImage.Visible = value;
