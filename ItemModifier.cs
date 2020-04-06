@@ -11,41 +11,6 @@ namespace ItemModifier
 {
     public class ItemModifier : Mod
     {
-        public class Changelog
-        {
-            public string Version { get; }
-
-            public string Title { get; }
-
-            public string Website { get; }
-
-            public string Raw { get; }
-
-            public Changelog(string version, string raw, string title = "", string website = "")
-            {
-                Version = version;
-                Raw = raw;
-                Title = title;
-                Website = website;
-            }
-
-            public override string ToString()
-            {
-                return $"{Version} {Title} \n{string.Join("\n", Raw)}";
-            }
-
-            public static Changelog Read(string Path)
-            {
-                using (MemoryStream mStream = new MemoryStream(ModContent.GetFileBytes(Path)))
-                {
-                    using (BinaryReader reader = new BinaryReader(mStream))
-                    {
-                        return new Changelog(reader.ReadString(), reader.ReadString(), reader.ReadString(), reader.ReadString());
-                    }
-                }
-            }
-        }
-
         public static class Textures
         {
             public static Texture2D ModifyItem { get; private set; }
@@ -92,17 +57,9 @@ namespace ItemModifier
 
             public static Texture2D HorizontalLine { get; private set; }
 
-            public static Texture2D Textbox { get; private set; }
-
-            public static Texture2D WindowBackground { get; private set; }
-
-            public static Texture2D WindowBorder { get; private set; }
-
             public static Texture2D X { get; private set; }
 
             public static Texture2D Caret { get; private set; }
-
-            public static Texture2D Air { get; private set; }
 
             public static Texture2D AutoReuse { get; private set; }
 
@@ -158,11 +115,13 @@ namespace ItemModifier
 
             public static Texture2D UseStyle { get; private set; }
 
-            public static Texture2D ScrollBorder { get; private set; }
+            public static Texture2D OpaqueWindowBackground { get; private set; }
 
-            public static Texture2D ScrollInside { get; private set; }
+            public static Texture2D WhiteDot { get; private set; }
 
             public static Texture2D SquareSelect { get; private set; }
+
+            public static Texture2D BlackDot { get; private set; }
 
             public static void Load()
             {
@@ -188,12 +147,8 @@ namespace ItemModifier
                 Reset = ModContent.GetTexture("ItemModifier/UI/Reset");
                 Checkbox = ModContent.GetTexture("ItemModifier/UIKit/Inputs/Checkbox");
                 HorizontalLine = ModContent.GetTexture("ItemModifier/UIKit/HorizontalLine");
-                Textbox = ModContent.GetTexture("ItemModifier/UIKit/Inputs/Textbox");
-                WindowBackground = ModContent.GetTexture("ItemModifier/UIKit/WindowBackground");
-                WindowBorder = ModContent.GetTexture("ItemModifier/UIKit/WindowBorder");
                 X = ModContent.GetTexture("ItemModifier/UIKit/X");
                 Caret = ModContent.GetTexture("ItemModifier/UIKit/Inputs/Caret");
-                Air = ModContent.GetTexture("ItemModifier/UIKit/Air");
                 AutoReuse = ModContent.GetTexture("ItemModifier/UI/AutoReuse");
                 Consumable = ModContent.GetTexture("ItemModifier/UI/Consumable");
                 PotionSickness = ModContent.GetTexture("ItemModifier/UI/PotionSickness");
@@ -221,10 +176,12 @@ namespace ItemModifier
                 FishingPower = ModContent.GetTexture("ItemModifier/UI/FishingPower");
                 ItemScale = ModContent.GetTexture("ItemModifier/UI/Scale");
                 UseStyle = ModContent.GetTexture("ItemModifier/UI/UseStyle");
-                ScrollBorder = new Texture2D(Main.graphics.GraphicsDevice, 1, 1);
-                ScrollInside = new Texture2D(Main.graphics.GraphicsDevice, 1, 1);
-                ScrollBorder.SetData(new Color[] { new Color(43, 56, 101) });
-                ScrollInside.SetData(new Color[] { Color.White });
+                OpaqueWindowBackground = new Texture2D(Main.spriteBatch.GraphicsDevice, 1, 1);
+                OpaqueWindowBackground.SetData(new Color[] { new Color(44, 57, 105) });
+                WhiteDot = new Texture2D(Main.spriteBatch.GraphicsDevice, 1, 1);
+                WhiteDot.SetData(new Color[] { Color.White });
+                BlackDot = new Texture2D(Main.spriteBatch.GraphicsDevice, 1, 1);
+                BlackDot.SetData(new Color[] { Color.Black });
                 SquareSelect = ModContent.GetTexture("ItemModifier/UIKit/Inputs/SquareSelect");
             }
 
@@ -252,12 +209,8 @@ namespace ItemModifier
                 Reset = null;
                 Checkbox = null;
                 HorizontalLine = null;
-                Textbox = null;
-                WindowBackground = null;
-                WindowBorder = null;
                 X = null;
                 Caret = null;
-                Air = null;
                 AutoReuse = null;
                 Consumable = null;
                 PotionSickness = null;
@@ -285,8 +238,8 @@ namespace ItemModifier
                 FishingPower = null;
                 ItemScale = null;
                 UseStyle = null;
-                ScrollBorder = null;
-                ScrollInside = null;
+                OpaqueWindowBackground = null;
+                WhiteDot = null;
                 SquareSelect = null;
             }
         }
@@ -299,32 +252,19 @@ namespace ItemModifier
 
         public bool ItemAtCursorDisabled { get; set; } = false;
 
-        public static List<Changelog> Changelogs { get; private set; }
-
         public override void Load()
         {
             Textures.Load();
-            Changelogs = new List<Changelog> {
-                Changelog.Read("ItemModifier/Changelogs/1.0.0.clog"),
-                Changelog.Read("ItemModifier/Changelogs/1.0.1.clog"),
-                Changelog.Read("ItemModifier/Changelogs/1.0.2.clog"),
-                Changelog.Read("ItemModifier/Changelogs/1.0.3.clog"),
-                Changelog.Read("ItemModifier/Changelogs/1.0.4.clog"),
-                Changelog.Read("ItemModifier/Changelogs/1.0.5.clog"),
-                Changelog.Read("ItemModifier/Changelogs/1.0.6.clog"),
-                Changelog.Read("ItemModifier/Changelogs/1.0.7.clog"),
-                Changelog.Read("ItemModifier/Changelogs/1.0.8.clog"),
-                Changelog.Read("ItemModifier/Changelogs/1.0.8.1.clog")
-                //Changelog.Read("ItemModifier/Changelogs/1.1.0.clog")
-            };
+        }
 
+        public override void PostSetupContent()
+        {
             if (!Main.dedServ) (MainUI = new MainInterface()).Activate();
         }
 
         public override void Unload()
         {
             Textures.Unload();
-            Changelogs = null;
             MainUI = null;
         }
 
@@ -353,8 +293,7 @@ namespace ItemModifier
                     delegate
                     {
                         MainUI?.Draw(Main.spriteBatch);
-                        Vector2 pos = new Vector2(Main.mouseX, Main.mouseY) + new Vector2(16);
-                        Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontMouseText, Tooltip ?? string.Empty, pos.X, pos.Y, Color.White, Color.Black, Vector2.Zero);
+                        Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontMouseText, Tooltip ?? string.Empty, Main.mouseX + 16f, Main.mouseY + 16f, Color.White, Color.Black, Vector2.Zero);
                         Tooltip = null;
                         return true;
                     },

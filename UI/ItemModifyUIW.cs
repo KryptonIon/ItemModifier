@@ -421,12 +421,12 @@ namespace ItemModifier.UI
             UseAnimation = new UIIntTextbox() { Negateable = false };
             UseAnimation.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.useAnimation = value;
             UseAnimation.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.useAnimation = DefaultItem.useAnimation;
-            PUseAnimation = new UICategory.UIProperty(Textures.UseAnimation, "Animation Duration:", UseAnimation);
+            PUseAnimation = new UICategory.UIProperty(Textures.UseAnimation, "Animation Span:", UseAnimation);
 
             UseTime = new UIIntTextbox() { Negateable = false };
             UseTime.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.useTime = value;
             UseTime.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.useTime = DefaultItem.useTime;
-            PUseTime = new UICategory.UIProperty(Textures.UseTime, "Use Duration:", UseTime);
+            PUseTime = new UICategory.UIProperty(Textures.UseTime, "Use Span:", UseTime);
 
             Defense = new UIIntTextbox();
             Defense.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.defense = value;
@@ -578,7 +578,7 @@ namespace ItemModifier.UI
                 AccessoriesCategory
             };
 
-            CategoryContainer = new UIContainer(Color.White)
+            CategoryContainer = new UIContainer()
             {
                 Width = new SizeDimension(290f),
                 Height = new SizeDimension(450f),

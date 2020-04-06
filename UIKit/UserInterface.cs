@@ -139,9 +139,9 @@ namespace ItemModifier.UIKit
             {
                 if (leftDown && !wasLeftdown || rightDown && !wasRightDown || middleDown && !wasMiddleDown || backDown && !wasBackDown || forwardDown && !wasForwardDown)
                 {
-                    if (lastFocused != null && lastFocused != target) lastFocused.Focused = false;
+                    if (lastFocused != null && lastFocused != target) lastFocused.Unfocus();
                     lastFocused = target;
-                    if (target != null) target.Focused = true;
+                    if (target != null) target.Focus();
                 }
                 if (leftDown && !wasLeftdown && target != null)
                 {

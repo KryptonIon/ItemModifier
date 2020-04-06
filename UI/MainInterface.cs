@@ -11,15 +11,11 @@ namespace ItemModifier.UI
     {
         internal ItemModifyUIW ModifyWindow;
 
-        internal ChangelogUIW ChangelogWindow;
-
-        //internal NewItemUIW NewItemWindow;
+        internal NewItemUIW NewItemWindow;
 
         internal UIImageButton ModifyWB;
 
         internal UIImageButton WikiWB;
-
-        internal UIImageButton ChangelogWB;
 
         internal UIImageButton NewItemWB;
 
@@ -29,26 +25,19 @@ namespace ItemModifier.UI
         {
             ItemModifier instance = ModContent.GetInstance<ItemModifier>();
 
-            ChangelogWindow = new ChangelogUIW
-            {
-                XOffset = new SizeDimension(0f, 0.1f),
-                YOffset = new SizeDimension(0f, 0.2f),
-                ParentUI = this
-            };
-
             ModifyWindow = new ItemModifyUIW
             {
-                XOffset = new SizeDimension(ChangelogWindow.OuterWidth + 10f, 0.1f), // + 10 is spacing between windows
-                YOffset = ChangelogWindow.YOffset,
+                XOffset = new SizeDimension(0, 0.3f),
+                YOffset = new SizeDimension(0, 0.2f),
                 ParentUI = this
             };
 
-            /*NewItemWindow = new NewItemUIW
+            NewItemWindow = new NewItemUIW
             {
-                XOffset = new SizeDimension(ModifyWindow.CalculatedXOffset + ModifyWindow.OuterWidth + 10f, 0.1f), // + 10 is spacing between windows
-                YOffset = ChangelogWindow.YOffset,
+                XOffset = new SizeDimension(ModifyWindow.OuterWidth + 10f, 0.3f),
+                YOffset = ModifyWindow.YOffset,
                 ParentUI = this
-            };*/
+            };
 
             ModifyWB = new UIImageButton(ItemModifier.Textures.ModifyItem)
             {
@@ -65,7 +54,7 @@ namespace ItemModifier.UI
             };
             NewItemWB.YOffset = new SizeDimension(ModifyWB.CalculatedYOffset - NewItemWB.OuterHeight - 5f);
             NewItemWB.ParentUI = this;
-            //NewItemWB.OnLeftClick += (source, e) => NewItemWindow.Visible = !NewItemWindow.Visible;
+            NewItemWB.OnLeftClick += (source, e) => NewItemWindow.Visible = !NewItemWindow.Visible;
             NewItemWB.WhileMouseHover += (source, e) => instance.Tooltip = "New Item";
 
             WikiWB = new UIImageButton(ItemModifier.Textures.Wiki)
@@ -77,38 +66,14 @@ namespace ItemModifier.UI
             WikiWB.OnLeftClick += (source, e) => new Thread(() => Process.Start("https://kryptonion.github.io/ItemModifier/")).Start();
             WikiWB.WhileMouseHover += (source, e) => instance.Tooltip = "Open Wiki";
 
-            ChangelogWB = new UIImageButton(ItemModifier.Textures.ChangelogIcon)
-            {
-                XOffset = new SizeDimension(20f)
-            };
-            ChangelogWB.YOffset = new SizeDimension(WikiWB.CalculatedYOffset - ChangelogWB.OuterHeight - 12f);
-            ChangelogWB.ParentUI = this;
-            ChangelogWB.OnLeftClick += (source, e) => ChangelogWindow.Visible = !ChangelogWindow.Visible;
-            ChangelogWB.WhileMouseHover += (source, e) => instance.Tooltip = "Changelog";
-
             DiscordLink = new UIImageButton(ItemModifier.Textures.DiscordIcon, activeTransparency: 1.5f, inactiveTransparency: 0.6f)
             {
                 XOffset = new SizeDimension(17f)
             };
-            DiscordLink.YOffset = new SizeDimension(ChangelogWB.CalculatedYOffset - DiscordLink.OuterHeight - 13.5f);
+            DiscordLink.YOffset = new SizeDimension(WikiWB.CalculatedYOffset - DiscordLink.OuterHeight - 13.5f);
             DiscordLink.ParentUI = this;
             DiscordLink.OnLeftClick += (source, e) => new Thread(() => Process.Start("https://discord.gg/UjQWNC2")).Start();
             DiscordLink.WhileMouseHover += (source, e) => instance.Tooltip = "Discord";
-
-            if (KRConfig.Instance.HelpMessage)
-            {
-                UIWindow messageBox = new UIWindow(false)
-                {
-                    Width = new SizeDimension(350f),
-                    Height = new SizeDimension(21f),
-                    XOffset = new SizeDimension(Main.screenWidth * 0.05f),
-                    YOffset = new SizeDimension(Main.screenHeight - 112),
-                    ParentUI = this
-                };
-                messageBox.Initialize();
-                messageBox.OnVisibilityChanged += (source, value) => { if (!value) { messageBox.Parent = null; messageBox = null; } };
-                new UIText("These are the ItemModifier UI Buttons.").Parent = messageBox;
-            }
         }
     }
 }

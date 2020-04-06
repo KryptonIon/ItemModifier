@@ -62,7 +62,7 @@ namespace ItemModifier.UIKit.Inputs
 
         protected override void DrawSelf(SpriteBatch sb)
         {
-            sb.Draw(ItemModifier.Textures.Checkbox, InnerPosition, new Rectangle(Check ? 20 : 0, 0, 18, 18), Color.White);
+            sb.Draw(ItemModifier.Textures.Checkbox, InnerRect, new Rectangle(Check ? 20 : 0, 0, 18, 18), Color.White);
         }
     }
 }

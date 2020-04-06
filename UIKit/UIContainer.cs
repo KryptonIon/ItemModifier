@@ -51,21 +51,21 @@ namespace ItemModifier.UIKit
 
         protected override void DrawSelf(SpriteBatch sb)
         {
-            if (BackgroundColor.A < 255)
+            if (BackgroundColor.A > 0)
             {
-                sb.Draw(ItemModifier.Textures.WindowBackground, PadRect, BackgroundColor);
+                sb.Draw(ItemModifier.Textures.WhiteDot, PadRect, new Rectangle(2, 2, 24, 24), BackgroundColor);
             }
             if (OverflowHidden)
             {
                 Point scrollBarPos = new Point((int)(InnerX + InnerWidth - 4f), (int)(InnerY + 2f));
-                sb.Draw(ItemModifier.Textures.ScrollBorder, new Rectangle(scrollBarPos.X, scrollBarPos.Y, 4, (int)(InnerHeight - 4f)), Color.White);
+                sb.Draw(ItemModifier.Textures.OpaqueWindowBackground, new Rectangle(scrollBarPos.X, scrollBarPos.Y, 4, (int)(InnerHeight - 4f)), Color.White);
                 if (DraggingScrollInner)
                 {
                     ScrollValue = tempScrollValue + (Main.mouseY - DragOrigin.Y) * scrollPerPixel;
                     RecalculateChildren();
                 }
-                scrollInnerPos = new Rectangle(scrollBarPos.X, scrollBarPos.Y + (int)(ScrollValue / scrollPerPixel), 4, scrollInnerSize);
-                sb.Draw(ItemModifier.Textures.ScrollInside, scrollInnerPos, Color.White);
+                scrollInnerPos = new Rectangle(scrollBarPos.X, scrollBarPos.Y + Math.Max((int)(ScrollValue / scrollPerPixel), 0), 4, scrollInnerSize);
+                sb.Draw(ItemModifier.Textures.WhiteDot, scrollInnerPos, Color.White);
             }
         }
 
@@ -77,13 +77,16 @@ namespace ItemModifier.UIKit
                 float lowestPoint = 0f;
                 for (int i = 0; i < Children.Count; i++)
                 {
-                    float ySize = Children[i].OuterY + Children[i].OuterHeight - InnerY;
-                    if (lowestPoint < ySize) lowestPoint = ySize;
+                    float ySize = Children[i].OuterY + Children[i].OuterHeight + ScrollValue - InnerY;
+                    if (lowestPoint < ySize)
+                    {
+                        lowestPoint = ySize;
+                    }
                 }
-                ScrollValue = ScrollValue;
                 MaxScrollValue = Math.Max(0, lowestPoint - InnerHeight);
                 scrollPerPixel = lowestPoint / (InnerHeight - 4f);
-                scrollInnerSize = (int)((InnerHeight - 4f) * (InnerHeight / (InnerHeight + MaxScrollValue)));
+                scrollInnerSize = Math.Max((int)((InnerHeight - 4f) * (InnerHeight / (InnerHeight + MaxScrollValue))), 1);
+                ScrollValue = ScrollValue;
             }
         }
 

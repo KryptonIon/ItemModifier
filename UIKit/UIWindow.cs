@@ -73,6 +73,7 @@ namespace ItemModifier.UIKit
                 PadWidth += BorderSize + BorderSize;
                 PadHeight += BorderSize + BorderSize;
                 InnerX += BorderSize;
+                InnerY += BorderSize;
             }
             if (TitleHeight != 0)
             {
@@ -108,15 +109,15 @@ namespace ItemModifier.UIKit
             {
                 int verticalPosition = padY + BorderSize;
                 int verticalLength = padHeight - BorderSize - BorderSize;
-                sb.Draw(Textures.WindowBorder, new Rectangle(padX, padY, padWidth, BorderSize), new Rectangle(0, 0, 28, 2), BorderColor);
-                sb.Draw(Textures.WindowBorder, new Rectangle(padX, verticalPosition, BorderSize, verticalLength), new Rectangle(0, 2, 2, 24), BorderColor);
-                sb.Draw(Textures.WindowBorder, new Rectangle((int)(PadX + PadWidth) - BorderSize, verticalPosition, BorderSize, verticalLength), new Rectangle(26, 2, 2, 24), BorderColor);
-                sb.Draw(Textures.WindowBorder, new Rectangle(padX, (int)(PadY + PadHeight) - BorderSize, padWidth, BorderSize), new Rectangle(0, 26, 28, 2), BorderColor);
+                sb.Draw(Textures.BlackDot, new Rectangle(padX, padY, padWidth, BorderSize), BorderColor);
+                sb.Draw(Textures.BlackDot, new Rectangle(padX, verticalPosition, BorderSize, verticalLength), BorderColor);
+                sb.Draw(Textures.BlackDot, new Rectangle((int)(PadX + PadWidth) - BorderSize, verticalPosition, BorderSize, verticalLength), BorderColor);
+                sb.Draw(Textures.BlackDot, new Rectangle(padX, (int)(PadY + PadHeight) - BorderSize, padWidth, BorderSize), BorderColor);
             }
-            sb.Draw(Textures.WindowBackground, new Rectangle(backgroundX, backgroundY, backgroundWidth, padHeight - BorderSize - BorderSize), BackgroundColor);
+            sb.Draw(Textures.WhiteDot, new Rectangle(backgroundX, backgroundY, backgroundWidth, padHeight - BorderSize - BorderSize), BackgroundColor);
             if (TitleHeight != 0)
             {
-                sb.Draw(Textures.WindowBackground, new Rectangle(backgroundX, backgroundY, backgroundWidth, (int)TitleHeight), Utils.UIBackgroundColor);
+                sb.Draw(Textures.WhiteDot, new Rectangle(backgroundX, backgroundY, backgroundWidth, (int)TitleHeight), Utils.UIBackgroundColor);
                 DrawBorderString(sb, Title, new Vector2(PadX + BorderSize + 2f, PadY + BorderSize + 1f), Color.White);
             }
         }

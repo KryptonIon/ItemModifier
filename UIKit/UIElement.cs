@@ -64,7 +64,9 @@ namespace ItemModifier.UIKit
 
         public event UIEventHandler<bool> OnVisibilityChanged;
 
-        public event UIEventHandler<bool> OnFocusChanged;
+        public event UIEventHandler OnFocused;
+
+        public event UIEventHandler OnUnfocused;
 
         public event UIEventHandler<UIElement> OnChildAdded;
 
@@ -311,24 +313,7 @@ namespace ItemModifier.UIKit
             }
         }
 
-        private bool focused;
-
-        public bool Focused
-        {
-            get
-            {
-                return focused;
-            }
-
-            set
-            {
-                if (Focused != value)
-                {
-                    focused = value;
-                    OnFocusChanged?.Invoke(this, Focused);
-                }
-            }
-        }
+        public bool Focused { get; protected set; }
 
         public UIElement this[int index]
         {
@@ -667,6 +652,20 @@ namespace ItemModifier.UIKit
         }
 
         #endregion
+
+        public virtual void Focus()
+        {
+            Focused = true;
+            OnFocused?.Invoke(this);
+            Parent?.Focus();
+        }
+
+        public virtual void Unfocus()
+        {
+            Focused = false;
+            OnUnfocused?.Invoke(this);
+            Parent?.Unfocus();
+        }
 
         public void Activate()
         {

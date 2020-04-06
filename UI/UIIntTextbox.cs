@@ -19,8 +19,8 @@ namespace ItemModifier.UI
             {
                 if (_value != value)
                 {
-                    _value = value > MaxValue ? int.MaxValue : value < MinValue ? MinValue : value;
-                    Text = Value.ToString();
+                    _value = value > MaxValue ? MaxValue : value < MinValue ? MinValue : value;
+                    DrawText = Value.ToString();
                     OnValueChanged?.Invoke(this, Value);
                 }
             }
@@ -32,31 +32,68 @@ namespace ItemModifier.UI
 
         public bool Negateable { get; set; } = true;
 
-        public UIIntTextbox(int maxValue = int.MaxValue, int minValue = int.MinValue) : base(10)
+        public UIIntTextbox(int minValue = int.MinValue, int maxValue = int.MaxValue) : base(11)
         {
-            text = "0";
             MaxValue = maxValue;
             MinValue = minValue;
-            OnFocusChanged += (source, e) =>
+            _value = 0 > MaxValue ? MaxValue : 0 < MinValue ? MinValue : 0;
+            DrawText = Value.ToString();
+            OnUnfocused += (source) =>
             {
-                if (!e) _value = int.Parse(Text);
+                if (string.IsNullOrEmpty(Text))
+                {
+                    Value = 0;
+                }
+                else if (Text.Length == 1 && Text[0] == '-')
+                {
+                    Value = 0;
+                }
+                else
+                {
+                    if (int.TryParse(Text, out int val))
+                    {
+                        Value = val;
+                    }
+                    else
+                    {
+                        Value = Text.StartsWith("-") ? MinValue : MaxValue;
+                    }
+                }
             };
             OnTextChanged += (source, e) =>
             {
                 string newText = "";
-                if(string.IsNullOrEmpty(e))
+                if (string.IsNullOrEmpty(e))
                 {
-                    Text = "0";
                     return;
                 }
-                if (Negateable && e[0] == '-') newText += e[0];
-                for (int i = 1; i < e.Length; i++)
+
+                if (char.IsDigit(e[0]) || e[0] == '-')
                 {
-                    if (char.IsDigit(e[i])) newText += e[i];
+                    newText += e[0];
                 }
-                newText.Trim('0');
-                if (string.IsNullOrEmpty(newText)) Text = "0";
-                else Text = newText;
+
+                int i = 1;
+                while (i < CaretPosition)
+                {
+                    if (char.IsDigit(e[i]))
+                    {
+                        newText += e[i];
+                    }
+
+                    i++;
+                }
+                CaretPosition = newText.Length;
+                while (i < e.Length)
+                {
+                    if (char.IsDigit(e[i]))
+                    {
+                        newText += e[i];
+                    }
+
+                    i++;
+                }
+                DrawText = newText;
             };
         }
     }

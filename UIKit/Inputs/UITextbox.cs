@@ -1,10 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using ReLogic.Graphics;
 using Terraria;
 using Terraria.GameInput;
 using Terraria.ID;
 using static ItemModifier.ItemModifier;
-using static Terraria.Utils;
+using static ItemModifier.UIKit.Utils;
 
 namespace ItemModifier.UIKit.Inputs
 {
@@ -27,9 +29,9 @@ namespace ItemModifier.UIKit.Inputs
 
         public event UIEventHandler<string> OnTextChangedByUser;
 
-        public Color TextColor { get; set; } = Color.White;
+        public Color TextColor { get; set; } = Color.Black;
 
-        public Color BackgroundColor { get; set; } = Utils.UIBackgroundColor;
+        public Color BackgroundColor { get; set; } = UIBackgroundColor;
 
         public Color BorderColor { get; set; } = Color.Black;
 
@@ -37,9 +39,32 @@ namespace ItemModifier.UIKit.Inputs
 
         public Color CaretColor { get; set; } = Color.Black;
 
-        public int CharacterLimit { get; set; } = 10;
+        public DynamicSpriteFont Font { get; set; } = Main.fontMouseText;
 
-        protected string text = string.Empty;
+        public int CharacterLimit { get; set; }
+
+        private string text = string.Empty;
+
+        protected string DrawText
+        {
+            get
+            {
+                return text;
+            }
+
+            set
+            {
+                if (CharacterLimit > 0 && value.Length > CharacterLimit)
+                {
+                    text = value.Substring(0, CharacterLimit);
+                    CaretPosition = CharacterLimit;
+                }
+                else
+                {
+                    text = value;
+                }
+            }
+        }
 
         public string Text
         {
@@ -52,7 +77,8 @@ namespace ItemModifier.UIKit.Inputs
             {
                 if (text != value)
                 {
-                    text = value ?? string.Empty;
+                    DrawText = value;
+                    CaretPosition = DrawText.Length;
                     OnTextChanged?.Invoke(this, Text);
                 }
             }
@@ -73,13 +99,15 @@ namespace ItemModifier.UIKit.Inputs
 
         public int CaretPosition { get; set; }
 
-        protected int CaretDelta { get; set; }
+        private int caretDelta;
+
+        private int caretMoveDelta;
 
         public UITextbox() : base()
         {
             Width = new SizeDimension(100f);
             Height = new SizeDimension(22f);
-            OnFocusChanged += (source, e) => { if (!e) CaretDelta = 0; };
+            OnUnfocused += (source) => caretDelta = 0;
         }
 
         public UITextbox(int characterLimit) : this()
@@ -102,44 +130,53 @@ namespace ItemModifier.UIKit.Inputs
         protected internal override void RecalculateSelf()
         {
             base.RecalculateSelf();
-            OuterWidth += BorderSize + BorderSize;
-            OuterHeight += BorderSize + BorderSize;
-            PadWidth += BorderSize + BorderSize;
-            PadHeight += BorderSize + BorderSize;
-            InnerX += BorderSize;
-            InnerY += BorderSize;
+            if (BorderSize > 0)
+            {
+                OuterWidth += BorderSize + BorderSize;
+                OuterHeight += BorderSize + BorderSize;
+                PadWidth += BorderSize + BorderSize;
+                PadHeight += BorderSize + BorderSize;
+                InnerX += BorderSize;
+                InnerY += BorderSize;
+            }
         }
 
         protected override void DrawSelf(SpriteBatch sb)
         {
+            int padX = (int)PadX;
+            int padY = (int)PadY;
+            int padWidth = (int)PadWidth;
+            int padHeight = (int)PadHeight;
             if (BorderSize > 0)
             {
-                int padX = (int)PadX;
-                int padY = (int)PadY;
-                int padWidth = (int)PadWidth;
-                int padHeight = (int)PadHeight;
                 int verticalPosition = padY + BorderSize;
                 int verticalLength = padHeight - BorderSize - BorderSize;
-                sb.Draw(Textures.Textbox, new Rectangle(padX, padY, padWidth, BorderSize), new Rectangle(0, 0, 100, 2), BorderColor);
-                sb.Draw(Textures.Textbox, new Rectangle(padX, verticalPosition, BorderSize, verticalLength), new Rectangle(0, 2, 2, 18), BorderColor);
-                sb.Draw(Textures.Textbox, new Rectangle((int)(PadX + PadWidth) - BorderSize, verticalPosition, BorderSize, verticalLength), new Rectangle(98, 2, 2, 18), BorderColor);
-                sb.Draw(Textures.Textbox, new Rectangle(padX, (int)(PadY + PadHeight) - BorderSize, padWidth, BorderSize), new Rectangle(0, 20, 100, 2), BorderColor);
-                sb.Draw(Textures.Textbox, new Rectangle(padX + 2, padY + 2, padWidth - 4, padHeight - 4), new Rectangle(2, 2, 96, 18), BackgroundColor);
+                sb.Draw(Textures.BlackDot, new Rectangle(padX, padY, padWidth, BorderSize), BorderColor);
+                sb.Draw(Textures.BlackDot, new Rectangle(padX, verticalPosition, BorderSize, verticalLength), BorderColor);
+                sb.Draw(Textures.BlackDot, new Rectangle((int)(PadX + PadWidth) - BorderSize, verticalPosition, BorderSize, verticalLength), BorderColor);
+                sb.Draw(Textures.BlackDot, new Rectangle(padX, (int)(PadY + PadHeight) - BorderSize, padWidth, BorderSize), BorderColor);
             }
+            sb.Draw(Textures.WhiteDot, new Rectangle(padX + BorderSize, padY + BorderSize, padWidth - BorderSize - BorderSize, padHeight - BorderSize - BorderSize), BackgroundColor);
             Rectangle scissorRect = sb.GraphicsDevice.ScissorRectangle;
             Rectangle innerRect = new Rectangle((int)InnerX + 2, (int)InnerY, (int)InnerWidth - 2, (int)InnerHeight);
             sb.End();
-            sb.GraphicsDevice.ScissorRectangle = Rectangle.Intersect(Utils.GetClippingRectangle(sb, innerRect), scissorRect);
-            sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, OverflowHiddenRasterizerState, null, Main.UIScaleMatrix);
-            Vector2 textSize = DrawBorderString(sb, Text, new Vector2(innerRect.X, innerRect.Y), TextColor, maxCharactersDisplayed: CharacterLimit);
+            sb.GraphicsDevice.ScissorRectangle = Rectangle.Intersect(GetClippingRectangle(sb, innerRect), scissorRect);
+            sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, OverflowHiddenRasterizerState, null, Main.UIScaleMatrix);
+            sb.DrawString(Font, Text, new Vector2(innerRect.X, innerRect.Y), TextColor);
             sb.End();
             sb.GraphicsDevice.ScissorRectangle = scissorRect;
             sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, sb.GraphicsDevice.RasterizerState, null, Main.UIScaleMatrix);
             if (Focused)
             {
-                if (CaretDelta < 20) sb.Draw(Textures.Caret, new Vector2(innerRect.X + 2 + textSize.X, InnerY + 1), CaretColor);
-                else if (CaretDelta >= 39) CaretDelta = 0;
-                CaretDelta++;
+                if (caretDelta < 20)
+                {
+                    float textSizeX = Font.MeasureString(Text.Substring(0, CaretPosition)).X;
+                    sb.Draw(Textures.Caret, new Vector2(innerRect.X + textSizeX, InnerY + 1), CaretColor);
+                }
+                if (++caretDelta > 39)
+                {
+                    caretDelta = 0;
+                }
             }
         }
 
@@ -151,13 +188,63 @@ namespace ItemModifier.UIKit.Inputs
                 Main.instance.HandleIME();
                 // Thanks to Magic Storage
                 string frontHalf = Text.Substring(0, CaretPosition);
-                string newText = Main.GetInputText(Text);
-                if (Text != newText)
+                string newText = Main.GetInputText(frontHalf);
+                if (frontHalf != newText)
                 {
-                    int caretPos = CaretPosition;
-                    CaretPosition = newText.Length;
-                    Text = newText + Text.Substring(caretPos);
+                    if (frontHalf != Text)
+                    {
+                        int caretPos = CaretPosition;
+                        CaretPosition = newText.Length;
+                        Text = newText + Text.Substring(caretPos);
+                    }
+                    else
+                    {
+                        CaretPosition = newText.Length;
+                        Text = newText;
+                    }
                     OnTextChangedByUser?.Invoke(this, Text);
+                }
+                if (Main.keyState.IsKeyDown(Keys.Left))
+                {
+                    if (Main.oldKeyState.IsKeyUp(Keys.Left))
+                    {
+                        if (--CaretPosition < 0)
+                        {
+                            CaretPosition = 0;
+                        }
+
+                        caretMoveDelta = 20;
+                    }
+                    if (--caretMoveDelta == 0)
+                    {
+                        caretMoveDelta = 3;
+                        if (--CaretPosition < 0)
+                        {
+                            CaretPosition = 0;
+                        }
+                    }
+                    caretDelta = 0;
+                }
+                else if (Main.keyState.IsKeyDown(Keys.Right))
+                {
+                    if (Main.oldKeyState.IsKeyUp(Keys.Right))
+                    {
+                        if (++CaretPosition > Text.Length)
+                        {
+                            CaretPosition = Text.Length;
+                        }
+
+                        caretMoveDelta = 20;
+                    }
+                    if (--caretMoveDelta == 0)
+                    {
+                        caretMoveDelta = 3;
+                        if (++CaretPosition > Text.Length)
+                        {
+                            CaretPosition = Text.Length;
+                        }
+                    }
+                    caretDelta = 0;
                 }
             }
         }
