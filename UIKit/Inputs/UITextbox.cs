@@ -57,12 +57,12 @@ namespace ItemModifier.UIKit.Inputs
                 if (CharacterLimit > 0 && value.Length > CharacterLimit)
                 {
                     text = value.Substring(0, CharacterLimit);
-                    CaretPosition = CharacterLimit;
                 }
                 else
                 {
                     text = value;
                 }
+                CaretPosition = DrawText.Length;
             }
         }
 
@@ -78,7 +78,6 @@ namespace ItemModifier.UIKit.Inputs
                 if (text != value)
                 {
                     DrawText = value;
-                    CaretPosition = DrawText.Length;
                     OnTextChanged?.Invoke(this, Text);
                 }
             }

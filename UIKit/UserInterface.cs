@@ -109,12 +109,32 @@ namespace ItemModifier.UIKit
         {
             MousePosition = new Vector2(Main.mouseX, Main.mouseY);
             ItemModifier instance = ModContent.GetInstance<ItemModifier>();
-            bool leftDown = Main.mouseLeft && Main.hasFocus;
-            bool rightDown = Main.mouseRight && Main.hasFocus;
-            bool middleDown = Main.mouseMiddle && Main.hasFocus;
-            bool backDown = Main.mouseXButton1 && Main.hasFocus;
-            bool forwardDown = Main.mouseXButton2 && Main.hasFocus;
-            UIElement target = Main.hasFocus ? GetElementAt(MousePosition) : null;
+            bool leftDown;
+            bool rightDown;
+            bool middleDown;
+            bool backDown;
+            bool forwardDown;
+            UIElement target;
+            if (Main.hasFocus)
+            {
+                leftDown = Main.mouseLeft;
+                rightDown = Main.mouseRight;
+                middleDown = Main.mouseMiddle;
+                backDown = Main.mouseXButton1;
+                forwardDown = Main.mouseXButton2; 
+                target = GetElementAt(MousePosition);
+            }
+            else
+            {
+                leftDown = false;
+                rightDown = false;
+                middleDown = false;
+                backDown = false;
+                forwardDown = false;
+                target = null;
+                lastFocused?.Unfocus();
+                lastFocused = null;
+            }
             if (target == null)
             {
                 instance.MouseWheelDisabled = false;
@@ -139,9 +159,15 @@ namespace ItemModifier.UIKit
             {
                 if (leftDown && !wasLeftdown || rightDown && !wasRightDown || middleDown && !wasMiddleDown || backDown && !wasBackDown || forwardDown && !wasForwardDown)
                 {
-                    if (lastFocused != null && lastFocused != target) lastFocused.Unfocus();
-                    lastFocused = target;
-                    if (target != null) target.Focus();
+                    if (lastFocused != target)
+                    {
+                        lastFocused?.Unfocus();
+                        lastFocused = target;
+                        if (target != null)
+                        {
+                            target.Focus();
+                        }
+                    }
                 }
                 if (leftDown && !wasLeftdown && target != null)
                 {
@@ -249,52 +275,86 @@ namespace ItemModifier.UIKit
                     lastForwardDown = null;
                 }
             }
-            if (PlayerInput.ScrollWheelDeltaForUI != 0) target?.ScrollWheel(new UIScrollWheelEventArgs(target, MousePosition, PlayerInput.ScrollWheelDeltaForUI));
+            if (PlayerInput.ScrollWheelDeltaForUI != 0)
+            {
+                target?.ScrollWheel(new UIScrollWheelEventArgs(target, MousePosition, PlayerInput.ScrollWheelDeltaForUI));
+            }
+
             wasLeftdown = leftDown;
             wasRightDown = rightDown;
             wasMiddleDown = middleDown;
             wasBackDown = backDown;
             wasForwardDown = forwardDown;
-            for (int i = 0; i < Children.Count; i++) Children[i].Update(gameTime);
+            for (int i = 0; i < Children.Count; i++)
+            {
+                Children[i].Update(gameTime);
+            }
         }
 
         public void PostUpdateInput()
         {
-            for (int i = 0; i < Children.Count; i++) Children[i].PostUpdateInput();
+            for (int i = 0; i < Children.Count; i++)
+            {
+                Children[i].PostUpdateInput();
+            }
         }
 
         public void Draw(SpriteBatch sb)
         {
             if (Visible)
             {
-                for (int i = 0; i < Children.Count; i++) Children[i].Draw(sb);
+                for (int i = 0; i < Children.Count; i++)
+                {
+                    Children[i].Draw(sb);
+                }
             }
         }
 
         internal void RefreshState()
         {
-            for (int i = 0; i < Children.Count; i++) Children[i].Deactivate();
+            for (int i = 0; i < Children.Count; i++)
+            {
+                Children[i].Deactivate();
+            }
+
             ResetState();
-            for (int i = 0; i < Children.Count; i++) Children[i].Activate();
+            for (int i = 0; i < Children.Count; i++)
+            {
+                Children[i].Activate();
+            }
         }
 
         public void Recalculate()
         {
-            for (int i = 0; i < Children.Count; i++) Children[i].Recalculate();
+            for (int i = 0; i < Children.Count; i++)
+            {
+                Children[i].Recalculate();
+            }
         }
 
         public void RemoveAllChildren()
         {
-            for (int i = 0; i < Children.Count; i++) Children[i].ParentUI = null;
+            for (int i = 0; i < Children.Count; i++)
+            {
+                Children[i].ParentUI = null;
+            }
+
             Children.Clear();
         }
 
         public void Activate()
         {
             Recalculate();
-            if (!Initialized) Initialize();
+            if (!Initialized)
+            {
+                Initialize();
+            }
+
             OnActivate();
-            for (int i = 0; i < Children.Count; i++) Children[i].Activate();
+            for (int i = 0; i < Children.Count; i++)
+            {
+                Children[i].Activate();
+            }
         }
 
         public virtual void OnActivate()
@@ -305,7 +365,10 @@ namespace ItemModifier.UIKit
         public void Deactivate()
         {
             OnDeactivate();
-            for (int i = 0; i < Children.Count; i++) Children[i].Deactivate();
+            for (int i = 0; i < Children.Count; i++)
+            {
+                Children[i].Deactivate();
+            }
         }
 
         public virtual void OnDeactivate()
@@ -329,7 +392,10 @@ namespace ItemModifier.UIKit
             for (int i = Children.Count - 1; i >= 0; i--)
             {
                 UIElement element = Children[i];
-                if (element.Visible && element.ContainsPoint(point)) return element.GetElementAt(point);
+                if (element.Visible && element.ContainsPoint(point))
+                {
+                    return element.GetElementAt(point);
+                }
             }
             return null;
         }
