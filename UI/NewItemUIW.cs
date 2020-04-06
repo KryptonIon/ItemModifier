@@ -21,6 +21,8 @@ namespace ItemModifier.UI
 
         internal UIContainer Matches;
 
+        internal UICheckbox UseModifiedProperties;
+
         public NewItemUIW() : base("New Item")
         {
             Visible = false;
@@ -70,7 +72,7 @@ namespace ItemModifier.UI
                             };
                             item.OnLeftClick += (source2, e) =>
                             {
-                                if(item.Item.type != ItemIDTextbox.Value)
+                                if (item.Item.type != ItemIDTextbox.Value)
                                 {
                                     ItemIDTextbox.Value = item.Item.type;
                                 }
@@ -120,10 +122,24 @@ namespace ItemModifier.UI
             Matches.OnFocused += (source) => Matches.Visible = true;
             Matches.OnUnfocused += (source) => Matches.Visible = false;
 
-            NoMatches = new UIText("No items found.")
+            UIItemDisplay ironPickaxe = new UIItemDisplay(1, 32f)
             {
                 Parent = Matches
             };
+            ironPickaxe.OnLeftClick += (source, e) =>
+            {
+                if (ironPickaxe.Item.type != ItemIDTextbox.Value)
+                {
+                    ItemIDTextbox.Value = ironPickaxe.Item.type;
+                }
+                else
+                {
+                    UpdateTextboxes();
+                }
+                Matches.Visible = false;
+            };
+
+            NoMatches = new UIText("No items found.");
 
             Generate = new UIImageButton(ItemModifier.Textures.NewItem)
             {
@@ -137,8 +153,19 @@ namespace ItemModifier.UI
             Generate.OnLeftClick += (source, e) =>
             {
                 int itemIndex = Item.NewItem(Main.LocalPlayer.getRect(), ItemIDTextbox.Value, 1, true);
-                Main.item[itemIndex].CopyItemProperties(instance.MainUI.ModifyWindow.ModifiedItem);
+                if (UseModifiedProperties.Check)
+                {
+                    Main.item[itemIndex].CopyItemProperties(instance.MainUI.ModifyWindow.ModifiedItem);
+                }
             };
+
+            UseModifiedProperties = new UICheckbox()
+            {
+                XOffset = new SizeDimension(Generate.CalculatedXOffset + 2f),
+                YOffset = Matches.YOffset,
+                Parent = this
+            };
+            UseModifiedProperties.WhileMouseHover += (source, e) => instance.Tooltip = "Use Modified Properties";
         }
 
         private void UpdateTextboxes()
