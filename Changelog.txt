@@ -1,4 +1,4 @@
-﻿Update 1.0.0, Demo Update
+﻿Update 1.0.0, Initial Release
 Added "ShowProperties" Setting
 Added "ShowUnnecessary" Setting
 Added "ShowPID" Setting
@@ -78,7 +78,7 @@ Added EnterWorld Message
 
 
 
-Update 1.0.1, Fixes & Changes Update 1
+Update 1.0.1, Hotfixes 1
 Changed Description
 
 
@@ -103,7 +103,7 @@ Changed Description
 
 
 
-Update 1.0.2, Fixes & Changes Update 2
+Update 1.0.2, Hotfixes 2
 Changed Mod Homepage from Github Repository to Terraria Forums
 
 
@@ -128,7 +128,7 @@ Changed Mod Homepage from Github Repository to Terraria Forums
 
 
 
-Update 1.0.3, Fixes & Changes Update 3
+Update 1.0.3, Hotfixes 3
 Changed Description
 
 
@@ -265,7 +265,7 @@ Fixed EnterWorld Message 2 being white
 
 
 
-Update 1.0.6, Fixes & Changes Update 4
+Update 1.0.6, Hotfixes 4
 Updated Parameters of "/gi params" and "/set params" (Sorry, forgot to do so last update)
 
 
@@ -473,7 +473,7 @@ Fixed Errors having Reply Color
 
 
 
-Update 1.0.8.1, Fixes & Changes Update 5
+Update 1.0.8.1, Hotfixes 5
 Fixed HealLife parsing
 Fixed SetItem $^
 
