@@ -112,7 +112,7 @@ namespace ItemModifier.UIKit
                 }
                 else
                 {
-                    if (GetItemName(i).Value.ToLower().Contains(name))
+                    if (GetItemName(i).Value.ToLower().Contains(name.ToLower()))
                     {
                         matches.Add(i);
                     }

@@ -182,7 +182,7 @@ namespace ItemModifier.UI
         {
             if (UseModifiedProperties.Check)
             {
-                ItemDisplay.Item = ModContent.GetInstance<ItemModifier>().MainUI.ModifyWindow.ModifiedItem;
+                ItemDisplay.Item.CopyItemProperties(ModContent.GetInstance<ItemModifier>().MainUI.ModifyWindow.ModifiedItem);
             }
         }
 
