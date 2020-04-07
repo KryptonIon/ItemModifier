@@ -65,15 +65,6 @@ namespace ItemModifier.UI
             WikiWB.ParentUI = this;
             WikiWB.OnLeftClick += (source, e) => new Thread(() => Process.Start("https://kryptonion.github.io/ItemModifier/")).Start();
             WikiWB.WhileMouseHover += (source, e) => instance.Tooltip = "Open Wiki";
-
-            DiscordLink = new UIImageButton(ItemModifier.Textures.DiscordIcon, activeTransparency: 1.5f, inactiveTransparency: 0.6f)
-            {
-                XOffset = new SizeDimension(17f)
-            };
-            DiscordLink.YOffset = new SizeDimension(WikiWB.CalculatedYOffset - DiscordLink.OuterHeight - 13.5f);
-            DiscordLink.ParentUI = this;
-            DiscordLink.OnLeftClick += (source, e) => new Thread(() => Process.Start("https://discord.gg/UjQWNC2")).Start();
-            DiscordLink.WhileMouseHover += (source, e) => instance.Tooltip = "Discord";
         }
     }
 }

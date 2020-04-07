@@ -49,8 +49,6 @@ namespace ItemModifier
 
             public static Texture2D Sync { get; private set; }
 
-            public static Texture2D DiscordIcon { get; private set; }
-
             public static Texture2D Reset { get; private set; }
 
             public static Texture2D Checkbox { get; private set; }
@@ -143,7 +141,6 @@ namespace ItemModifier
                 RightArrowShort = ModContent.GetTexture("ItemModifier/UI/RightArrowShort");
                 Lock = ModContent.GetTexture("ItemModifier/UI/Lock");
                 Sync = ModContent.GetTexture("ItemModifier/UI/Sync");
-                DiscordIcon = ModContent.GetTexture("ItemModifier/UI/DiscordIcon");
                 Reset = ModContent.GetTexture("ItemModifier/UI/Reset");
                 Checkbox = ModContent.GetTexture("ItemModifier/UIKit/Inputs/Checkbox");
                 HorizontalLine = ModContent.GetTexture("ItemModifier/UIKit/HorizontalLine");
@@ -205,7 +202,6 @@ namespace ItemModifier
                 RightArrowShort = null;
                 Lock = null;
                 Sync = null;
-                DiscordIcon = null;
                 Reset = null;
                 Checkbox = null;
                 HorizontalLine = null;
