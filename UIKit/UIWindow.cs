@@ -137,8 +137,11 @@ namespace ItemModifier.UIKit
 
         public override void LeftMouseUp(UIMouseEventArgs e)
         {
-            dragging = false;
-            Recalculate();
+            if (dragging)
+            {
+                dragging = false;
+                Recalculate();
+            }
             base.LeftMouseUp(e);
         }
 
