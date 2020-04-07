@@ -30,8 +30,6 @@ namespace ItemModifier.UI
 
         public int MinValue { get; set; }
 
-        public bool Negateable { get; set; } = true;
-
         public UIIntTextbox(int minValue = int.MinValue, int maxValue = int.MaxValue) : base(11)
         {
             MaxValue = maxValue;
@@ -67,12 +65,10 @@ namespace ItemModifier.UI
                 {
                     return;
                 }
-
                 if (char.IsDigit(e[0]) || e[0] == '-')
                 {
                     newText += e[0];
                 }
-
                 int i = 1;
                 while (i < CaretPosition)
                 {

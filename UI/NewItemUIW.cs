@@ -102,7 +102,6 @@ namespace ItemModifier.UI
 
             ItemIDTextbox = new UIIntTextbox(1, ItemLoader.ItemCount - 1)
             {
-                Negateable = false,
                 Width = new SizeDimension(51f),
                 XOffset = new SizeDimension(ItemNameTextbox.CalculatedXOffset + ItemNameTextbox.OuterWidth + 4f),
                 YOffset = ItemNameTextbox.YOffset,

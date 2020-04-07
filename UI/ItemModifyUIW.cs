@@ -355,7 +355,7 @@ namespace ItemModifier.UI
             KnockBack.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.knockBack = DefaultItem.knockBack;
             PKnockBack = new UICategory.UIProperty(Textures.Knockback, "KnockBack:", KnockBack);
 
-            Shoot = new UIIntTextbox(0, ProjectileLoader.ProjectileCount - 1) { Negateable = false };
+            Shoot = new UIIntTextbox(0, ProjectileLoader.ProjectileCount - 1);
             Shoot.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.shoot = value;
             Shoot.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.shoot = DefaultItem.shoot;
             PShoot = new UICategory.UIProperty(Textures.ProjectileShot, "Projectile Shot:", Shoot);
@@ -376,57 +376,57 @@ namespace ItemModifier.UI
             PTileBoost = new UICategory.UIProperty(Textures.AddedRange, "Added Range:", TileBoost);
             PTileBoost.Recalculate();
 
-            Buff = new UIIntTextbox(0, BuffLoader.BuffCount - 1) { Negateable = false };
+            Buff = new UIIntTextbox(0, BuffLoader.BuffCount - 1);
             Buff.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.buffType = value;
             Buff.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.buffType = DefaultItem.buffType;
             PBuff = new UICategory.UIProperty(Textures.BuffType, "Buff Inflicted:", Buff);
 
-            BuffTime = new UIIntTextbox() { Negateable = false };
+            BuffTime = new UIIntTextbox(0);
             BuffTime.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.buffTime = value;
             BuffTime.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.buffTime = DefaultItem.buffTime;
             PBuffTime = new UICategory.UIProperty(Textures.BuffDuration, "Buff Duration:", BuffTime);
 
-            HealHP = new UIIntTextbox() { Negateable = false };
+            HealHP = new UIIntTextbox(0);
             HealHP.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.healLife = value;
             HealHP.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.healLife = DefaultItem.healLife;
             PHealHP = new UICategory.UIProperty(Textures.HPHealed, "HP Healed:", HealHP);
 
-            HealMP = new UIIntTextbox() { Negateable = false };
+            HealMP = new UIIntTextbox(0);
             HealMP.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.healMana = value;
             HealMP.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.healMana = DefaultItem.healMana;
             PHealMP = new UICategory.UIProperty(Textures.MPHealed, "Mana Healed:", HealMP);
 
-            AxePower = new UIIntTextbox() { Negateable = false };
+            AxePower = new UIIntTextbox(0);
             AxePower.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.axe = value;
             AxePower.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.axe = DefaultItem.axe;
             PAxePower = new UICategory.UIProperty(Textures.AxePower, "Axe Power:", AxePower);
 
-            PickaxePower = new UIIntTextbox() { Negateable = false };
+            PickaxePower = new UIIntTextbox(0);
             PickaxePower.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.pick = value;
             PickaxePower.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.pick = DefaultItem.pick;
             PPickaxePower = new UICategory.UIProperty(Textures.PickaxePower, "Pickaxe Power:", PickaxePower);
 
-            HammerPower = new UIIntTextbox() { Negateable = false };
+            HammerPower = new UIIntTextbox(0);
             HammerPower.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.hammer = value;
             HammerPower.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.hammer = DefaultItem.hammer;
             PHammerPower = new UICategory.UIProperty(Textures.HammerPower, "Hammer Power:", HammerPower);
 
-            Stack = new UIIntTextbox() { Negateable = false };
+            Stack = new UIIntTextbox(1);
             Stack.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.stack = value;
             Stack.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.stack = DefaultItem.stack;
             PStack = new UICategory.UIProperty(Textures.Stack, "Amount:", Stack);
 
-            MaxStack = new UIIntTextbox() { Negateable = false };
+            MaxStack = new UIIntTextbox(1);
             MaxStack.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.maxStack = value;
             MaxStack.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.maxStack = DefaultItem.maxStack;
             PMaxStack = new UICategory.UIProperty(Textures.MaxStack, "Max Stack:", MaxStack);
 
-            UseAnimation = new UIIntTextbox() { Negateable = false };
+            UseAnimation = new UIIntTextbox(0);
             UseAnimation.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.useAnimation = value;
             UseAnimation.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.useAnimation = DefaultItem.useAnimation;
             PUseAnimation = new UICategory.UIProperty(Textures.UseAnimation, "Animation Span:", UseAnimation);
 
-            UseTime = new UIIntTextbox() { Negateable = false };
+            UseTime = new UIIntTextbox(0);
             UseTime.OnValueChanged += (source, value) => Main.LocalPlayer.HeldItem.useTime = value;
             UseTime.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.useTime = DefaultItem.useTime;
             PUseTime = new UICategory.UIProperty(Textures.UseTime, "Use Span:", UseTime);

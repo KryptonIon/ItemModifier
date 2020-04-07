@@ -30,8 +30,6 @@ namespace ItemModifier.UI
 
         public float MinValue { get; set; }
 
-        public bool Negateable { get; set; } = true;
-
         public UIFloatTextbox(float maxValue = float.MaxValue, float minValue = float.MinValue) : base(11)
         {
             MaxValue = maxValue;
