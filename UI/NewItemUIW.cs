@@ -49,7 +49,7 @@ namespace ItemModifier.UI
                 YOffset = new SizeDimension(4f),
                 Parent = this
             };
-            ItemNameTextbox.WhileMouseHover += (source, e) => instance.Tooltip = "Item Name";
+            ItemNameTextbox.WhileMouseHover += (source, e) => instance.Tooltip = "Name";
             ItemNameTextbox.OnFocused += (source) => Matches.Visible = true;
             ItemNameTextbox.OnUnfocused += (source) => Matches.Visible = false;
             ItemNameTextbox.OnTextChanged += (source, value) =>
@@ -108,7 +108,7 @@ namespace ItemModifier.UI
                 YOffset = ItemNameTextbox.YOffset,
                 Parent = this
             };
-            ItemIDTextbox.WhileMouseHover += (source, e) => instance.Tooltip = "Item ID";
+            ItemIDTextbox.WhileMouseHover += (source, e) => instance.Tooltip = "ID";
             ItemIDTextbox.OnValueChanged += (source, value) => UpdateTextboxes();
 
             ItemStackTextbox = new UIIntTextbox(1)
@@ -117,6 +117,7 @@ namespace ItemModifier.UI
                 YOffset = ItemNameTextbox.YOffset,
                 Parent = this
             };
+            ItemStackTextbox.WhileMouseHover += (source, e) => instance.Tooltip = "Stack";
 
             Matches = new UIContainer(UIBackgroundColor)
             {
@@ -182,7 +183,9 @@ namespace ItemModifier.UI
         {
             if (UseModifiedProperties.Check)
             {
+                float scale = ItemDisplay.Item.scale;
                 ItemDisplay.Item.CopyItemProperties(ModContent.GetInstance<ItemModifier>().MainUI.ModifyWindow.ModifiedItem);
+                ItemDisplay.Item.scale = scale;
             }
         }
 
