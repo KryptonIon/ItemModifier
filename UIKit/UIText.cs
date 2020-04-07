@@ -41,7 +41,7 @@ namespace ItemModifier.UIKit
             TextColor = textColor;
         }
 
-        public UIText(string text, Color textColor, float scale, Vector2 anchor, int maxCharacters) : this(text, textColor)
+        public UIText(string text, Color textColor, float scale, Vector2 anchor) : this(text, textColor)
         {
             Scale = scale;
             Anchor = anchor;

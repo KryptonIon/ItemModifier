@@ -7,7 +7,10 @@ namespace ItemModifier.UIKit
     {
         public override void PreUpdate()
         {
-            if (ModContent.GetInstance<ItemModifier>().MouseWheelDisabled) PlayerInput.ScrollWheelDelta = 0;
+            if (ModContent.GetInstance<ItemModifier>().MouseWheelDisabled)
+            {
+                PlayerInput.ScrollWheelDelta = 0;
+            }
         }
     }
 }

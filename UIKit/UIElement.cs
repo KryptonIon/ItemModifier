@@ -109,7 +109,10 @@ namespace ItemModifier.UIKit
                 ParentUI?.Children.Remove(this);
                 parentUI = value;
                 ParentUI?.Children.Add(this);
-                for (int i = 0; i < Children.Count; i++) Children[i].parentUI = ParentUI;
+                for (int i = 0; i < Children.Count; i++)
+                {
+                    Children[i].parentUI = ParentUI;
+                }
                 Recalculate();
             }
         }
@@ -356,7 +359,10 @@ namespace ItemModifier.UIKit
             for (int i = Children.Count - 1; i >= 0; i--)
             {
                 UIElement element = Children[i];
-                if (element.Visible && element.ContainsPoint(point)) return element.GetElementAt(point);
+                if (element.Visible && element.ContainsPoint(point))
+                {
+                    return element.GetElementAt(point);
+                }
             }
             return this;
         }
@@ -366,7 +372,10 @@ namespace ItemModifier.UIKit
             for (int i = Children.Count - 1; i >= 0; i--)
             {
                 UIElement element = Children[i];
-                if (element.Visible && element.ContainsPoint(point)) return element.GetElementAt(point);
+                if (element.Visible && element.ContainsPoint(point))
+                {
+                    return element.GetElementAt(point);
+                }
             }
             return this;
         }
@@ -374,7 +383,10 @@ namespace ItemModifier.UIKit
         public void Update(GameTime gameTime)
         {
             UpdateSelf(gameTime);
-            for (int i = 0; i < Children.Count; i++) Children[i].Update(gameTime);
+            for (int i = 0; i < Children.Count; i++)
+            {
+                Children[i].Update(gameTime);
+            }
         }
 
         protected virtual void UpdateSelf(GameTime gameTime)
@@ -385,7 +397,10 @@ namespace ItemModifier.UIKit
         public void PostUpdateInput()
         {
             PostUpdateInputSelf();
-            for (int i = 0; i < Children.Count; i++) Children[i].PostUpdateInput();
+            for (int i = 0; i < Children.Count; i++)
+            {
+                Children[i].PostUpdateInput();
+            }
         }
 
         protected virtual void PostUpdateInputSelf()
@@ -435,12 +450,18 @@ namespace ItemModifier.UIKit
 
         protected virtual void DrawChildren(SpriteBatch sb)
         {
-            for (int i = 0; i < Children.Count; i++) Children[i].Draw(sb);
+            for (int i = 0; i < Children.Count; i++)
+            {
+                Children[i].Draw(sb);
+            }
         }
 
         public void RemoveAllChildren()
         {
-            while (Children.Count > 0) Children[0].Parent = null;
+            while (Children.Count > 0)
+            {
+                Children[0].Parent = null;
+            }
         }
 
         public virtual void Recalculate()
@@ -477,11 +498,20 @@ namespace ItemModifier.UIKit
             OuterHeight = PadHeight + Margin.Top + Margin.Bottom;
             CalculatedXOffset = XOffset.CalculateValue(baseWidth);
             OuterX = baseX + CalculatedXOffset;
-            if (HorizontalAlign != 0f) OuterX += (baseWidth - OuterWidth) * HorizontalAlign;
+            if (HorizontalAlign != 0f)
+            {
+                OuterX += (baseWidth - OuterWidth) * HorizontalAlign;
+            }
             CalculatedYOffset = YOffset.CalculateValue(baseHeight);
             OuterY = baseY + CalculatedYOffset;
-            if (VerticalAlign != 0f) OuterY += (baseHeight - OuterHeight) * VerticalAlign;
-            if (Parent is UIContainer container) OuterY -= container.ScrollValue;
+            if (VerticalAlign != 0f)
+            {
+                OuterY += (baseHeight - OuterHeight) * VerticalAlign;
+            }
+            if (Parent is UIContainer container)
+            {
+                OuterY -= container.ScrollValue;
+            }
             PadX = OuterX + Margin.Left;
             PadY = OuterY + Margin.Top;
             InnerX = PadX + Padding.Left;
@@ -490,7 +520,10 @@ namespace ItemModifier.UIKit
 
         public virtual void RecalculateChildren()
         {
-            for (int i = 0; i < Children.Count; i++) Children[i].Recalculate();
+            for (int i = 0; i < Children.Count; i++)
+            {
+                Children[i].Recalculate();
+            }
         }
 
         #region MouseEventsInvokers
@@ -670,9 +703,15 @@ namespace ItemModifier.UIKit
         public void Activate()
         {
             Recalculate();
-            if (!Initialized) Initialize();
+            if (!Initialized)
+            {
+                Initialize();
+            }
             OnActivate();
-            for (int i = 0; i < Children.Count; i++) Children[i].Activate();
+            for (int i = 0; i < Children.Count; i++)
+            {
+                Children[i].Activate();
+            }
         }
 
         public virtual void OnActivate()
@@ -683,7 +722,10 @@ namespace ItemModifier.UIKit
         public void Deactivate()
         {
             OnDeactivate();
-            for (int i = 0; i < Children.Count; i++) Children[i].Deactivate();
+            for (int i = 0; i < Children.Count; i++)
+            {
+                Children[i].Deactivate();
+            }
         }
 
         public virtual void OnDeactivate()
@@ -707,7 +749,10 @@ namespace ItemModifier.UIKit
             radio.Selected = true;
             for (int i = 0; i < Children.Count; i++)
             {
-                if (Children[i] is UIRadioButton child && child != radio) child.Selected = false;
+                if (Children[i] is UIRadioButton child && child != radio)
+                {
+                    child.Selected = false;
+                }
             }
         }
 
@@ -715,7 +760,10 @@ namespace ItemModifier.UIKit
         {
             for (int i = 0; i < Children.Count; i++)
             {
-                if (Children[i] is UIRadioButton child) child.Selected = false;
+                if (Children[i] is UIRadioButton child)
+                {
+                    child.Selected = false;
+                }
             }
         }
 

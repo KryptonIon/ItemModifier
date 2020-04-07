@@ -22,52 +22,63 @@ namespace ItemModifier.UIKit
             }
         }
 
-        public static Vector2 MeasureString2(string Text, bool SkipDescenderScaling = false)
+        public static Vector2 MeasureString2(string text, bool skipDescenderScaling = false)
         {
-            Vector2 Size = fontMouseText.MeasureString(Text);
-            Size.Y -= !SkipDescenderScaling ? Text.Contains("g") || Text.Contains("j") || Text.Contains("p") || Text.Contains("q") || Text.Contains("Q") || Text.Contains("y") ? 3 : 7 : 3;
+            Vector2 Size = fontMouseText.MeasureString(text);
+            Size.Y -= !skipDescenderScaling ? text.Contains("g") || text.Contains("j") || text.Contains("p") || text.Contains("q") || text.Contains("Q") || text.Contains("y") ? 3 : 7 : 3;
             return Size;
         }
 
-        public static string TrimText(string Text, float MaxWidth, DynamicSpriteFont font)
+        public static bool IsKeyPressed(KeyboardState oldKeyboardState, KeyboardState newKeyboardState, Keys key)
         {
-            string result = string.Empty;
-            float size = 0;
-            float charSize;
-            for (int j = Text.Length - 1; j >= 0 && size + (charSize = font.GetCharacterMetrics(Text[j]).KernedWidth) < MaxWidth; j--)
+            return !oldKeyboardState.IsKeyDown(key) && newKeyboardState.IsKeyDown(key);
+        }
+
+        public static bool AreAllKeysPressed(KeyboardState oldKeyboardState, KeyboardState newKeyboardState, params Keys[] keys)
+        {
+            for (int i = 0; i < keys.Length; i++)
             {
-                size += charSize;
-                result = Text[j] + result;
+                if (!IsKeyPressed(oldKeyboardState, newKeyboardState, keys[i]))
+                {
+                    return false;
+                }
             }
-            return result;
-        }
-
-        public static bool IsKeyPressed(KeyboardState OldKeyboardState, KeyboardState NewKeyboardState, Keys key)
-        {
-            return !OldKeyboardState.IsKeyDown(key) && NewKeyboardState.IsKeyDown(key);
-        }
-
-        public static bool AreAllKeysPressed(KeyboardState OldKeyboardState, KeyboardState NewKeyboardState, params Keys[] keys)
-        {
-            for (int i = 0; i < keys.Length; i++) if (!IsKeyPressed(OldKeyboardState, NewKeyboardState, keys[i])) return false;
             return true;
         }
 
-        public static bool IsAnyKeyPressed(KeyboardState OldKeyboardState, KeyboardState NewKeyboardState, params Keys[] keys)
+        public static bool IsAnyKeyPressed(KeyboardState oldKeyboardState, KeyboardState newKeyboardState, params Keys[] keys)
         {
-            for (int i = 0; i < keys.Length; i++) if (IsKeyPressed(OldKeyboardState, NewKeyboardState, keys[i])) return true;
+            for (int i = 0; i < keys.Length; i++)
+            {
+                if (IsKeyPressed(oldKeyboardState, newKeyboardState, keys[i]))
+                {
+                    return true;
+                }
+            }
             return false;
         }
 
-        public static bool AreAllKeysDown(KeyboardState NewKeyboardState, params Keys[] keys)
+        public static bool AreAllKeysDown(KeyboardState newKeyboardState, params Keys[] keys)
         {
-            for (int i = 0; i < keys.Length; i++) if (!NewKeyboardState.IsKeyDown(keys[i])) return false;
+            for (int i = 0; i < keys.Length; i++)
+            {
+                if (!newKeyboardState.IsKeyDown(keys[i]))
+                {
+                    return false;
+                }
+            }
             return true;
         }
 
-        public static bool IsAnyKeyDown(KeyboardState NewKeyboardState, params Keys[] keys)
+        public static bool IsAnyKeyDown(KeyboardState newKeyboardState, params Keys[] keys)
         {
-            for (int i = 0; i < keys.Length; i++) if (NewKeyboardState.IsKeyDown(keys[i])) return true;
+            for (int i = 0; i < keys.Length; i++)
+            {
+                if (newKeyboardState.IsKeyDown(keys[i]))
+                {
+                    return true;
+                }
+            }
             return false;
         }
 
@@ -83,22 +94,31 @@ namespace ItemModifier.UIKit
             return result;
         }
 
-        public static List<int> FindItemsByName(string Name, bool CaseSensitive = false, bool ExcludeDeprecated = true)
+        public static int[] FindItemsByName(string name, bool caseSensitive = false, bool excludeDeprecated = true)
         {
             List<int> matches = new List<int>();
             for (int i = 0; i < ItemCount; i++)
             {
-                if (ExcludeDeprecated && Deprecated[i]) continue;
-                if (CaseSensitive)
+                if (excludeDeprecated && Deprecated[i])
                 {
-                    if (GetItemName(i).Value.Contains(Name)) matches.Add(i);
+                    continue;
+                }
+                if (caseSensitive)
+                {
+                    if (GetItemName(i).Value.Contains(name))
+                    {
+                        matches.Add(i);
+                    }
                 }
                 else
                 {
-                    if (GetItemName(i).Value.ToLower().Contains(Name.ToLower())) matches.Add(i);
+                    if (GetItemName(i).Value.ToLower().Contains(name))
+                    {
+                        matches.Add(i);
+                    }
                 }
             }
-            return matches;
+            return matches.ToArray();
         }
     }
 }

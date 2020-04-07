@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
-using System.IO;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.UI;
@@ -18,8 +17,6 @@ namespace ItemModifier
             public static Texture2D Settings { get; private set; }
 
             public static Texture2D Wiki { get; private set; }
-
-            public static Texture2D ChangelogIcon { get; private set; }
 
             public static Texture2D Save { get; private set; }
 
@@ -126,7 +123,6 @@ namespace ItemModifier
                 ModifyItem = ModContent.GetTexture("ItemModifier/UI/ModifyItem");
                 Settings = ModContent.GetTexture("ItemModifier/UI/Settings");
                 Wiki = ModContent.GetTexture("ItemModifier/UI/Wiki");
-                ChangelogIcon = ModContent.GetTexture("ItemModifier/UI/Changelog");
                 Save = ModContent.GetTexture("ItemModifier/UI/Save");
                 UpArrow = ModContent.GetTexture("ItemModifier/UI/UpArrow");
                 DownArrow = ModContent.GetTexture("ItemModifier/UI/DownArrow");
@@ -187,7 +183,6 @@ namespace ItemModifier
                 ModifyItem = null;
                 Settings = null;
                 Wiki = null;
-                ChangelogIcon = null;
                 Save = null;
                 UpArrow = null;
                 DownArrow = null;
@@ -225,7 +220,7 @@ namespace ItemModifier
                 MPHealed = null;
                 AxePower = null;
                 PickaxePower = null;
-                HammerPower =null;
+                HammerPower = null;
                 Stack = null;
                 MaxStack = null;
                 UseAnimation = null;
@@ -255,7 +250,10 @@ namespace ItemModifier
 
         public override void PostSetupContent()
         {
-            if (!Main.dedServ) (MainUI = new MainInterface()).Activate();
+            if (!Main.dedServ)
+            {
+                (MainUI = new MainInterface()).Activate();
+            }
         }
 
         public override void Unload()
@@ -279,7 +277,10 @@ namespace ItemModifier
             if (ItemAtCursorDisabled)
             {
                 int mouseItemIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Interact Item Icon"));
-                if (mouseItemIndex != -1) layers.RemoveAt(mouseItemIndex);
+                if (mouseItemIndex != -1)
+                {
+                    layers.RemoveAt(mouseItemIndex);
+                }
             }
             int mouseIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Hotbar"));
             if (mouseIndex != -1)

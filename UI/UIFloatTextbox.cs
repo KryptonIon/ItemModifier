@@ -40,31 +40,37 @@ namespace ItemModifier.UI
             DrawText = Value.ToString();
             OnUnfocused += (source) =>
             {
-                    if (string.IsNullOrEmpty(Text))
+                if (string.IsNullOrEmpty(Text))
+                {
+                    Value = 0f;
+                }
+                else if (Text.Length == 1 && Text[0] == '-')
+                {
+                    Value = 0f;
+                }
+                else
+                {
+                    if (float.TryParse(Text, out float val))
                     {
-                        Value = 0f;
-                    }
-                    else if (Text.Length == 1 && Text[0] == '-')
-                    {
-                        Value = 0f;
+                        Value = val;
                     }
                     else
                     {
-                        if (float.TryParse(Text, out float val))
-                        {
-                            Value = val;
-                        }
-                        else
-                        {
-                            Value = Text.StartsWith("-") ? MinValue : MaxValue;
-                        }
+                        Value = Text.StartsWith("-") ? MinValue : MaxValue;
                     }
+                }
             };
             OnTextChanged += (source, e) =>
             {
                 string newText = "";
-                if (string.IsNullOrEmpty(e)) return;
-                if (char.IsDigit(e[0]) || e[0] == '-') newText += e[0];
+                if (string.IsNullOrEmpty(e))
+                {
+                    return;
+                }
+                if (char.IsDigit(e[0]) || e[0] == '-')
+                {
+                    newText += e[0];
+                }
                 int i = 1;
                 bool dot = false;
                 while (i < CaretPosition)

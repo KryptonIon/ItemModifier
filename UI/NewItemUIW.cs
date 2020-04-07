@@ -1,6 +1,6 @@
 ﻿using ItemModifier.UIKit;
 using ItemModifier.UIKit.Inputs;
-using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 using static ItemModifier.UIKit.Utils;
@@ -21,12 +21,14 @@ namespace ItemModifier.UI
 
         internal UIContainer Matches;
 
+        internal UIIntTextbox ItemStackTextbox;
+
         internal UICheckbox UseModifiedProperties;
 
         public NewItemUIW() : base("New Item")
         {
             Visible = false;
-            Width = new SizeDimension(462f);
+            Width = new SizeDimension(542f);
             Height = new SizeDimension(110f);
         }
 
@@ -42,7 +44,7 @@ namespace ItemModifier.UI
             ItemNameTextbox = new UITextbox()
             {
                 Text = "Iron Pickaxe",
-                Width = new SizeDimension(337f),
+                Width = new SizeDimension(309f),
                 XOffset = new SizeDimension(ItemDisplay.OuterWidth + 4f),
                 YOffset = new SizeDimension(4f),
                 Parent = this
@@ -59,10 +61,10 @@ namespace ItemModifier.UI
                 else
                 {
                     Matches.RemoveAllChildren();
-                    List<int> ids = FindItemsByName(value);
-                    if (ids.Count > 0)
+                    int[] ids = FindItemsByName(value);
+                    if (ids.Length > 0)
                     {
-                        for (int i = 0, j = 0, k = 0; i < ids.Count; i++)
+                        for (int i = 0, j = 0, k = 0; i < ids.Length; i++)
                         {
                             UIItemDisplay item = new UIItemDisplay(ids[i], 32f)
                             {
@@ -82,7 +84,7 @@ namespace ItemModifier.UI
                                 }
                                 Matches.Visible = false;
                             };
-                            if (++j > 11)
+                            if (++j > 13)
                             {
                                 j = 0;
                                 k++;
@@ -109,10 +111,17 @@ namespace ItemModifier.UI
             ItemIDTextbox.WhileMouseHover += (source, e) => instance.Tooltip = "Item ID";
             ItemIDTextbox.OnValueChanged += (source, value) => UpdateTextboxes();
 
+            ItemStackTextbox = new UIIntTextbox(1)
+            {
+                XOffset = new SizeDimension(ItemIDTextbox.CalculatedXOffset + ItemIDTextbox.OuterWidth + 4f),
+                YOffset = ItemNameTextbox.YOffset,
+                Parent = this
+            };
+
             Matches = new UIContainer(UIBackgroundColor)
             {
                 Visible = false,
-                Width = new SizeDimension(ItemIDTextbox.CalculatedXOffset + ItemIDTextbox.OuterWidth - 4),
+                Width = new SizeDimension(ItemStackTextbox.CalculatedXOffset + ItemStackTextbox.OuterWidth - 4),
                 Height = new SizeDimension(InnerHeight - ItemNameTextbox.CalculatedYOffset - ItemNameTextbox.OuterHeight - 8),
                 XOffset = new SizeDimension(4f),
                 YOffset = new SizeDimension(ItemNameTextbox.CalculatedYOffset + ItemNameTextbox.OuterHeight + 4f),
@@ -145,7 +154,7 @@ namespace ItemModifier.UI
             {
                 Width = new SizeDimension(22f),
                 Height = new SizeDimension(22f),
-                XOffset = new SizeDimension(ItemIDTextbox.CalculatedXOffset + ItemIDTextbox.OuterWidth + 4f),
+                XOffset = new SizeDimension(ItemStackTextbox.CalculatedXOffset + ItemStackTextbox.OuterWidth + 4f),
                 YOffset = ItemNameTextbox.YOffset,
                 Parent = this
             };
@@ -156,6 +165,7 @@ namespace ItemModifier.UI
                 if (UseModifiedProperties.Check)
                 {
                     Main.item[itemIndex].CopyItemProperties(instance.MainUI.ModifyWindow.ModifiedItem);
+                    Main.item[itemIndex].stack = ItemStackTextbox.Value;
                 }
             };
 
@@ -166,6 +176,14 @@ namespace ItemModifier.UI
                 Parent = this
             };
             UseModifiedProperties.WhileMouseHover += (source, e) => instance.Tooltip = "Use Modified Properties";
+        }
+
+        protected override void UpdateSelf(GameTime gameTime)
+        {
+            if (UseModifiedProperties.Check)
+            {
+                ItemDisplay.Item = ModContent.GetInstance<ItemModifier>().MainUI.ModifyWindow.ModifiedItem;
+            }
         }
 
         private void UpdateTextboxes()

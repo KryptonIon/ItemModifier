@@ -2,8 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
-using static Terraria.Utils;
 using static ItemModifier.UIKit.Utils;
+using static Terraria.Utils;
 
 namespace ItemModifier.UIKit.Inputs
 {

@@ -19,8 +19,6 @@ namespace ItemModifier.UI
 
         internal UIImageButton NewItemWB;
 
-        internal UIImageButton DiscordLink;
-
         public override void OnInitialize()
         {
             ItemModifier instance = ModContent.GetInstance<ItemModifier>();

@@ -60,7 +60,10 @@ namespace ItemModifier.UIKit
         {
             titleHeight = 21f;
             Title = title;
-            if (hasCloseButton) CloseButton = new UIImageButton(Textures.X);
+            if (hasCloseButton)
+            {
+                CloseButton = new UIImageButton(Textures.X);
+            }
         }
 
         protected internal override void RecalculateSelf()

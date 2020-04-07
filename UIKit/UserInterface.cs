@@ -121,7 +121,7 @@ namespace ItemModifier.UIKit
                 rightDown = Main.mouseRight;
                 middleDown = Main.mouseMiddle;
                 backDown = Main.mouseXButton1;
-                forwardDown = Main.mouseXButton2; 
+                forwardDown = Main.mouseXButton2;
                 target = GetElementAt(MousePosition);
             }
             else
