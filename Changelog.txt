@@ -14,7 +14,7 @@ Added "Set" Command
 Added "Properties" Command
 Added "Settings" Command
 Added Utilities
-Added EnterWorld Message
+Added Greet Message
 
 
 
@@ -111,7 +111,7 @@ Changed Description
 
 Update 1.0.4, Mini Update 1
 Added ShowEWMessage Setting
-Added Another EnterWorld Message
+Added Another Greet Message
 Changed Description
 
 
@@ -122,7 +122,7 @@ Settings:
 Added ShowEWMessage Setting
 
 Others:
-Added Another Greet Message Message
+Added Another Greet Message
 
 Changes
 Changed Description
@@ -150,7 +150,7 @@ Added "Reset" Command
 Added Settings List
 Changed "Properties" Command trigger from "p" to "properties"
 Changed Description
-Fixed EnterWorld Message 2 being white
+Fixed 2nd Greet Message being white
 
 
 
@@ -173,7 +173,7 @@ Changed "Properties" Command trigger from "p" to "properties"
 Changed Description
 
 Fixes
-Fixed EnterWorld Message 2 being white
+Fixed 2nd Greet Message being white
 
 
 
@@ -206,7 +206,7 @@ Updated Parameters of "/gi params" and "/set params" (Sorry, forgot to do so las
 
 Update 1.0.7, Wiki Update
 Added Wiki Command
-Changed Enter World Messages
+Changed Greet Messages
 Properties will refer to TileBoost as both +Range and TileBoost
 Description will now contain changelog of current version
 Removed ShowPID Setting
@@ -222,7 +222,7 @@ Commands:
 Added Wiki Command
 
 Changes
-Changed Enter World Messages
+Changed Greet Messages
 Properties will refer to TileBoost as both +Range and TileBoost
 Description will now contain changelog of current version
 Removed ShowPID Setting
