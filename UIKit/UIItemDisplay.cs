@@ -54,9 +54,8 @@ namespace ItemModifier.UIKit
             Texture2D itemTexture = Main.itemTexture[Item.type];
             Rectangle frameRect = Main.itemAnimations[Item.type] == null ? itemTexture.Frame(1, 1, 0, 0) : Main.itemAnimations[Item.type].GetFrame(itemTexture);
             ItemSlot.GetItemLight(ref Item.color, ref Item.scale, Item, false);
-            scale = (frameRect.Width > (int)InnerWidth || frameRect.Height > (int)InnerWidth ? (InnerWidth / Math.Max(frameRect.Width, frameRect.Height)) : 1f) * Item.scale * Main.inventoryScale;
-            Vector2 size = frameRect.Size();
-            origin = size * 0.5f;
+            scale = (frameRect.Width > (int)InnerWidth || frameRect.Height > (int)InnerWidth ? (InnerWidth / Math.Max(frameRect.Width, frameRect.Height)) : 1f) * Item.scale;
+            origin = frameRect.Size() * 0.5f;
         }
     }
 }
