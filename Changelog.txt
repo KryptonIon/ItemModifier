@@ -348,14 +348,9 @@ Fixed SetItem $^
 
 
 Update 1.1.0 UI Update
-Added InfoColor Setting
-Added TextColor Setting
-Added ActiveTextColor Setting
-Added PositiveTextColor Setting
-Added NegativeTextColor Setting
 Added UI
 Added Mod Icon
-Changelog edited to have consitency
+Changelog edited to have consistency
 Removed ShowProperties Setting
 Removed ShowUnnecessary Setting
 Removed ShowEWMessage Setting
@@ -398,13 +393,6 @@ Removed Error Codes
 
 
 Additions
-Settings:
-Added InfoColor Setting
-Added TextColor Setting
-Added ActiveTextColor Setting
-Added PositiveTextColor Setting
-Added NegativeTextColor Setting
-
 Others:
 Added UI
 Added Mod Icon
@@ -448,9 +436,3 @@ Removed TileBoost Command
 Removed UseAnimation Command
 Removed UseTime Command
 Removed Error Codes
-
-
-
-
-Update Summary
-Removed all Commands and Settings, added UI in replacement for Commands, and changed mod description.
