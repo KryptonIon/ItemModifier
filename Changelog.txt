@@ -45,32 +45,6 @@ Added EnterWorld Message
 
 
 
-## Additions
-> Settings:
->* Added `ShowProperties` Setting
->* Added `ShowUnnecessary` Setting
->* Added `ShowPID` Setting
-
-> Commands:
->* Added `CreateTile` Command
->* Added `HealLife` Command
->* Added `HealMana` Command
->* Added `Shoot` Command
->* Added `ShootSpeed` Command
->* Added `UseTime` Command
->* Added `UseAnimation` Command
->* Added `GenerateItem` Command
->* Added `Set` Command
->* Added `Properties` Command
->* Added `Settings` Command
-
-> Others:
->* Added Utilities
->* Added EnterWorld Message
-
-
-
-
 
 
 
@@ -90,12 +64,6 @@ Changed Description
 
 
 
-## Changes
->* Changed Description
-
-
-
-
 
 
 
@@ -104,19 +72,13 @@ Changed Description
 
 
 Update 1.0.2, Hotfixes 2
-Changed Mod Homepage from Github Repository to Terraria Forums
+Changed the Mod Homepage from the Github Repository to the Terraria Community Forums post
 
 
 
 
 Changes
-Changed Mod Homepage from Github Repository to Terraria Forums
-
-
-
-
-## Changes
->* Changed Mod Homepage from Github Repository to Terraria Forums
+Changed the Mod Homepage from the Github Repository to the Terraria Community Forums post
 
 
 
@@ -136,12 +98,6 @@ Changed Description
 
 Changes
 Changed Description
-
-
-
-
-## Changes
->* Changed Description
 
 
 
@@ -170,19 +126,6 @@ Added Another EnterWorld Message
 
 Changes
 Changed Description
-
-
-
-
-## Additions
-> Settings:
->* Added `ShowEWMessage` Setting
-
-> Others:
->* Added Another EnterWorld Message
-
-## Changes
->* Changed Description
 
 
 
@@ -235,29 +178,6 @@ Fixed EnterWorld Message 2 being white
 
 
 
-## Additions
-> Commands:
->* Added `TileBoost(+Range)` Command
->* Added `Pickaxe Power` Command
->* Added `Axe Power` Command
->* Added `Hammer Power` Command
->* Added `Knockback` Command
->* Added `Damage` Command
->* Added `Critical Strike Chance` Command
->* Added `AutoReuse` Command
->* Added `Reset` Command
->* Added Settings List(/settings)
-
-## Changes
->* Changed `Properties` Command trigger from `p` to `properties`
->* Changed Description
-
-## Fixes
->* Fixed EnterWorld Message 2 being white
-
-
-
-
 
 
 
@@ -273,12 +193,6 @@ Updated Parameters of "/gi params" and "/set params" (Sorry, forgot to do so las
 
 Changes
 Updated Parameters of "/gi params" and "/set params" (Sorry, forgot to do so last update)
-
-
-
-
-## Changes
->* Changed Parameters of `/gi params` and `/set params` (Sorry, forgot to do so last update)
 
 
 
@@ -317,24 +231,6 @@ Fixes
 Fixed Properties not having colons when Requesting Properties
 Fixed Properties not having colons when using Properties Command
 Fixed TileBoost not being properly Capitalized when Requesting properties
-
-
-
-
-## Additions
-> Commands:
->* Added `Wiki` Command
-
-## Changes
->* Changed Enter World Messages
->* Properties will refer to TileBoost as both +Range and TileBoost
->* Description will now contain changelog of current version
->* Removed ShowPID Setting
-
-## Fixes
->* Fixed Properties not having colons when Requesting Properties
->* Fixed Properties not having colons when using Properties Command
->* Fixed TileBoost not being properly Capitalized when Requesting Properties 
 
 
 
@@ -423,49 +319,6 @@ Fixed Errors having Reply Color
 
 
 
-## Additions
-> Settings:
->* Added `AlwaysUseID` Setting
->* Added `ShowResultList` Setting
->* Added `GetRandomItem` Setting
->* Added `ShowMaxStack` Setting
-
-> Commands:
->* Added `SetItem` Command
->* Added `ID` Command
->* Added `Buff` Command
->* Added `BuffTime` Command
->* Added `Stack` Command
->* Added `Potion` Command
->* Added `Consumable` Command
->* Added `MaxStack` Command
-
-> Others:
->* Added new error message(0 shootspeed)(/shootspeed)
->* Added Error Codes(Current Code Count: 5)
->* Added Command Aliases
-
-## Changes
->* Changed Changelog Format
->* Changed GenerateItem Command behavior
->* Changed (most)Error Messages
->* Changed All Command Example Usages, Fields are now indicated with Brackets[] instead of Angular Brackets<>, Notes are now indicated with Parentheses() instead of Brackets[]
->* Changed `Settings` Command trigger from `/setting` to `/settings`
->* The ShootSpeed and Knockback Modifier now uses Floating-point numbers(float) instead of Integers(int), which means decimals can now be used
->* Changed Settings Parameter from `/settings settings` to `/settings list`
->* Settings Success Message Changed from `Success! {SettingName} is now {SettingValue}` to `{SettingName} set to {SettingValue}`
->* Killed("Changed") `Settings` Command's AutoCorrect
->* (Internal)CSProj file is now removed from the mod(can still be acquired via Github)
->* (Internal)Unified modification processes(fixes some inconsistency between commands eg `/set` and `/shoot`).
-
-## Fixes
->* Fixed Damage Property showing unnecessarily
->* Fixed Shoot Command saying tile count rather than projectile count
->* Fixed Errors having Reply Color
-
-
-
-
 
 
 
@@ -483,13 +336,6 @@ Fixed SetItem $^
 Fixes
 Fixed HealLife parsing
 Fixed SetItem $^
-
-
-
-
-## Fixes
->* Fixed HealLife parsing
->* Fixed SetItem $^
 
 
 
@@ -602,64 +448,6 @@ Removed TileBoost Command
 Removed UseAnimation Command
 Removed UseTime Command
 Removed Error Codes
-
-
-
-
-## Additions
-> Settings:
->* Added InfoColor Setting
->* Added TextColor Setting
->* Added ActiveTextColor Setting
->* Added PositiveTextColor Setting
->* Added NegativeTextColor Setting
-
-> UI:
->* Added UI
-
-> Others:
->* ModLoader now must be 0.11.5 or above to use
->* Mod Now has an Icon
-
-## Changes
->* Changelog edited to have consitency
->* Removed ShowProperties Setting
->* Removed ShowUnnecessary Setting
->* Removed ShowEWMessage Setting
->* Removed AlwaysUseID Setting
->* Removed ShowResultList Setting
->* Removed GetRandomItem Setting
->* Removed ShowMaxStack Setting
->* Removed GenerateItem Command
->* Removed ID Command
->* Removed Properties Command
->* Removed Reset Command
->* Removed Set Command
->* Removed SetItem Command
->* Removed Setting Command
->* Removed Wiki Command
->* Removed AutoReuse Command
->* Removed Axe Command
->* Removed BuffID Command
->* Removed BuffTime Command
->* Removed Consumable Command
->* Removed CreateTile Command
->* Removed Critical Command
->* Removed Damage Command
->* Removed Hammer Command
->* Removed HealLife Command
->* Removed HealMana Command
->* Removed Knockback Command
->* Removed MaxStack Command
->* Removed Pick Command
->* Removed Potion Command
->* Removed Shoot Command
->* Removed ShootSpeed Command
->* Removed Stack Command
->* Removed TileBoost Command
->* Removed UseAnimation Command
->* Removed UseTime Command
->* Removed Error Codes
 
 
 
