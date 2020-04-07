@@ -40,7 +40,7 @@ Added "Settings" Command
 
 Others:
 Added Utilities
-Added EnterWorld Message
+Added Greet Message
 
 
 
@@ -122,7 +122,7 @@ Settings:
 Added ShowEWMessage Setting
 
 Others:
-Added Another EnterWorld Message
+Added Another Greet Message Message
 
 Changes
 Changed Description
