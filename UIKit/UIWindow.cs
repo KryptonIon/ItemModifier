@@ -24,7 +24,7 @@ namespace ItemModifier.UIKit
 
         private Vector2 localDragPosition;
 
-        protected UIImageButton CloseButton;
+        protected UIImageButton CloseButton { get; private set; }
 
         public float TitleX { get; protected set; }
 
