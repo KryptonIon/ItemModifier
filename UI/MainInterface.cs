@@ -61,7 +61,7 @@ namespace ItemModifier.UI
             };
             WikiWB.YOffset = new SizeDimension(NewItemWB.CalculatedYOffset - WikiWB.OuterHeight - 12f);
             WikiWB.ParentUI = this;
-            WikiWB.OnLeftClick += (source, e) => new Thread(() => Process.Start("https://kryptonion.github.io/ItemModifier/")).Start();
+            WikiWB.OnLeftClick += (source, e) => Process.Start("https://terrariamods.gamepedia.com/Item_Modifier");
             WikiWB.WhileMouseHover += (source, e) => instance.Tooltip = "Open Wiki";
         }
     }
