@@ -746,7 +746,7 @@ namespace ItemModifier.UIKit
 
         public virtual void SelectRadio(UIRadioButton radio)
         {
-            radio.Selected = true;
+            radio.Selected = !radio.Selected;
             for (int i = 0; i < Children.Count; i++)
             {
                 if (Children[i] is UIRadioButton child && child != radio)

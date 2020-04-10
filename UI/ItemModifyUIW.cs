@@ -448,15 +448,45 @@ namespace ItemModifier.UI
 
             UseStyle = new UIContainer();
             RSwing = new UIRadioButton("Swing") { Parent = UseStyle };
-            RSwing.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.useStyle = 1;
+            RSwing.OnValueChanged += (source, e) =>
+            {
+                if (e)
+                {
+                    Main.LocalPlayer.HeldItem.useStyle = 1;
+                }
+            };
             RDrink = new UIRadioButton("Drink") { Parent = UseStyle };
-            RDrink.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.useStyle = 2;
+            RDrink.OnValueChanged += (source, e) =>
+            {
+                if (e)
+                {
+                    Main.LocalPlayer.HeldItem.useStyle = 2;
+                }
+            };
             RStab = new UIRadioButton("Stab") { Parent = UseStyle };
-            RStab.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.useStyle = 3;
+            RStab.OnValueChanged += (source, e) =>
+            {
+                if (e)
+                {
+                    Main.LocalPlayer.HeldItem.useStyle = 3;
+                }
+            };
             RAboveHead = new UIRadioButton("Above Head") { Parent = UseStyle };
-            RAboveHead.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.useStyle = 4;
+            RAboveHead.OnValueChanged += (source, e) =>
+            {
+                if (e)
+                {
+                    Main.LocalPlayer.HeldItem.useStyle = 4;
+                }
+            };
             RHeld = new UIRadioButton("Held") { Parent = UseStyle };
-            RHeld.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.useStyle = 5;
+            RHeld.OnValueChanged += (source, e) =>
+            {
+                if (e)
+                {
+                    Main.LocalPlayer.HeldItem.useStyle = 5;
+                }
+            };
             float uStyleWidth = 0f;
             for (int i = 0; i < UseStyle.ChildrenCount; i++)
             {

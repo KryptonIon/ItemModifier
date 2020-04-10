@@ -71,7 +71,6 @@ namespace ItemModifier.UIKit.Inputs
         public override void LeftClick(UIMouseEventArgs e)
         {
             Parent?.SelectRadio(this);
-            Selected = !Selected;
             Main.PlaySound(SoundID.MenuTick);
             base.LeftClick(e);
         }
