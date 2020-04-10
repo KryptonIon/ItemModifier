@@ -436,3 +436,22 @@ Removed TileBoost Command
 Removed UseAnimation Command
 Removed UseTime Command
 Removed Error Codes
+
+
+
+
+
+
+
+
+
+
+
+Update 1.1.1 Hotfixes 6
+Fixed Mod Crashing during Server Loading
+
+
+
+
+Fixes
+Fixed Mod Crashing during Server Loading

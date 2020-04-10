@@ -245,7 +245,10 @@ namespace ItemModifier
 
         public override void Load()
         {
-            Textures.Load();
+            if (!Main.dedServ)
+            {
+                Textures.Load();
+            }
         }
 
         public override void PostSetupContent()
