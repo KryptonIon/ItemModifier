@@ -5,7 +5,7 @@ namespace ItemModifier.UIKit.Inputs
 {
     public class UIBool : UIText, IInput<bool>
     {
-        public event UIEventHandler<bool> OnValueChanged;
+        public event UIEventHandler<EventArgs<bool>> OnValueChanged;
 
         private bool _value;
 
@@ -22,7 +22,7 @@ namespace ItemModifier.UIKit.Inputs
                 {
                     _value = value;
                     Text = Value ? TrueText : FalseText;
-                    OnValueChanged?.Invoke(this, Value);
+                    OnValueChanged?.Invoke(this, new EventArgs<bool>(Value));
                 }
             }
         }

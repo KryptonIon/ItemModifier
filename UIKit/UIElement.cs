@@ -1,5 +1,4 @@
-﻿using ItemModifier.UIKit.Inputs;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections;
 using System.Collections.Generic;
@@ -62,19 +61,21 @@ namespace ItemModifier.UIKit
 
         public event UIEventHandler<UIScrollWheelEventArgs> OnScrollWheel;
 
-        public event UIEventHandler<bool> OnVisibilityChanged;
+        public event UIEventHandler<EventArgs<bool>> OnVisibilityChanged;
 
         public event UIEventHandler OnFocused;
 
         public event UIEventHandler OnUnfocused;
 
-        public event UIEventHandler<UIElement> OnChildAdded;
+        public event UIEventHandler<UIEventArgs> OnChildAdded;
+
+        public event UIEventHandler<UIEventArgs> OnChildRemoved;
 
         protected List<UIElement> Children { get; } = new List<UIElement>();
 
         private UIElement parent;
 
-        public UIElement Parent
+        public virtual UIElement Parent
         {
             get
             {
@@ -83,13 +84,17 @@ namespace ItemModifier.UIKit
 
             set
             {
-                Parent?.Children.Remove(this);
+                if (Parent != null)
+                {
+                    Parent.Children.Remove(this);
+                    Parent.OnChildRemoved?.Invoke(Parent, new UIEventArgs(this));
+                }
                 parent = value;
                 if (Parent != null)
                 {
                     Parent.Children.Add(this);
                     parentUI = Parent.ParentUI;
-                    Parent.OnChildAdded?.Invoke(Parent, this);
+                    Parent.OnChildAdded?.Invoke(Parent, new UIEventArgs(this));
                 }
                 Recalculate();
             }
@@ -311,7 +316,7 @@ namespace ItemModifier.UIKit
                 if (Visible != value)
                 {
                     visible = value;
-                    OnVisibilityChanged?.Invoke(this, Visible);
+                    OnVisibilityChanged?.Invoke(this, new EventArgs<bool>(Visible));
                 }
             }
         }
@@ -742,29 +747,6 @@ namespace ItemModifier.UIKit
         public virtual void OnInitialize()
         {
 
-        }
-
-        public virtual void SelectRadio(UIRadioButton radio)
-        {
-            radio.Selected = !radio.Selected;
-            for (int i = 0; i < Children.Count; i++)
-            {
-                if (Children[i] is UIRadioButton child && child != radio)
-                {
-                    child.Selected = false;
-                }
-            }
-        }
-
-        public virtual void DeselectAllRadio()
-        {
-            for (int i = 0; i < Children.Count; i++)
-            {
-                if (Children[i] is UIRadioButton child)
-                {
-                    child.Selected = false;
-                }
-            }
         }
 
         public IEnumerator<UIElement> GetEnumerator()

@@ -2,6 +2,7 @@
 using ItemModifier.UIKit.Inputs;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 using static ItemModifier.UIKit.Utils;
 
@@ -52,8 +53,9 @@ namespace ItemModifier.UI
             ItemNameTextbox.WhileMouseHover += (source, e) => instance.Tooltip = "Name";
             ItemNameTextbox.OnFocused += (source) => Matches.Visible = true;
             ItemNameTextbox.OnUnfocused += (source) => Matches.Visible = false;
-            ItemNameTextbox.OnTextChanged += (source, value) =>
+            ItemNameTextbox.OnTextChanged += (source, e) =>
             {
+                string value = e.Value;
                 if (string.IsNullOrEmpty(value))
                 {
                     Matches.Visible = false;
@@ -72,7 +74,7 @@ namespace ItemModifier.UI
                                 YOffset = new SizeDimension(36f * k),
                                 Parent = Matches
                             };
-                            item.OnLeftClick += (source2, e) =>
+                            item.OnLeftClick += (source2, e2) =>
                             {
                                 if (item.Item.type != ItemIDTextbox.Value)
                                 {
@@ -161,11 +163,17 @@ namespace ItemModifier.UI
             Generate.WhileMouseHover += (source, e) => instance.Tooltip = "New Item";
             Generate.OnLeftClick += (source, e) =>
             {
-                int itemIndex = Item.NewItem(Main.LocalPlayer.getRect(), ItemIDTextbox.Value, 1, true);
+                int itemIndex = Item.NewItem(Main.LocalPlayer.position, ItemIDTextbox.Value, ItemStackTextbox.Value, noGrabDelay: true);
                 if (UseModifiedProperties.Check)
                 {
                     Main.item[itemIndex].CopyItemProperties(instance.MainUI.ModifyWindow.ModifiedItem);
-                    Main.item[itemIndex].stack = ItemStackTextbox.Value;
+                }
+                if (Main.netMode == NetmodeID.MultiplayerClient)
+                {
+                    Item defaultItem = new Item();
+                    defaultItem.SetDefaults(ItemIDTextbox.Value);
+
+                    //NetMessage.SendData(MessageID.ItemTweaker, )
                 }
             };
 

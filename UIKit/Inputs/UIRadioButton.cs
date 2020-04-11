@@ -9,7 +9,7 @@ namespace ItemModifier.UIKit.Inputs
 {
     public class UIRadioButton : UIElement, IInput<bool>
     {
-        public event UIEventHandler<bool> OnValueChanged;
+        public event UIEventHandler<EventArgs<bool>> OnValueChanged;
 
         private string label;
 
@@ -43,7 +43,7 @@ namespace ItemModifier.UIKit.Inputs
                 if (selected != value)
                 {
                     selected = value;
-                    OnValueChanged?.Invoke(this, Selected);
+                    OnValueChanged?.Invoke(this, new EventArgs<bool>(Selected));
                 }
             }
         }
@@ -70,7 +70,7 @@ namespace ItemModifier.UIKit.Inputs
 
         public override void LeftClick(UIMouseEventArgs e)
         {
-            Parent?.SelectRadio(this);
+            Selected = !Selected;
             Main.PlaySound(SoundID.MenuTick);
             base.LeftClick(e);
         }

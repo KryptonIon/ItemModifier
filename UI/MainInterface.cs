@@ -1,7 +1,6 @@
 ﻿using ItemModifier.UIKit;
 using ItemModifier.UIKit.Inputs;
 using System.Diagnostics;
-using System.Threading;
 using Terraria;
 using Terraria.ModLoader;
 

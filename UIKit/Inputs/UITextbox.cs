@@ -12,9 +12,9 @@ namespace ItemModifier.UIKit.Inputs
 {
     public class UITextbox : UIElement, IInput<string>
     {
-        public event UIEventHandler<string> OnTextChanged;
+        public event UIEventHandler<EventArgs<string>> OnTextChanged;
 
-        event UIEventHandler<string> IInput<string>.OnValueChanged
+        event UIEventHandler<EventArgs<string>> IInput<string>.OnValueChanged
         {
             add
             {
@@ -27,7 +27,7 @@ namespace ItemModifier.UIKit.Inputs
             }
         }
 
-        public event UIEventHandler<string> OnTextChangedByUser;
+        public event UIEventHandler<EventArgs<string>> OnTextChangedByUser;
 
         public Color TextColor { get; set; } = Color.Black;
 
@@ -78,7 +78,7 @@ namespace ItemModifier.UIKit.Inputs
                 if (text != value)
                 {
                     DrawText = value;
-                    OnTextChanged?.Invoke(this, Text);
+                    OnTextChanged?.Invoke(this, new EventArgs<string>(Text));
                 }
             }
         }
@@ -201,7 +201,7 @@ namespace ItemModifier.UIKit.Inputs
                         CaretPosition = newText.Length;
                         Text = newText;
                     }
-                    OnTextChangedByUser?.Invoke(this, Text);
+                    OnTextChangedByUser?.Invoke(this, new EventArgs<string>(Text));
                 }
                 if (Main.keyState.IsKeyDown(Keys.Left))
                 {

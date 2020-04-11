@@ -1,10 +1,11 @@
-﻿using ItemModifier.UIKit.Inputs;
+﻿using ItemModifier.UIKit;
+using ItemModifier.UIKit.Inputs;
 
 namespace ItemModifier.UI
 {
     public class UIFloatTextbox : UITextbox, IInput<float>
     {
-        public event UIEventHandler<float> OnValueChanged;
+        public event UIEventHandler<EventArgs<float>> OnValueChanged;
 
         private float _value;
 
@@ -21,7 +22,7 @@ namespace ItemModifier.UI
                 {
                     _value = value > MaxValue ? MaxValue : value < MinValue ? MinValue : value;
                     DrawText = Value.ToString();
-                    OnValueChanged?.Invoke(this, Value);
+                    OnValueChanged?.Invoke(this, new EventArgs<float>(Value));
                 }
             }
         }
@@ -60,40 +61,41 @@ namespace ItemModifier.UI
             };
             OnTextChanged += (source, e) =>
             {
+                string value = e.Value;
                 string newText = "";
-                if (string.IsNullOrEmpty(e))
+                if (string.IsNullOrEmpty(e.Value))
                 {
                     return;
                 }
-                if (char.IsDigit(e[0]) || e[0] == '-')
+                if (char.IsDigit(value[0]) || value[0] == '-')
                 {
-                    newText += e[0];
+                    newText += value[0];
                 }
                 int i = 1;
                 bool dot = false;
                 while (i < CaretPosition)
                 {
-                    if (char.IsDigit(e[i]))
+                    if (char.IsDigit(value[i]))
                     {
-                        newText += e[i];
+                        newText += value[i];
                     }
-                    else if (!dot && e[i] == '.')
+                    else if (!dot && value[i] == '.')
                     {
-                        newText += e[i];
+                        newText += value[i];
                         dot = true;
                     }
                     i++;
                 }
                 CaretPosition = newText.Length;
-                while (i < e.Length)
+                while (i < value.Length)
                 {
-                    if (char.IsDigit(e[i]))
+                    if (char.IsDigit(value[i]))
                     {
-                        newText += e[i];
+                        newText += value[i];
                     }
-                    else if (!dot && e[i] == '.')
+                    else if (!dot && value[i] == '.')
                     {
-                        newText += e[i];
+                        newText += value[i];
                         dot = true;
                     }
                     i++;

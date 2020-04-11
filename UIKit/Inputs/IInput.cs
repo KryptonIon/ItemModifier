@@ -4,7 +4,7 @@ namespace ItemModifier.UIKit.Inputs
 {
     public interface IInput<T>
     {
-        event UIEventHandler<T> OnValueChanged;
+        event UIEventHandler<EventArgs<T>> OnValueChanged;
 
         T Value { get; set; }
     }
