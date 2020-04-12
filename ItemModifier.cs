@@ -471,7 +471,7 @@ namespace ItemModifier
                     }
                     if (flags2[7])
                     {
-                        writer.Write(item.crit);
+                        writer.Write((ushort)item.crit);
                     }
                 }
                 if (flags1[1])
@@ -503,11 +503,11 @@ namespace ItemModifier
                     }
                     if (flags3[6])
                     {
-                        writer.Write(item.healLife);
+                        writer.Write((ushort)item.healLife);
                     }
                     if (flags3[7])
                     {
-                        writer.Write(item.healMana);
+                        writer.Write((ushort)item.healMana);
                     }
                 }
                 if (flags1[2])
@@ -515,15 +515,15 @@ namespace ItemModifier
                     writer.Write(flags4);
                     if (flags4[0])
                     {
-                        writer.Write(item.axe);
+                        writer.Write((ushort)item.axe);
                     }
                     if (flags4[1])
                     {
-                        writer.Write(item.pick);
+                        writer.Write((ushort)item.pick);
                     }
                     if (flags4[2])
                     {
-                        writer.Write(item.hammer);
+                        writer.Write((ushort)item.hammer);
                     }
                     if (flags4[3])
                     {
@@ -601,7 +601,7 @@ namespace ItemModifier
                 }
                 if (flags2[7])
                 {
-                    item.crit = reader.ReadInt32();
+                    item.crit = reader.ReadUInt16();
                 }
             }
             if (flags1[1])
@@ -633,11 +633,11 @@ namespace ItemModifier
                 }
                 if (flags3[6])
                 {
-                    item.healLife = reader.ReadInt32();
+                    item.healLife = reader.ReadUInt16();
                 }
                 if (flags3[7])
                 {
-                    item.healMana = reader.ReadInt32();
+                    item.healMana = reader.ReadUInt16();
                 }
             }
             if (flags1[2])
@@ -645,11 +645,11 @@ namespace ItemModifier
                 BitsByte flags4 = reader.ReadByte();
                 if (flags4[0])
                 {
-                    item.axe = reader.ReadInt32();
+                    item.axe = reader.ReadUInt16();
                 }
                 if (flags4[1])
                 {
-                    item.pick = reader.ReadInt32();
+                    item.pick = reader.ReadUInt16();
                 }
                 if (flags4[2])
                 {
@@ -657,7 +657,7 @@ namespace ItemModifier
                 }
                 if (flags4[3])
                 {
-                    item.maxStack = reader.ReadInt32();
+                    item.maxStack = reader.ReadUInt16();
                 }
                 if (flags4[4])
                 {
