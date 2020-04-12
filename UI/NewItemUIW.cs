@@ -163,17 +163,19 @@ namespace ItemModifier.UI
             Generate.WhileMouseHover += (source, e) => instance.Tooltip = "New Item";
             Generate.OnLeftClick += (source, e) =>
             {
-                int itemIndex = Item.NewItem(Main.LocalPlayer.position, ItemIDTextbox.Value, ItemStackTextbox.Value, noGrabDelay: true);
-                if (UseModifiedProperties.Check)
+                if (Main.mouseItem.IsAir)
                 {
-                    Main.item[itemIndex].CopyItemProperties(instance.MainUI.ModifyWindow.ModifiedItem);
+                    Main.mouseItem = new Item();
+                    Main.mouseItem.SetDefaults(ItemIDTextbox.Value);
+                    Main.mouseItem.stack = ItemStackTextbox.Value;
+                    if (UseModifiedProperties.Check)
+                    {
+                        Main.mouseItem.CopyItemProperties(instance.MainUI.ModifyWindow.ModifiedItem);
+                    }
                 }
-                if (Main.netMode == NetmodeID.MultiplayerClient)
+                else
                 {
-                    Item defaultItem = new Item();
-                    defaultItem.SetDefaults(ItemIDTextbox.Value);
-
-                    //NetMessage.SendData(MessageID.ItemTweaker, )
+                    Main.NewText("Can't place item on mouse", new Color(255, 0, 0));
                 }
             };
 
@@ -184,15 +186,31 @@ namespace ItemModifier.UI
                 Parent = this
             };
             UseModifiedProperties.WhileMouseHover += (source, e) => instance.Tooltip = "Use Modified Properties";
+            UseModifiedProperties.OnValueChanged += (source, e) =>
+            {
+                if(!e.Value)
+                {
+                    ItemDisplay.Item = new Item();
+                    ItemDisplay.Item.SetDefaults(ItemIDTextbox.Value);
+                }
+            };
         }
 
         protected override void UpdateSelf(GameTime gameTime)
         {
-            if (UseModifiedProperties.Check)
+            if (Visible)
             {
-                float scale = ItemDisplay.Item.scale;
-                ItemDisplay.Item.CopyItemProperties(ModContent.GetInstance<ItemModifier>().MainUI.ModifyWindow.ModifiedItem);
-                ItemDisplay.Item.scale = scale;
+                if(!Main.playerInventory)
+                {
+                    Visible = false;
+                    return;
+                }
+                if (UseModifiedProperties.Check)
+                {
+                    float scale = ItemDisplay.Item.scale;
+                    ItemDisplay.Item.CopyItemProperties(ModContent.GetInstance<ItemModifier>().MainUI.ModifyWindow.ModifiedItem);
+                    ItemDisplay.Item.scale = scale;
+                }
             }
         }
 

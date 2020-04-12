@@ -340,7 +340,7 @@ namespace ItemModifier.UI
             Accessory.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.accessory = DefaultItem.accessory;
             PAccessory = new UICategory.UIProperty(Textures.Accessory, "Accessory:", Accessory);
 
-            Damage = new UIIntTextbox(minValue: -1);
+            Damage = new UIIntTextbox(-1);
             Damage.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.damage = e.Value;
             Damage.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.damage = DefaultItem.damage;
             PDamage = new UICategory.UIProperty(Textures.Damage, "Damage:", Damage);

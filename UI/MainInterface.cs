@@ -51,7 +51,14 @@ namespace ItemModifier.UI
             };
             NewItemWB.YOffset = new SizeDimension(ModifyWB.CalculatedYOffset - NewItemWB.OuterHeight - 5f);
             NewItemWB.ParentUI = this;
-            NewItemWB.OnLeftClick += (source, e) => NewItemWindow.Visible = !NewItemWindow.Visible;
+            NewItemWB.OnLeftClick += (source, e) =>
+            {
+                NewItemWindow.Visible = !NewItemWindow.Visible;
+                if (NewItemWindow.Visible)
+                {
+                    Main.playerInventory = true;
+                }
+            };
             NewItemWB.WhileMouseHover += (source, e) => instance.Tooltip = "New Item";
 
             WikiWB = new UIImageButton(ItemModifier.Textures.Wiki)
