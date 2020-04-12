@@ -653,11 +653,11 @@ namespace ItemModifier
                 }
                 if (flags4[2])
                 {
-                    item.hammer = reader.ReadInt32();
+                    item.hammer = reader.ReadUInt16();
                 }
                 if (flags4[3])
                 {
-                    item.maxStack = reader.ReadUInt16();
+                    item.maxStack = reader.ReadInt32();
                 }
                 if (flags4[4])
                 {

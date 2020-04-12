@@ -27,9 +27,36 @@ namespace ItemModifier.UI
             }
         }
 
-        public float MaxValue { get; set; }
+        private float maxValue;
 
-        public float MinValue { get; set; }
+        public float MaxValue
+        {
+            get
+            {
+                return maxValue;
+            }
+            set
+            {
+                maxValue = value;
+                Value = Value;
+            }
+        }
+
+        private float minValue;
+
+        public float MinValue
+        {
+            get
+            {
+                return minValue;
+            }
+
+            set
+            {
+                minValue = value;
+                Value = Value;
+            }
+        }
 
         public UIFloatTextbox(float maxValue = float.MaxValue, float minValue = float.MinValue) : base(11)
         {

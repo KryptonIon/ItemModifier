@@ -27,9 +27,36 @@ namespace ItemModifier.UI
             }
         }
 
-        public int MaxValue { get; set; }
+        private int maxValue;
 
-        public int MinValue { get; set; }
+        public int MaxValue
+        {
+            get
+            {
+                return maxValue;
+            }
+            set
+            {
+                maxValue = value;
+                Value = Value;
+            }
+        }
+
+        private int minValue;
+
+        public int MinValue
+        {
+            get
+            {
+                return minValue;
+            }
+
+            set
+            {
+                minValue = value;
+                Value = Value;
+            }
+        }
 
         public UIIntTextbox(int minValue = int.MinValue, int maxValue = int.MaxValue) : base(11)
         {

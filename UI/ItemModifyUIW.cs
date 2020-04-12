@@ -412,26 +412,12 @@ namespace ItemModifier.UI
             PHammerPower = new UICategory.UIProperty(Textures.HammerPower, "Hammer Power:", HammerPower);
 
             Stack = limited ? new UIIntTextbox(1) : new UIIntTextbox();
-            Stack.OnValueChanged += (source, e) =>
-            {
-                Main.LocalPlayer.HeldItem.stack = e.Value;
-                if (ItemModifierConfig.Instance.Limited && MaxStack.Value < e.Value)
-                {
-                    MaxStack.MinValue = e.Value;
-                }
-            };
+            Stack.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.stack = e.Value;
             Stack.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.stack = DefaultItem.stack;
             PStack = new UICategory.UIProperty(Textures.Stack, "Amount:", Stack);
 
             MaxStack = limited ? new UIIntTextbox(1) : new UIIntTextbox();
-            MaxStack.OnValueChanged += (source, e) =>
-            {
-                Main.LocalPlayer.HeldItem.maxStack = e.Value;
-                if (ItemModifierConfig.Instance.Limited && e.Value < Stack.Value)
-                {
-                    e.Value = Stack.Value;
-                }
-            };
+            MaxStack.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.maxStack = e.Value;
             MaxStack.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.maxStack = DefaultItem.maxStack;
             PMaxStack = new UICategory.UIProperty(Textures.MaxStack, "Max Stack:", MaxStack);
 
