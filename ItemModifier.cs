@@ -689,5 +689,11 @@ namespace ItemModifier
                 }
             }
         }
+
+        public override void PreSaveAndQuit()
+        {
+            MainUI.ModifyWindow.Visible = false;
+            MainUI.NewItemWindow.Visible = false;
+        }
     }
 }
