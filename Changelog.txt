@@ -455,3 +455,31 @@ Fixed Mod Crashing during Server Loading
 
 Fixes
 Fixed Mod Crashing during Server Loading
+
+
+
+
+
+
+
+
+
+
+
+Update 1.1.2 Hotfixes 7
+Added Multiplayer Compatibility
+Added "Limited" Setting in Config
+The UI Windows are now closed when exiting world
+Added Range property is now limited to -128 - 127
+Crit Chance property is now limited to 0 - 65535
+HP Healed property is now limited to 0 - 65535
+Mana Healed property is now limited to 0 - 65535
+Axe Power property is now limited to 0 - 65535
+Pickaxe Power property is now limited to 0 - 65535
+Hammer Power property is now limited to 0 - 65535
+NewItem is now placed on the cursor instead of dropped
+NewItemUI now requires Inventory to be open
+Mod Source Files are now omitted from the Mod
+Fixed Radio Button Selection
+Fixed NewItem Wrong Knockback Issue
+Fixed NewItemUI ItemDisplay retaining values after UseModifiedProperties has been ticked off
