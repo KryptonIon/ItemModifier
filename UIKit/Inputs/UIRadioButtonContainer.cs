@@ -8,11 +8,19 @@ namespace ItemModifier.UIKit.Inputs
 
         public event UIEventHandler<EventArgs<UIRadioButton>> OnDeselected;
 
-        public bool AlwaysSelected { get; set; } = true;
+        public bool AlwaysSelected { get; set; }
 
         public bool Multiselect { get; set; }
 
-        public List<UIRadioButton> Selected { get; } = new List<UIRadioButton>();
+        private List<UIRadioButton> selected = new List<UIRadioButton>();
+
+        public UIRadioButton[] Selected
+        {
+            get
+            {
+                return selected.ToArray();
+            }
+        }
 
         protected List<UIRadioButton> Choices { get; } = new List<UIRadioButton>();
 
@@ -48,15 +56,15 @@ namespace ItemModifier.UIKit.Inputs
             if (e.Value)
             {
                 UIRadioButton radio = (UIRadioButton)source;
-                Selected.Add(radio);
+                selected.Add(radio);
                 OnSelected?.Invoke(this, new EventArgs<UIRadioButton>(radio));
                 if (!Multiselect)
                 {
-                    for (int i = 0; i < Selected.Count; i++)
+                    for (int i = 0; i < selected.Count; i++)
                     {
-                        if (Selected[i] != radio)
+                        if (selected[i] != radio)
                         {
-                            Selected[i].Selected = false;
+                            selected[i].Selected = false;
                         }
                     }
                 }
@@ -64,9 +72,9 @@ namespace ItemModifier.UIKit.Inputs
             else
             {
                 UIRadioButton radio = (UIRadioButton)source;
-                Selected.Remove(radio);
+                selected.Remove(radio);
                 OnDeselected?.Invoke(this, new EventArgs<UIRadioButton>(radio));
-                if (AlwaysSelected && Selected.Count < 1)
+                if (AlwaysSelected && selected.Count < 1)
                 {
                     radio.Selected = true;
                     e.Value = true;

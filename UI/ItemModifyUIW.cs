@@ -499,6 +499,13 @@ namespace ItemModifier.UI
             }
             UseStyle.Width = new SizeDimension(uStyleWidth);
             UseStyle.Height = new SizeDimension(RSwing.InnerHeight * UseStyle.ChildrenCount);
+            UseStyle.OnDeselected += (source, e) =>
+            {
+                if (UseStyle.Selected.Length < 1)
+                {
+                    Main.LocalPlayer.HeldItem.useStyle = 0;
+                }
+            };
             PUseStyle = new UICategory.UIProperty(Textures.UseStyle, "Use Style:", UseStyle);
 
             ToggleLiveSync = new UIImageButton(Textures.Sync, false, new Color(20, 255, 20))
