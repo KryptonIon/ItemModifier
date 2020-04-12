@@ -1,5 +1,6 @@
 ﻿using ItemModifier.UI;
 using System.ComponentModel;
+using Terraria;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
 
@@ -24,17 +25,20 @@ namespace ItemModifier
 
         public override void OnChanged()
         {
-            ItemModifier instance = ModContent.GetInstance<ItemModifier>();
-            ItemModifyUIW window = instance.MainUI?.ModifyWindow;
-            if (window == null)
+            if (!Main.gameMenu)
             {
-                return;
+                ItemModifier instance = ModContent.GetInstance<ItemModifier>();
+                ItemModifyUIW window = instance.MainUI?.ModifyWindow;
+                if (window == null)
+                {
+                    return;
+                }
+                window.RemoveAllChildren();
+                window.Initialize();
+                window.CategoryIndex = window.CategoryIndex;
+                window.Visible = window.Visible;
+                window.LiveSync = window.LiveSync;
             }
-            window.RemoveAllChildren();
-            window.Initialize();
-            window.CategoryIndex = window.CategoryIndex;
-            window.Visible = window.Visible;
-            window.LiveSync = window.LiveSync;
         }
     }
 }
