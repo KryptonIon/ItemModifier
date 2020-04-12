@@ -1,6 +1,8 @@
-﻿using ItemModifier.UI;
+﻿using ItemModifier.Extensions;
+using ItemModifier.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Terraria;
@@ -457,26 +459,7 @@ namespace ItemModifier
                     }
                     if (flags2[4])
                     {
-                        if (item.melee)
-                        {
-                            writer.Write((byte)0);
-                        }
-                        else if (item.magic)
-                        {
-                            writer.Write((byte)1);
-                        }
-                        else if (item.ranged)
-                        {
-                            writer.Write((byte)2);
-                        }
-                        else if (item.summon)
-                        {
-                            writer.Write((byte)3);
-                        }
-                        else if (item.thrown)
-                        {
-                            writer.Write((byte)4);
-                        }
+                        writer.Write((byte)item.DamageType());
                     }
                     if (flags2[5])
                     {
@@ -606,24 +589,7 @@ namespace ItemModifier
                 }
                 if (flags2[4])
                 {
-                    switch (reader.ReadByte())
-                    {
-                        case 0:
-                            item.melee = true;
-                            break;
-                        case 1:
-                            item.magic = true;
-                            break;
-                        case 2:
-                            item.ranged = true;
-                            break;
-                        case 3:
-                            item.summon = true;
-                            break;
-                        case 4:
-                            item.thrown = true;
-                            break;
-                    }
+                    item.SetDamageType(reader.ReadByte());
                 }
                 if (flags2[5])
                 {
@@ -722,44 +688,6 @@ namespace ItemModifier
                     item.useStyle = reader.ReadByte();
                 }
             }
-        }
-    }
-
-    public static class ExtensionMethods
-    {
-        public static void CopyItemProperties(this Item target, Item origin)
-        {
-            target.Prefix(origin.prefix);
-            target.autoReuse = origin.autoReuse;
-            target.consumable = origin.consumable;
-            target.potion = origin.potion;
-            target.melee = origin.melee;
-            target.magic = origin.magic;
-            target.ranged = origin.ranged;
-            target.summon = origin.summon;
-            target.thrown = origin.thrown;
-            target.accessory = origin.accessory;
-            target.damage = origin.damage;
-            target.knockBack = origin.knockBack;
-            target.crit = origin.crit;
-            target.shoot = origin.shoot;
-            target.shootSpeed = origin.shootSpeed;
-            target.createTile = origin.createTile;
-            target.tileBoost = origin.tileBoost;
-            target.buffTime = origin.buffTime;
-            target.buffType = origin.buffType;
-            target.healLife = origin.healLife;
-            target.healMana = origin.healMana;
-            target.axe = origin.axe;
-            target.pick = origin.pick;
-            target.hammer = origin.hammer;
-            target.maxStack = origin.maxStack;
-            target.useTime = origin.useTime;
-            target.useAnimation = origin.useAnimation;
-            target.defense = origin.defense;
-            target.fishingPole = origin.fishingPole;
-            target.scale = origin.scale;
-            target.useStyle = origin.useStyle;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using ItemModifier.UIKit;
+﻿using ItemModifier.Extensions;
+using ItemModifier.UIKit;
 using ItemModifier.UIKit.Inputs;
 using Microsoft.Xna.Framework;
 using Terraria;
