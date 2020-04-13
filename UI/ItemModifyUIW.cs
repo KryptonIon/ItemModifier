@@ -259,7 +259,7 @@ namespace ItemModifier.UI
         {
             base.OnInitialize();
             ItemModifier instance = ModContent.GetInstance<ItemModifier>();
-            bool limited = ItemModifierConfig.Instance.Limited;
+            bool limited = UIConfig.Instance.Limited;
 
             CategoryName = new UIText("There's a problem")
             {

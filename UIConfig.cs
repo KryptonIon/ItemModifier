@@ -6,7 +6,7 @@ using Terraria.ModLoader.Config;
 
 namespace ItemModifier
 {
-    public class ItemModifierConfig : ModConfig
+    public class UIConfig : ModConfig
     {
         public override ConfigScope Mode
         {
@@ -16,7 +16,7 @@ namespace ItemModifier
             }
         }
 
-        public static ItemModifierConfig Instance;
+        public static UIConfig Instance;
 
         [Label("Limited")]
         [Tooltip("If true, Item Modifier will set boundaries for some properties.\nChanging this setting will cause ItemModiferUI to reload")]
@@ -28,7 +28,7 @@ namespace ItemModifier
             if (!Main.gameMenu)
             {
                 ItemModifier instance = ModContent.GetInstance<ItemModifier>();
-                ItemModifyUIW window = instance.MainUI?.ModifyWindow;
+                ItemModifyUIW window = instance.MainUI?.ItemModifierWindow;
                 if (window == null)
                 {
                     return;
