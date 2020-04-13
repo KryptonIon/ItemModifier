@@ -22,8 +22,6 @@ namespace ItemModifier
 
             public static Texture2D Wiki { get; private set; }
 
-            public static Texture2D Save { get; private set; }
-
             public static Texture2D UpArrow { get; private set; }
 
             public static Texture2D DownArrow { get; private set; }
@@ -33,8 +31,6 @@ namespace ItemModifier
             public static Texture2D RightArrow { get; private set; }
 
             public static Texture2D NewItem { get; private set; }
-
-            public static Texture2D Print { get; private set; }
 
             public static Texture2D ClearModifications { get; private set; }
 
@@ -122,18 +118,18 @@ namespace ItemModifier
 
             public static Texture2D BlackDot { get; private set; }
 
+            public static Texture2D Globe { get; private set; }
+
             public static void Load()
             {
                 ModifyItem = ModContent.GetTexture("ItemModifier/UI/ModifyItem");
                 Settings = ModContent.GetTexture("ItemModifier/UI/Settings");
                 Wiki = ModContent.GetTexture("ItemModifier/UI/Wiki");
-                Save = ModContent.GetTexture("ItemModifier/UI/Save");
                 UpArrow = ModContent.GetTexture("ItemModifier/UI/UpArrow");
                 DownArrow = ModContent.GetTexture("ItemModifier/UI/DownArrow");
                 LeftArrow = ModContent.GetTexture("ItemModifier/UI/LeftArrow");
                 RightArrow = ModContent.GetTexture("ItemModifier/UI/RightArrow");
                 NewItem = ModContent.GetTexture("ItemModifier/UI/NewItem");
-                Print = ModContent.GetTexture("ItemModifier/UI/Print");
                 ClearModifications = ModContent.GetTexture("ItemModifier/UI/ClearModifications");
                 UpArrowShort = ModContent.GetTexture("ItemModifier/UI/UpArrowShort");
                 DownArrowShort = ModContent.GetTexture("ItemModifier/UI/DownArrowShort");
@@ -180,6 +176,7 @@ namespace ItemModifier
                 BlackDot = new Texture2D(Main.spriteBatch.GraphicsDevice, 1, 1);
                 BlackDot.SetData(new Color[] { Color.Black });
                 SquareSelect = ModContent.GetTexture("ItemModifier/UIKit/Inputs/SquareSelect");
+                Globe = ModContent.GetTexture("ItemModifier/UI/Globe");
             }
 
             public static void Unload()
@@ -187,13 +184,11 @@ namespace ItemModifier
                 ModifyItem = null;
                 Settings = null;
                 Wiki = null;
-                Save = null;
                 UpArrow = null;
                 DownArrow = null;
                 LeftArrow = null;
                 RightArrow = null;
                 NewItem = null;
-                Print = null;
                 ClearModifications = null;
                 UpArrowShort = null;
                 DownArrowShort = null;
@@ -236,6 +231,7 @@ namespace ItemModifier
                 OpaqueWindowBackground = null;
                 WhiteDot = null;
                 SquareSelect = null;
+                Globe = null;
             }
         }
 
@@ -692,7 +688,7 @@ namespace ItemModifier
 
         public override void PreSaveAndQuit()
         {
-            MainUI.ModifyWindow.Visible = false;
+            MainUI.ItemModifierWindow.Visible = false;
             MainUI.NewItemWindow.Visible = false;
         }
     }
