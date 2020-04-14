@@ -539,7 +539,7 @@ namespace ItemModifier
                     }
                     if (flags4[7])
                     {
-                        writer.Write(item.fishingPole);
+                        writer.Write((ushort)item.fishingPole);
                     }
                 }
                 if (flags1[3])
@@ -669,7 +669,7 @@ namespace ItemModifier
                 }
                 if (flags4[7])
                 {
-                    item.fishingPole = reader.ReadInt32();
+                    item.fishingPole = reader.ReadUInt16();
                 }
             }
             if (flags1[3])

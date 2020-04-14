@@ -436,7 +436,7 @@ namespace ItemModifier.UI
             Defense.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.defense = DefaultItem.defense;
             PDefense = new UICategory.UIProperty(Textures.Defense, "Defense:", Defense);
 
-            FishingPower = new UIIntTextbox();
+            FishingPower = limited ? new UIIntTextbox(ushort.MinValue, ushort.MaxValue) : new UIIntTextbox();
             FishingPower.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.fishingPole = e.Value;
             FishingPower.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.fishingPole = DefaultItem.fishingPole;
             PFishingPower = new UICategory.UIProperty(Textures.FishingPower, "Fishing Power:", FishingPower);
