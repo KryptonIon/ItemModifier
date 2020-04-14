@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ItemModifier.Extensions;
+using Terraria;
 
 namespace ItemModifier
 {
     public class ItemProperties
     {
+        public int Type { get; set; }
+
         public bool AutoReuse { get; set; }
 
-        public bool Consumeable { get; set; }
+        public bool Consumable { get; set; }
 
         public bool Potion { get; set; }
 
@@ -22,7 +21,7 @@ namespace ItemModifier
 
         public int Crit { get; set; }
 
-        public float Knockback { get; set; }
+        public float KnockBack { get; set; }
 
         public int Shoot { get; set; }
 
@@ -56,8 +55,43 @@ namespace ItemModifier
 
         public int FishingPole { get; set; }
 
-        public int Scale { get; set; }
+        public float Scale { get; set; }
 
         public int UseStyle { get; set; }
+
+        public ItemProperties(int type)
+        {
+            Type = type;
+        }
+
+        public void FromItem(Item item)
+        {
+            AutoReuse = item.autoReuse;
+            Consumable = item.consumable;
+            Potion = item.potion;
+            Accessory = item.accessory;
+            DamageType = item.DamageType();
+            Damage = item.damage;
+            KnockBack = item.knockBack;
+            Crit = item.crit;
+            Shoot = item.shoot;
+            ShootSpeed = item.shootSpeed;
+            CreateTile = item.createTile + 1;
+            TileBoost = item.tileBoost;
+            BuffTime = item.buffTime;
+            BuffType = item.buffType;
+            HealLife = item.healLife;
+            HealMana = item.healMana;
+            Axe = item.axe;
+            Pickaxe = item.pick;
+            Hammer = item.hammer;
+            MaxStack = item.maxStack;
+            UseTime = item.useTime;
+            UseAnimation = item.useAnimation;
+            Defense = item.defense;
+            FishingPole = item.fishingPole;
+            Scale = item.scale;
+            UseStyle = item.useStyle;
+        }
     }
 }

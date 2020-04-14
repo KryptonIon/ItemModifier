@@ -3,7 +3,6 @@ using ItemModifier.UIKit;
 using ItemModifier.UIKit.Inputs;
 using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 using static ItemModifier.UIKit.Utils;
 
@@ -189,7 +188,7 @@ namespace ItemModifier.UI
             UseModifiedProperties.WhileMouseHover += (source, e) => instance.Tooltip = "Use Modified Properties";
             UseModifiedProperties.OnValueChanged += (source, e) =>
             {
-                if(!e.Value)
+                if (!e.Value)
                 {
                     ItemDisplay.Item = new Item();
                     ItemDisplay.Item.SetDefaults(ItemIDTextbox.Value);
@@ -201,7 +200,7 @@ namespace ItemModifier.UI
         {
             if (Visible)
             {
-                if(!Main.playerInventory)
+                if (!Main.playerInventory)
                 {
                     Visible = false;
                     return;

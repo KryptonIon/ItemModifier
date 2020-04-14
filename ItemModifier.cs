@@ -1,12 +1,8 @@
-﻿using ItemModifier.Extensions;
-using ItemModifier.UI;
+﻿using ItemModifier.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using System.Collections.Generic;
-using System.IO;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.UI;
 
@@ -247,6 +243,8 @@ namespace ItemModifier
         {
             if (!Main.dedServ)
             {
+                ItemConfig itemConfig = new ItemConfig();
+                itemConfig.Read();
                 Textures.Load();
             }
         }
@@ -261,8 +259,12 @@ namespace ItemModifier
 
         public override void Unload()
         {
-            Textures.Unload();
-            MainUI = null;
+            if (!Main.dedServ)
+            {
+                MainUI = null;
+                Textures.Unload();
+                ItemConfig.Instance.Save();
+            }
         }
 
         public override void UpdateUI(GameTime gameTime)

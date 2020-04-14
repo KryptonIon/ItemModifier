@@ -195,6 +195,8 @@ namespace ItemModifier.UI
 
         internal UIImageButton ToggleLiveSync;
 
+        internal UIImageButton SaveItemConfig;
+
         internal UIText CategoryName;
 
         internal UIContainer GrayBG;
@@ -531,6 +533,39 @@ namespace ItemModifier.UI
             ClearModifications.Parent = this;
             ClearModifications.OnLeftClick += (source, e) => Main.LocalPlayer.HeldItem.SetDefaults(Main.LocalPlayer.HeldItem.type);
             ClearModifications.WhileMouseHover += (source, e) => instance.Tooltip = "Clear Modifications";
+
+            SaveItemConfig = new UIImageButton(Textures.Globe, false)
+            {
+                Width = new SizeDimension(16f),
+                Height = new SizeDimension(16f),
+                YOffset = CloseButton.YOffset
+            };
+            SaveItemConfig.Recalculate();
+            SaveItemConfig.XOffset = new SizeDimension(ClearModifications.CalculatedXOffset - SaveItemConfig.OuterWidth - 3);
+            SaveItemConfig.Parent = this;
+            SaveItemConfig.OnLeftClick += (source, e) =>
+            {
+                Item heldItem = Main.LocalPlayer.HeldItem;
+                if (heldItem.type == 0)
+                {
+                    Main.NewText("Cannot modify air!");
+                    return;
+                }
+                List<ItemProperties> itemConfig = ItemConfig.Instance.ItemChanges;
+                int index = itemConfig.FindIndex(prop => prop.Type == heldItem.type);
+                if (index == -1)
+                {
+                    ItemProperties props = new ItemProperties(heldItem.type);
+                    props.FromItem(heldItem);
+                    itemConfig.Add(props);
+                }
+                else
+                {
+                    itemConfig[index].FromItem(heldItem);
+                }
+                Main.NewText("Global Change Added! Reload Required", Color.Green);
+            };
+            SaveItemConfig.WhileMouseHover += (source, e) => instance.Tooltip = "Add to Item Config";
 
             AllCategory = new UICategory("All", new List<UICategory.UIProperty> {
                 PAutoReuse,

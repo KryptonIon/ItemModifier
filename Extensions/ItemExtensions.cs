@@ -11,12 +11,8 @@ namespace ItemModifier.Extensions
             target.autoReuse = origin.autoReuse;
             target.consumable = origin.consumable;
             target.potion = origin.potion;
-            target.melee = origin.melee;
-            target.magic = origin.magic;
-            target.ranged = origin.ranged;
-            target.summon = origin.summon;
-            target.thrown = origin.thrown;
             target.accessory = origin.accessory;
+            target.SetDamageType(origin.DamageType());
             target.damage = origin.damage;
             target.knockBack = origin.knockBack;
             target.crit = origin.crit;
@@ -38,6 +34,36 @@ namespace ItemModifier.Extensions
             target.fishingPole = origin.fishingPole;
             target.scale = origin.scale;
             target.useStyle = origin.useStyle;
+        }
+
+        public static void CopyItemProperties(this Item target, ItemProperties properties)
+        {
+            target.autoReuse = properties.AutoReuse;
+            target.consumable = properties.Consumable;
+            target.potion = properties.Potion;
+            target.accessory = properties.Accessory;
+            target.SetDamageType(properties.DamageType);
+            target.damage = properties.Damage;
+            target.knockBack = properties.KnockBack;
+            target.crit = properties.Crit;
+            target.shoot = properties.Shoot;
+            target.shootSpeed = properties.ShootSpeed;
+            target.createTile = properties.CreateTile - 1;
+            target.tileBoost = properties.TileBoost;
+            target.buffTime = properties.BuffTime;
+            target.buffType = properties.BuffType;
+            target.healLife = properties.HealLife;
+            target.healMana = properties.HealMana;
+            target.axe = properties.Axe;
+            target.pick = properties.Pickaxe;
+            target.hammer = properties.Hammer;
+            target.maxStack = properties.MaxStack;
+            target.useTime = properties.UseTime;
+            target.useAnimation = properties.UseAnimation;
+            target.defense = properties.Defense;
+            target.fishingPole = properties.FishingPole;
+            target.scale = properties.Scale;
+            target.useStyle = properties.UseStyle;
         }
 
         public static int DamageType(this Item item)

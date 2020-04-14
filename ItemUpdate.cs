@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using ItemModifier.Extensions;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
 using Terraria.ModLoader;
 
@@ -192,7 +188,7 @@ namespace ItemModifier
                     }
                     if (flags3[2])
                     {
-                        writer.Write((ushort)item.createTile);
+                        writer.Write((ushort)(item.createTile + 1));
                     }
                     if (flags3[3])
                     {
@@ -322,7 +318,7 @@ namespace ItemModifier
                 }
                 if (flags3[2])
                 {
-                    item.createTile = reader.ReadUInt16();
+                    item.createTile = reader.ReadUInt16() - 1;
                 }
                 if (flags3[3])
                 {
