@@ -487,7 +487,7 @@ namespace ItemModifier
                     }
                     if (flags3[3])
                     {
-                        writer.Write((byte)item.tileBoost);
+                        writer.Write((sbyte)item.tileBoost);
                     }
                     if (flags3[4])
                     {
@@ -617,7 +617,7 @@ namespace ItemModifier
                 }
                 if (flags3[3])
                 {
-                    item.tileBoost = reader.ReadByte();
+                    item.tileBoost = reader.ReadSByte();
                 }
                 if (flags3[4])
                 {
