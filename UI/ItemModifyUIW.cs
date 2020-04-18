@@ -534,7 +534,7 @@ namespace ItemModifier.UI
             ClearModifications.OnLeftClick += (source, e) => Main.LocalPlayer.HeldItem.SetDefaults(Main.LocalPlayer.HeldItem.type);
             ClearModifications.WhileMouseHover += (source, e) => instance.Tooltip = "Clear Modifications";
 
-            SaveItemConfig = new UIImageButton(Textures.Globe, false)
+            /*SaveItemConfig = new UIImageButton(Textures.Globe, false)
             {
                 Width = new SizeDimension(16f),
                 Height = new SizeDimension(16f),
@@ -565,7 +565,7 @@ namespace ItemModifier.UI
                 }
                 Main.NewText("Global Change Added! Reload Required", Color.Green);
             };
-            SaveItemConfig.WhileMouseHover += (source, e) => instance.Tooltip = "Add to Item Config";
+            SaveItemConfig.WhileMouseHover += (source, e) => instance.Tooltip = "Add to Item Config";*/
 
             AllCategory = new UICategory("All", new List<UICategory.UIProperty> {
                 PAutoReuse,

@@ -243,8 +243,8 @@ namespace ItemModifier
         {
             if (!Main.dedServ)
             {
-                ItemConfig itemConfig = new ItemConfig();
-                itemConfig.Read();
+                //ItemConfig itemConfig = new ItemConfig();
+                //itemConfig.Read();
                 Textures.Load();
             }
         }
@@ -263,7 +263,8 @@ namespace ItemModifier
             {
                 MainUI = null;
                 Textures.Unload();
-                ItemConfig.Instance.Save();
+                //ItemConfig.Instance.Save();
+                //ItemConfig.Instance = null;
             }
         }
 
