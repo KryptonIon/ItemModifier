@@ -483,3 +483,19 @@ Mod Source Files are now omitted from the Mod
 Fixed Radio Button Selection
 Fixed NewItem Wrong Knockback Issue
 Fixed NewItemUI ItemDisplay retaining values after UseModifiedProperties has been ticked off
+
+
+
+
+
+
+
+
+
+
+
+Update 1.1.3 Hotfixes 8
+Items now automatically save when modified
+Renamed Item Modifier Config to UI Config
+Fishing Power property is now limited to 0 - 65535
+Fixed Added Range property multiplayer bug
