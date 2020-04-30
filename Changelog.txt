@@ -499,3 +499,17 @@ Items now automatically save when modified
 Renamed Item Modifier Config to UI Config
 Fishing Power property is now limited to 0 - 65535
 Fixed Added Range property multiplayer bug
+
+
+
+
+
+
+
+
+
+
+
+Update 1.1.4 Hotfixes 9
+Added Use Style textbox
+Fixed Crashing when used aside other mods

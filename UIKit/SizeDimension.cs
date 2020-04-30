@@ -25,5 +25,25 @@
         {
             return Pixels + containerSize * Percent;
         }
+
+        public override bool Equals(object obj)
+        {
+            return obj is SizeDimension dimensions && this == dimensions;
+        }
+
+        public override int GetHashCode()
+        {
+            return Pixels.GetHashCode() + Percent.GetHashCode();
+        }
+
+        public static bool operator ==(SizeDimension a, SizeDimension b)
+        {
+            return a.Pixels == b.Pixels && a.Percent == b.Percent;
+        }
+
+        public static bool operator !=(SizeDimension a, SizeDimension b)
+        {
+            return a.Pixels != b.Pixels || a.Percent != b.Percent;
+        }
     }
 }

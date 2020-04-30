@@ -97,6 +97,8 @@ namespace ItemModifier.UI
 
         internal UIIntTextbox FishingPower;
 
+        internal UIIntTextbox UseStyle;
+
         //internal UIIntTextbox ColorTint;
 
         //internal UIIntTextbox UseSound;
@@ -119,7 +121,7 @@ namespace ItemModifier.UI
 
         internal UIRadioButton RThrown;
 
-        internal UIRadioButtonContainer UseStyle;
+        internal UIRadioButtonContainer UseStyleRadio;
 
         internal UIRadioButton RSwing;
 
@@ -194,8 +196,6 @@ namespace ItemModifier.UI
         internal UIImageButton NextCategory;
 
         internal UIImageButton ToggleLiveSync;
-
-        internal UIImageButton SaveItemConfig;
 
         internal UIText CategoryName;
 
@@ -448,8 +448,8 @@ namespace ItemModifier.UI
             Scale.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.scale = DefaultItem.scale;
             PScale = new UICategory.UIProperty(Textures.ItemScale, "Item Scale:", Scale);
 
-            UseStyle = new UIRadioButtonContainer();
-            RSwing = new UIRadioButton("Swing") { Parent = UseStyle };
+            UseStyleRadio = new UIRadioButtonContainer();
+            RSwing = new UIRadioButton("Swing") { Parent = UseStyleRadio };
             RSwing.OnValueChanged += (source, e) =>
             {
                 if (e.Value)
@@ -457,7 +457,7 @@ namespace ItemModifier.UI
                     Main.LocalPlayer.HeldItem.useStyle = 1;
                 }
             };
-            RDrink = new UIRadioButton("Drink") { Parent = UseStyle };
+            RDrink = new UIRadioButton("Drink") { Parent = UseStyleRadio };
             RDrink.OnValueChanged += (source, e) =>
             {
                 if (e.Value)
@@ -465,7 +465,7 @@ namespace ItemModifier.UI
                     Main.LocalPlayer.HeldItem.useStyle = 2;
                 }
             };
-            RStab = new UIRadioButton("Stab") { Parent = UseStyle };
+            RStab = new UIRadioButton("Stab") { Parent = UseStyleRadio };
             RStab.OnValueChanged += (source, e) =>
             {
                 if (e.Value)
@@ -473,7 +473,7 @@ namespace ItemModifier.UI
                     Main.LocalPlayer.HeldItem.useStyle = 3;
                 }
             };
-            RAboveHead = new UIRadioButton("Above Head") { Parent = UseStyle };
+            RAboveHead = new UIRadioButton("Above Head") { Parent = UseStyleRadio };
             RAboveHead.OnValueChanged += (source, e) =>
             {
                 if (e.Value)
@@ -481,7 +481,7 @@ namespace ItemModifier.UI
                     Main.LocalPlayer.HeldItem.useStyle = 4;
                 }
             };
-            RHeld = new UIRadioButton("Held") { Parent = UseStyle };
+            RHeld = new UIRadioButton("Held") { Parent = UseStyleRadio };
             RHeld.OnValueChanged += (source, e) =>
             {
                 if (e.Value)
@@ -490,25 +490,31 @@ namespace ItemModifier.UI
                 }
             };
             float uStyleWidth = 0f;
-            for (int i = 0; i < UseStyle.ChildrenCount; i++)
+            for (int i = 0; i < UseStyleRadio.ChildrenCount; i++)
             {
-                UIElement child = UseStyle[i];
+                UIElement child = UseStyleRadio[i];
                 if (child.InnerWidth > uStyleWidth)
                 {
                     uStyleWidth = child.InnerWidth;
                 }
                 child.YOffset = new SizeDimension(RSwing.InnerHeight * i);
             }
-            UseStyle.Width = new SizeDimension(uStyleWidth);
-            UseStyle.Height = new SizeDimension(RSwing.InnerHeight * UseStyle.ChildrenCount);
-            UseStyle.OnDeselected += (source, e) =>
+            UseStyleRadio.Width = new SizeDimension(uStyleWidth);
+            UseStyleRadio.Height = new SizeDimension(RSwing.InnerHeight * UseStyleRadio.ChildrenCount);
+            UseStyleRadio.OnDeselected += (source, e) =>
             {
-                if (UseStyle.Selected.Length < 1)
+                if (UseStyleRadio.Selected.Length < 1)
                 {
                     Main.LocalPlayer.HeldItem.useStyle = 0;
                 }
             };
-            PUseStyle = new UICategory.UIProperty(Textures.UseStyle, "Use Style:", UseStyle);
+            UseStyleRadio.Recalculate();
+            UseStyle = limited ? new UIIntTextbox(0) : new UIIntTextbox()
+            {
+                YOffset = new SizeDimension(UseStyleRadio.OuterHeight)
+            };
+            UseStyle.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.useStyle = e.Value;
+            PUseStyle = new UICategory.UIProperty(Textures.UseStyle, "Use Style:", UseStyleRadio, UseStyle);
 
             ToggleLiveSync = new UIImageButton(Textures.Sync, false, new Color(20, 255, 20))
             {
@@ -800,14 +806,15 @@ namespace ItemModifier.UI
                     {
                         Scale.Value = heldItem.scale;
                     }
-                    if (heldItem.useStyle == 0)
+                    if (heldItem.useStyle <= 5 && heldItem.useStyle != 0)
                     {
-                        UseStyle.DeselectAllRadio();
+                        UseStyleRadio.GetChoice(heldItem.useStyle - 1).Selected = true;
                     }
                     else
                     {
-                        UseStyle.GetChoice(heldItem.useStyle - 1).Selected = true;
+                        UseStyleRadio.DeselectAllRadio();
                     }
+                    UseStyle.Value = heldItem.useStyle;
                     GrayBG.Visible = heldItem.type == 0;
                 }
             }

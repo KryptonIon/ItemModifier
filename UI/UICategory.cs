@@ -1,6 +1,7 @@
 ﻿using ItemModifier.UIKit;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 using static Terraria.Utils;
 
@@ -41,34 +42,22 @@ namespace ItemModifier.UI
                 }
             }
 
-            private UIElement inputElement;
-
-            internal UIElement InputElement
-            {
-                get
-                {
-                    return inputElement;
-                }
-
-                set
-                {
-                    inputElement = value;
-                    InputElement.XOffset = new SizeDimension(24f + Utils.MeasureString2(Label, true).X);
-                    inputElement.Parent = this;
-                    RecalculateSelf();
-                }
-            }
+            public SizeDimension ChildXOffset { get; private set; }
 
             public Color TextColor { get; set; } = Color.White;
 
-            public UIProperty(Texture2D imageLabel, string label, UIElement inputElement)
+            public UIProperty(Texture2D imageLabel, string label, params UIElement[] children)
             {
                 this.imageLabel = new UIImage(imageLabel)
                 {
                     Parent = this
                 };
                 Label = label;
-                InputElement = inputElement;
+                OnChildAdded += (source, child) => child.Target.XOffset = ChildXOffset;
+                for (int i = 0; i < children.Length; i++)
+                {
+                    children[i].Parent = this;
+                }
             }
 
             protected override void DrawSelf(SpriteBatch sb)
@@ -79,18 +68,22 @@ namespace ItemModifier.UI
             protected internal override void RecalculateSelf()
             {
                 Vector2 labelSize = Utils.MeasureString2(Label, true);
-                float titleSize = 20 + labelSize.X;
-                if (InputElement == null)
+                float width = labelSize.X + 20f;
+                float height = labelSize.Y;
+                ChildXOffset = new SizeDimension(width + 4f);
+                float furthest = 0f;
+                float deepest = 0f;
+                for (int i = 0; i < ChildrenCount; i++)
                 {
-                    Width = new SizeDimension(titleSize);
-                    Height = new SizeDimension(labelSize.Y);
+                    UIElement child = Children[i];
+                    float dX = child.XOffset.Pixels + child.OuterWidth;
+                    float dY = child.YOffset.Pixels + child.OuterHeight;
+                    if (dX > furthest) furthest = dX;
+                    if (dY > deepest) deepest = dY;
                 }
-                else
-                {
-                    Width = new SizeDimension(titleSize + 4f + InputElement.OuterWidth);
-                    Height = new SizeDimension(labelSize.Y > InputElement.OuterWidth ? labelSize.Y : InputElement.OuterHeight);
-                    InputElement.XOffset = new SizeDimension(24f + labelSize.X);
-                }
+                width += furthest;
+                Width = new SizeDimension(width);
+                Height = new SizeDimension(Math.Max(height, deepest));
                 base.RecalculateSelf();
             }
         }
