@@ -513,3 +513,20 @@ Fixed Added Range property multiplayer bug
 Update 1.1.4 Hotfixes 9
 Added Use Style textbox
 Fixed Crashing when used aside other mods
+
+
+
+
+
+
+
+
+
+
+
+Update 1.1.5 Hotfixes 10
+Textboxes now only focus when Left Clicked
+Right clicking on Use Style(Radio Buttons) now resets the value to default
+Fixed TileBoost saving incorrectly
+Fixed Textbox Caret moving to the end when typing
+Fixed Use Style Textbox position when in Limited Mode

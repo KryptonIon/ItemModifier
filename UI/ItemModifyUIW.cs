@@ -53,6 +53,8 @@ namespace ItemModifier.UI
             }
         }
 
+        #region Inputs
+
         internal UIBool AutoReuse;
 
         internal UIBool Consumable;
@@ -97,9 +99,9 @@ namespace ItemModifier.UI
 
         internal UIIntTextbox FishingPower;
 
-        internal UIIntTextbox UseStyle;
-
         //internal UIIntTextbox ColorTint;
+
+        internal UIIntTextbox UseStyle;
 
         //internal UIIntTextbox UseSound;
 
@@ -190,6 +192,8 @@ namespace ItemModifier.UI
         internal UICategory.UIProperty PUseStyle;
 
         //internal UICategory.UIProperty PUseSound;
+
+        #endregion
 
         internal UIImageButton PreviousCategory;
 
@@ -501,19 +505,20 @@ namespace ItemModifier.UI
             }
             UseStyleRadio.Width = new SizeDimension(uStyleWidth);
             UseStyleRadio.Height = new SizeDimension(RSwing.InnerHeight * UseStyleRadio.ChildrenCount);
+            UseStyleRadio.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.useStyle = DefaultItem.useStyle;
             UseStyleRadio.OnDeselected += (source, e) =>
             {
-                if (UseStyleRadio.Selected.Length < 1)
+                Item heldItem = Main.LocalPlayer.HeldItem;
+                if (UseStyleRadio.Selected.Length < 1 && heldItem.useStyle <= 5)
                 {
-                    Main.LocalPlayer.HeldItem.useStyle = 0;
+                    heldItem.useStyle = 0;
                 }
             };
             UseStyleRadio.Recalculate();
-            UseStyle = limited ? new UIIntTextbox(0) : new UIIntTextbox()
-            {
-                YOffset = new SizeDimension(UseStyleRadio.OuterHeight)
-            };
+            UseStyle = limited ? new UIIntTextbox(0) : new UIIntTextbox();
+            UseStyle.YOffset = new SizeDimension(UseStyleRadio.OuterHeight);
             UseStyle.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.useStyle = e.Value;
+            UseStyle.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.useStyle = DefaultItem.useStyle;
             PUseStyle = new UICategory.UIProperty(Textures.UseStyle, "Use Style:", UseStyleRadio, UseStyle);
 
             ToggleLiveSync = new UIImageButton(Textures.Sync, false, new Color(20, 255, 20))

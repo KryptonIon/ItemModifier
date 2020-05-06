@@ -62,7 +62,6 @@ namespace ItemModifier.UIKit.Inputs
                 {
                     text = value;
                 }
-                CaretPosition = DrawText.Length;
             }
         }
 
@@ -78,6 +77,7 @@ namespace ItemModifier.UIKit.Inputs
                 if (text != value)
                 {
                     DrawText = value;
+                    CaretPosition = DrawText.Length;
                     OnTextChanged?.Invoke(this, new EventArgs<string>(Text));
                 }
             }
@@ -106,7 +106,12 @@ namespace ItemModifier.UIKit.Inputs
         {
             Width = new SizeDimension(100f);
             Height = new SizeDimension(22f);
-            OnUnfocused += (source) => caretDelta = 0;
+            OnUnfocused += (source) =>
+            {
+                CaretPosition = Text.Length;
+                caretDelta = 0;
+                caretMoveDelta = 0;
+            };
         }
 
         public UITextbox(int characterLimit) : this()
@@ -190,11 +195,11 @@ namespace ItemModifier.UIKit.Inputs
                 string newText = Main.GetInputText(frontHalf);
                 if (frontHalf != newText)
                 {
-                    if (frontHalf != Text)
+                    if (frontHalf.Length != Text.Length)
                     {
-                        int caretPos = CaretPosition;
+                        string backHalf = Text.Substring(CaretPosition);
                         CaretPosition = newText.Length;
-                        Text = newText + Text.Substring(caretPos);
+                        DrawText = newText + backHalf;
                     }
                     else
                     {
@@ -246,6 +251,30 @@ namespace ItemModifier.UIKit.Inputs
                     caretDelta = 0;
                 }
             }
+        }
+
+        public override void MiddleClick(UIMouseEventArgs e)
+        {
+            base.MiddleClick(e);
+            Focused = false;
+        }
+
+        public override void RightClick(UIMouseEventArgs e)
+        {
+            base.RightClick(e);
+            Focused = false;
+        }
+
+        public override void BackClick(UIMouseEventArgs e)
+        {
+            base.BackClick(e);
+            Focused = false;
+        }
+
+        public override void ForwardClick(UIMouseEventArgs e)
+        {
+            base.ForwardClick(e);
+            Focused = false;
         }
     }
 }

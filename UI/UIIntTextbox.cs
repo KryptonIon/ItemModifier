@@ -22,6 +22,7 @@ namespace ItemModifier.UI
                 {
                     _value = value > MaxValue ? MaxValue : value < MinValue ? MinValue : value;
                     DrawText = Value.ToString();
+                    CaretPosition = DrawText.Length;
                     OnValueChanged?.Invoke(this, new EventArgs<int>(Value));
                 }
             }
@@ -64,6 +65,7 @@ namespace ItemModifier.UI
             MinValue = minValue;
             _value = 0 > MaxValue ? MaxValue : 0 < MinValue ? MinValue : 0;
             DrawText = Value.ToString();
+            CaretPosition = DrawText.Length;
             OnUnfocused += (source) =>
             {
                 if (string.IsNullOrEmpty(Text))

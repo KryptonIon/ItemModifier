@@ -461,7 +461,7 @@ namespace ItemModifier
             }
             if (item.tileBoost != defaultItem.tileBoost)
             {
-                tag.Add("TileBoost", (byte)item.tileBoost);
+                tag.Add("TileBoost", (byte)(sbyte)item.tileBoost);
             }
             if (item.buffType != defaultItem.buffType)
             {

@@ -77,10 +77,14 @@ namespace ItemModifier.UIKit
                 float lowestPoint = 0f;
                 for (int i = 0; i < Children.Count; i++)
                 {
-                    float ySize = Children[i].OuterY + Children[i].OuterHeight + ScrollValue - InnerY;
-                    if (lowestPoint < ySize)
+                    UIElement child = Children[i];
+                    if (child.Visible)
                     {
-                        lowestPoint = ySize;
+                        float ySize = child.OuterY + child.OuterHeight + ScrollValue - InnerY;
+                        if (lowestPoint < ySize)
+                        {
+                            lowestPoint = ySize;
+                        }
                     }
                 }
                 MaxScrollValue = Math.Max(0, lowestPoint - InnerHeight);
