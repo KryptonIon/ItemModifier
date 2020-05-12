@@ -12,47 +12,6 @@ namespace ItemModifier.UI
     {
         private Item DefaultItem { get; set; } = new Item();
 
-        internal Item ModifiedItem
-        {
-            get
-            {
-                return new Item
-                {
-                    autoReuse = AutoReuse.Value,
-                    consumable = Consumable.Value,
-                    potion = Potion.Value,
-                    shoot = Shoot.Value,
-                    createTile = Tile.Value,
-                    tileBoost = TileBoost.Value,
-                    buffType = Buff.Value,
-                    buffTime = BuffTime.Value,
-                    damage = Damage.Value,
-                    crit = Critical.Value,
-                    healLife = HealHP.Value,
-                    healMana = HealMP.Value,
-                    axe = AxePower.Value,
-                    pick = PickaxePower.Value,
-                    hammer = HammerPower.Value,
-                    stack = Stack.Value,
-                    maxStack = MaxStack.Value,
-                    useAnimation = UseAnimation.Value,
-                    useTime = UseTime.Value,
-                    shootSpeed = ShootSpeed.Value,
-                    knockBack = KnockBack.Value,
-                    accessory = Accessory.Value,
-                    defense = Defense.Value,
-                    melee = RMelee.Selected,
-                    magic = RMagic.Selected,
-                    ranged = RRanged.Selected,
-                    summon = RSummon.Selected,
-                    thrown = RThrown.Selected,
-                    fishingPole = FishingPower.Value,
-                    scale = Scale.Value,
-                    useStyle = RSwing.Selected ? 1 : RDrink.Selected ? 2 : RSwing.Selected ? 3 : RAboveHead.Selected ? 4 : RHeld.Selected ? 5 : 0
-                };
-            }
-        }
-
         #region Inputs
 
         internal UIBool AutoReuse;
@@ -69,9 +28,11 @@ namespace ItemModifier.UI
 
         internal UIIntTextbox TileBoost;
 
-        internal UIIntTextbox Buff;
+        internal UIContainer BuffContainer;
 
-        internal UIIntTextbox BuffTime;
+        internal UIBuffTextbox[] BuffTypes;
+
+        internal UIIntTextbox[] BuffTimes;
 
         internal UIIntTextbox Damage;
 
@@ -148,8 +109,6 @@ namespace ItemModifier.UI
         internal UICategory.UIProperty PTileBoost;
 
         internal UICategory.UIProperty PBuff;
-
-        internal UICategory.UIProperty PBuffTime;
 
         internal UICategory.UIProperty PDamage;
 
@@ -236,7 +195,7 @@ namespace ItemModifier.UI
 
             set
             {
-                categoryIndex = value < 0 ? Categories.Count - 1 : value >= Categories.Count ? 0 : value;
+                categoryIndex = value;
                 CategoryContainer.RemoveAllChildren();
                 Categories[CategoryIndex].AppendProperties(CategoryContainer);
                 CategoryContainer.Recalculate();
@@ -279,8 +238,8 @@ namespace ItemModifier.UI
                 ColorTint = new Color(0, 100, 255),
                 Parent = this
             };
-            PreviousCategory.OnLeftClick += (source, e) => CategoryIndex--;
-            PreviousCategory.OnRightClick += (source, e) => CategoryIndex++;
+            PreviousCategory.OnLeftClick += (source, e) => changeIndex(CategoryIndex - 1);
+            PreviousCategory.OnRightClick += (source, e) => changeIndex(CategoryIndex + 1);
             PreviousCategory.WhileMouseHover += (source, e) => instance.Tooltip = "Previous Category";
 
             NextCategory = new UIImageButton(Textures.RightArrow)
@@ -289,9 +248,14 @@ namespace ItemModifier.UI
             };
             NextCategory.XOffset = new SizeDimension(InnerWidth - NextCategory.OuterWidth);
             NextCategory.Parent = this;
-            NextCategory.OnLeftClick += (source, e) => CategoryIndex++;
-            NextCategory.OnRightClick += (source, e) => CategoryIndex--;
+            NextCategory.OnLeftClick += (source, e) => changeIndex(CategoryIndex + 1);
+            NextCategory.OnRightClick += (source, e) => changeIndex(CategoryIndex - 1);
             NextCategory.WhileMouseHover += (source, e) => instance.Tooltip = "Next Category";
+
+            void changeIndex(int newIndex)
+            {
+                CategoryIndex = newIndex < 0 ? Categories.Count - 1 : newIndex >= Categories.Count ? 0 : newIndex;
+            }
 
             AutoReuse = new UIBool();
             AutoReuse.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.autoReuse = e.Value;
@@ -382,15 +346,47 @@ namespace ItemModifier.UI
             PTileBoost = new UICategory.UIProperty(Textures.AddedRange, "Added Range:", TileBoost);
             PTileBoost.Recalculate();
 
-            Buff = new UIIntTextbox(0, BuffLoader.BuffCount - 1);
-            Buff.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.buffType = e.Value;
-            Buff.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.buffType = DefaultItem.buffType;
-            PBuff = new UICategory.UIProperty(Textures.BuffType, "Buff Inflicted:", Buff);
-
-            BuffTime = limited ? new UIIntTextbox(0) : new UIIntTextbox();
-            BuffTime.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.buffTime = e.Value;
-            BuffTime.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.buffTime = DefaultItem.buffTime;
-            PBuffTime = new UICategory.UIProperty(Textures.BuffDuration, "Buff Duration:", BuffTime);
+            BuffContainer = new UIContainer()
+            {
+                Width = new SizeDimension(144f),
+                Height = new SizeDimension(130f),
+                OverflowHidden = true
+            };
+            BuffTypes = new UIBuffTextbox[22];
+            BuffTimes = new UIIntTextbox[22];
+            BuffTypes[0] = new UIBuffTextbox()
+            {
+                Width = new SizeDimension(26f),
+                Height = new SizeDimension(26f),
+                Parent = BuffContainer
+            };
+            BuffTypes[0].OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.buffType = e.Value;
+            BuffTypes[0].OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.buffType = DefaultItem.buffType;
+            BuffTimes[0] = limited ? new UIIntTextbox(0) : new UIIntTextbox();
+            BuffTimes[0].XOffset = new SizeDimension(BuffTypes[0].OuterWidth + 4);
+            BuffTimes[0].Parent = BuffContainer;
+            BuffTimes[0].OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.buffTime = e.Value;
+            BuffTimes[0].OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.buffTime = DefaultItem.buffTime;
+            for (int i = 1; i < BuffTypes.Length; i++)
+            {
+                int id = i - 1;
+                BuffTypes[i] = new UIBuffTextbox()
+                {
+                    Width = new SizeDimension(26f),
+                    Height = new SizeDimension(26f),
+                    YOffset = new SizeDimension(i * 26f),
+                    Parent = BuffContainer
+                };
+                BuffTypes[i].OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.GetGlobalItem<CustomProperties>().BuffTypes[id] = e.Value;
+                BuffTypes[i].OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.GetGlobalItem<CustomProperties>().BuffTypes[id] = DefaultItem.GetGlobalItem<CustomProperties>().BuffTypes[id];
+                BuffTimes[i] = limited ? new UIIntTextbox(0) : new UIIntTextbox();
+                BuffTimes[i].XOffset = new SizeDimension(BuffTypes[i].OuterWidth + 4);
+                BuffTimes[i].YOffset = new SizeDimension(i * 26f);
+                BuffTimes[i].Parent = BuffContainer;
+                BuffTimes[i].OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.GetGlobalItem<CustomProperties>().BuffTimes[id] = e.Value;
+                BuffTimes[i].OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.GetGlobalItem<CustomProperties>().BuffTimes[id] = DefaultItem.GetGlobalItem<CustomProperties>().BuffTimes[id];
+            }
+            PBuff = new UICategory.UIProperty(Textures.BuffType, "Buff:", BuffContainer);
 
             HealHP = limited ? new UIIntTextbox(ushort.MinValue, ushort.MaxValue) : new UIIntTextbox();
             HealHP.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.healLife = e.Value;
@@ -596,7 +592,6 @@ namespace ItemModifier.UI
                 PConsumable,
                 PPotion,
                 PBuff,
-                PBuffTime,
                 PHealHP,
                 PHealMP,
                 PStack,
@@ -640,7 +635,6 @@ namespace ItemModifier.UI
                 PConsumable,
                 PPotion,
                 PBuff,
-                PBuffTime,
                 PHealHP,
                 PHealMP,
                 PUseStyle
@@ -711,7 +705,16 @@ namespace ItemModifier.UI
         {
             if (Visible)
             {
-                Item heldItem = Main.LocalPlayer.HeldItem;
+                Item heldItem = Main.mouseItem.IsAir ? Main.LocalPlayer.HeldItem : Main.mouseItem;
+                if (heldItem.IsAir)
+                {
+                    GrayBG.Visible = true;
+                    return;
+                }
+                else
+                {
+                    GrayBG.Visible = false;
+                }
                 if (DefaultItem.type != heldItem.type)
                 {
                     DefaultItem.SetDefaults(heldItem.type);
@@ -739,13 +742,26 @@ namespace ItemModifier.UI
                     {
                         TileBoost.Value = heldItem.tileBoost;
                     }
-                    if (!Buff.Focused)
+                    if (!BuffTypes[0].Focused)
                     {
-                        Buff.Value = heldItem.buffType;
+                        BuffTypes[0].Value = heldItem.buffType;
                     }
-                    if (!BuffTime.Focused)
+                    if (!BuffTypes[0].Focused)
                     {
-                        BuffTime.Value = heldItem.buffTime;
+                        BuffTimes[0].Value = heldItem.buffTime;
+                    }
+                    CustomProperties gItem = heldItem.GetGlobalItem<CustomProperties>();
+                    for (int i = 1; i < gItem.BuffTypes.Length; i++)
+                    {
+                        int id = i - 1;
+                        if (!BuffTypes[i].Focused)
+                        {
+                            BuffTypes[i].Value = gItem.BuffTypes[id];
+                        }
+                        if (!BuffTimes[i].Focused)
+                        {
+                            BuffTimes[i].Value = gItem.BuffTimes[id];
+                        }
                     }
                     if (!Damage.Focused)
                     {
@@ -820,8 +836,49 @@ namespace ItemModifier.UI
                         UseStyleRadio.DeselectAllRadio();
                     }
                     UseStyle.Value = heldItem.useStyle;
-                    GrayBG.Visible = heldItem.type == 0;
                 }
+            }
+        }
+
+        internal void CopyToItem(Item item)
+        {
+            item.autoReuse = AutoReuse.Value;
+            item.consumable = Consumable.Value;
+            item.potion = Potion.Value;
+            item.shoot = Shoot.Value;
+            item.createTile = Tile.Value;
+            item.tileBoost = TileBoost.Value;
+            item.buffType = BuffTypes[0].Value;
+            item.buffTime = BuffTimes[0].Value;
+            item.damage = Damage.Value;
+            item.crit = Critical.Value;
+            item.healLife = HealHP.Value;
+            item.healMana = HealMP.Value;
+            item.axe = AxePower.Value;
+            item.pick = PickaxePower.Value;
+            item.hammer = HammerPower.Value;
+            item.stack = Stack.Value;
+            item.maxStack = MaxStack.Value;
+            item.useAnimation = UseAnimation.Value;
+            item.useTime = UseTime.Value;
+            item.shootSpeed = ShootSpeed.Value;
+            item.knockBack = KnockBack.Value;
+            item.accessory = Accessory.Value;
+            item.defense = Defense.Value;
+            item.melee = RMelee.Selected;
+            item.magic = RMagic.Selected;
+            item.ranged = RRanged.Selected;
+            item.summon = RSummon.Selected;
+            item.thrown = RThrown.Selected;
+            item.fishingPole = FishingPower.Value;
+            item.scale = Scale.Value;
+            item.useStyle = UseStyle.Value;
+            CustomProperties cItem = item.GetGlobalItem<CustomProperties>();
+            for (int i = 1; i < BuffTypes.Length; i++)
+            {
+                int id = i - 1;
+                cItem.BuffTypes[id] = BuffTypes[i].Value;
+                cItem.BuffTimes[id] = BuffTimes[i].Value;
             }
         }
     }

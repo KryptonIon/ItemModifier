@@ -170,7 +170,7 @@ namespace ItemModifier.UI
                     Main.mouseItem.stack = ItemStackTextbox.Value;
                     if (UseModifiedProperties.Check)
                     {
-                        Main.mouseItem.CopyItemProperties(instance.MainUI.ItemModifierWindow.ModifiedItem);
+                        instance.MainUI.ItemModifierWindow.CopyToItem(Main.mouseItem);
                     }
                 }
                 else
@@ -208,7 +208,7 @@ namespace ItemModifier.UI
                 if (UseModifiedProperties.Check)
                 {
                     float scale = ItemDisplay.Item.scale;
-                    ItemDisplay.Item.CopyItemProperties(ModContent.GetInstance<ItemModifier>().MainUI.ItemModifierWindow.ModifiedItem);
+                    ModContent.GetInstance<ItemModifier>().MainUI.ItemModifierWindow.CopyToItem(ItemDisplay.Item);
                     ItemDisplay.Item.scale = scale;
                 }
             }

@@ -1,5 +1,4 @@
 ﻿using ItemModifier.Extensions;
-using System.Collections.Generic;
 using System.IO;
 using Terraria;
 using Terraria.ModLoader;
@@ -519,6 +518,21 @@ namespace ItemModifier
             {
                 tag.Add("UseStyle", (byte)item.useStyle);
             }
+            CustomProperties cItem = item.GetGlobalItem<CustomProperties>();
+            bool save = false;
+            for (int i = 0; i < cItem.BuffTypes.Length; i++)
+            {
+                if (cItem.BuffTypes[i] != 0 || cItem.BuffTimes[i] != 0)
+                {
+                    save = true;
+                    break;
+                }
+            }
+            if (save)
+            {
+                tag.Add("BuffTypes", cItem.BuffTypes);
+                tag.Add("BuffTimes", cItem.BuffTimes);
+            }
             return tag;
         }
 
@@ -627,6 +641,17 @@ namespace ItemModifier
             if (tag.ContainsKey("UseStyle"))
             {
                 item.useStyle = tag.GetByte("UseStyle");
+            }
+            if (tag.ContainsKey("BuffTypes"))
+            {
+                CustomProperties cItem = item.GetGlobalItem<CustomProperties>();
+                int[] buffTypes = tag.GetIntArray("BuffTypes");
+                int[] buffTimes = tag.GetIntArray("BuffTimes");
+                for (int i = 0; i < cItem.BuffTypes.Length; i++)
+                {
+                    cItem.BuffTypes[i] = buffTypes[i];
+                    cItem.BuffTimes[i] = buffTimes[i];
+                }
             }
         }
     }
