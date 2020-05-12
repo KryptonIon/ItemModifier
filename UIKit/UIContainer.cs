@@ -96,7 +96,15 @@ namespace ItemModifier.UIKit
 
         public override void ScrollWheel(UIScrollWheelEventArgs e)
         {
-            ScrollValue -= e.ScrollWheelValue;
+            UIElement target = e.Target;
+            while(!(target is UIContainer))
+            {
+                target = target.Parent;
+            }
+            if (target == this)
+            {
+                ScrollValue -= e.ScrollWheelValue;
+            }
             base.ScrollWheel(e);
         }
 

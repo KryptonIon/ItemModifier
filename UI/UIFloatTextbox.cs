@@ -21,8 +21,8 @@ namespace ItemModifier.UI
                 if (_value != value)
                 {
                     _value = value > MaxValue ? MaxValue : value < MinValue ? MinValue : value;
-                    DrawText = Value.ToString();
-                    CaretPosition = DrawText.Length;
+                    RawText = Value.ToString();
+                    CaretPosition = RawText.Length;
                     OnValueChanged?.Invoke(this, new EventArgs<float>(Value));
                 }
             }
@@ -64,8 +64,8 @@ namespace ItemModifier.UI
             MaxValue = maxValue;
             MinValue = minValue;
             _value = 0f > MaxValue ? MaxValue : 0f < MinValue ? MinValue : 0f;
-            DrawText = Value.ToString();
-            CaretPosition = DrawText.Length;
+            RawText = Value.ToString();
+            CaretPosition = RawText.Length;
             OnUnfocused += (source) =>
             {
                 if (string.IsNullOrEmpty(Text))
@@ -129,7 +129,7 @@ namespace ItemModifier.UI
                     }
                     i++;
                 }
-                DrawText = newText;
+                RawText = newText;
             };
         }
     }

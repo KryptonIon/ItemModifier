@@ -29,6 +29,8 @@ namespace ItemModifier.UIKit.Inputs
 
         public event UIEventHandler<EventArgs<string>> OnTextChangedByUser;
 
+        protected Texture2D TextboxTexture { get; set; } = Textures.WhiteDot;
+
         public Color TextColor { get; set; } = Color.Black;
 
         public Color BackgroundColor { get; set; } = UIBackgroundColor;
@@ -43,9 +45,26 @@ namespace ItemModifier.UIKit.Inputs
 
         public int CharacterLimit { get; set; }
 
+        protected virtual Rectangle ScissorRectangle
+        {
+            get
+            {
+                Vector2 textPosition = TextPosition;
+                return new Rectangle((int)textPosition.X, (int)textPosition.Y, (int)InnerWidth - 2, (int)InnerHeight);
+            }
+        }
+
+        protected virtual Vector2 TextPosition
+        {
+            get
+            {
+                return new Vector2(InnerX + 2f, InnerY);
+            }
+        }
+
         private string text = string.Empty;
 
-        protected string DrawText
+        protected string RawText
         {
             get
             {
@@ -76,8 +95,8 @@ namespace ItemModifier.UIKit.Inputs
             {
                 if (text != value)
                 {
-                    DrawText = value;
-                    CaretPosition = DrawText.Length;
+                    RawText = value;
+                    CaretPosition = RawText.Length;
                     OnTextChanged?.Invoke(this, new EventArgs<string>(Text));
                 }
             }
@@ -160,22 +179,26 @@ namespace ItemModifier.UIKit.Inputs
                 sb.Draw(Textures.BlackDot, new Rectangle((int)(PadX + PadWidth) - BorderSize, verticalPosition, BorderSize, verticalLength), BorderColor);
                 sb.Draw(Textures.BlackDot, new Rectangle(padX, (int)(PadY + PadHeight) - BorderSize, padWidth, BorderSize), BorderColor);
             }
-            sb.Draw(Textures.WhiteDot, new Rectangle(padX + BorderSize, padY + BorderSize, padWidth - BorderSize - BorderSize, padHeight - BorderSize - BorderSize), BackgroundColor);
-            Rectangle scissorRect = sb.GraphicsDevice.ScissorRectangle;
-            Rectangle innerRect = new Rectangle((int)InnerX + 2, (int)InnerY, (int)InnerWidth - 2, (int)InnerHeight);
+            sb.Draw(TextboxTexture, InnerRect, BackgroundColor);
+            DrawText(sb);
+        }
+
+        protected virtual void DrawText(SpriteBatch sb)
+        {
+            Rectangle originalScissorRect = sb.GraphicsDevice.ScissorRectangle;
             sb.End();
-            sb.GraphicsDevice.ScissorRectangle = Rectangle.Intersect(GetClippingRectangle(sb, innerRect), scissorRect);
+            sb.GraphicsDevice.ScissorRectangle = Rectangle.Intersect(GetClippingRectangle(sb, ScissorRectangle), originalScissorRect);
             sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, OverflowHiddenRasterizerState, null, Main.UIScaleMatrix);
-            sb.DrawString(Font, Text, new Vector2(innerRect.X, innerRect.Y), TextColor);
+            Vector2 textPos = TextPosition;
+            sb.DrawString(Font, Text, textPos, TextColor);
             sb.End();
-            sb.GraphicsDevice.ScissorRectangle = scissorRect;
+            sb.GraphicsDevice.ScissorRectangle = originalScissorRect;
             sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, sb.GraphicsDevice.RasterizerState, null, Main.UIScaleMatrix);
             if (Focused)
             {
                 if (caretDelta < 20)
                 {
-                    float textSizeX = Font.MeasureString(Text.Substring(0, CaretPosition)).X;
-                    sb.Draw(Textures.Caret, new Vector2(innerRect.X + textSizeX, InnerY + 1), CaretColor);
+                    sb.Draw(Textures.Caret, new Vector2(textPos.X + Font.MeasureString(Text.Substring(0, CaretPosition)).X, textPos.Y), CaretColor);
                 }
                 if (++caretDelta > 39)
                 {
@@ -199,7 +222,7 @@ namespace ItemModifier.UIKit.Inputs
                     {
                         string backHalf = Text.Substring(CaretPosition);
                         CaretPosition = newText.Length;
-                        DrawText = newText + backHalf;
+                        RawText = newText + backHalf;
                     }
                     else
                     {
