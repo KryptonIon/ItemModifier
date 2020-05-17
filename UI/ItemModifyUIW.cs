@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
 using static ItemModifier.ItemModifier;
+using Terraria.ID;
 
 namespace ItemModifier.UI
 {
@@ -454,7 +455,7 @@ namespace ItemModifier.UI
             {
                 if (e.Value)
                 {
-                    Main.LocalPlayer.HeldItem.useStyle = 1;
+                    Main.LocalPlayer.HeldItem.useStyle = ItemUseStyleID.SwingThrow;
                 }
             };
             RDrink = new UIRadioButton("Drink") { Parent = UseStyleRadio };
@@ -462,7 +463,7 @@ namespace ItemModifier.UI
             {
                 if (e.Value)
                 {
-                    Main.LocalPlayer.HeldItem.useStyle = 2;
+                    Main.LocalPlayer.HeldItem.useStyle = ItemUseStyleID.EatingUsing;
                 }
             };
             RStab = new UIRadioButton("Stab") { Parent = UseStyleRadio };
@@ -470,7 +471,7 @@ namespace ItemModifier.UI
             {
                 if (e.Value)
                 {
-                    Main.LocalPlayer.HeldItem.useStyle = 3;
+                    Main.LocalPlayer.HeldItem.useStyle = ItemUseStyleID.Stabbing;
                 }
             };
             RAboveHead = new UIRadioButton("Above Head") { Parent = UseStyleRadio };
@@ -478,7 +479,7 @@ namespace ItemModifier.UI
             {
                 if (e.Value)
                 {
-                    Main.LocalPlayer.HeldItem.useStyle = 4;
+                    Main.LocalPlayer.HeldItem.useStyle = ItemUseStyleID.HoldingUp;
                 }
             };
             RHeld = new UIRadioButton("Held") { Parent = UseStyleRadio };
@@ -486,7 +487,7 @@ namespace ItemModifier.UI
             {
                 if (e.Value)
                 {
-                    Main.LocalPlayer.HeldItem.useStyle = 5;
+                    Main.LocalPlayer.HeldItem.useStyle = ItemUseStyleID.HoldingOut;
                 }
             };
             float uStyleWidth = 0f;
@@ -505,7 +506,7 @@ namespace ItemModifier.UI
             UseStyleRadio.OnDeselected += (source, e) =>
             {
                 Item heldItem = Main.LocalPlayer.HeldItem;
-                if (UseStyleRadio.Selected.Length < 1 && heldItem.useStyle <= 5)
+                if (UseStyleRadio.Selected.Length < 1 && heldItem.useStyle <= ItemUseStyleID.HoldingOut)
                 {
                     heldItem.useStyle = 0;
                 }
@@ -827,7 +828,7 @@ namespace ItemModifier.UI
                     {
                         Scale.Value = heldItem.scale;
                     }
-                    if (heldItem.useStyle <= 5 && heldItem.useStyle != 0)
+                    if (heldItem.useStyle <= ItemUseStyleID.HoldingOut && heldItem.useStyle != 0)
                     {
                         UseStyleRadio.GetChoice(heldItem.useStyle - 1).Selected = true;
                     }
