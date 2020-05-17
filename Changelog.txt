@@ -533,3 +533,16 @@ Fixed NewItem copying wrong UseStyle
 Fixed TileBoost saving incorrectly
 Fixed Textbox Caret moving to the end when typing
 Fixed Use Style Textbox position when in Limited Mode
+
+
+
+
+
+
+
+
+
+
+
+Update 1.1.6 Hotfixes 11
+Fixed most items bugging out

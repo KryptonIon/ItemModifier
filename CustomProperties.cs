@@ -28,7 +28,7 @@ namespace ItemModifier
             {
                 player.AddBuff(BuffTypes[i], BuffTimes[i]);
             }
-            return true;
+            return false;
         }
     }
 }
