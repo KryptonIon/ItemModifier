@@ -546,3 +546,16 @@ Fixed Use Style Textbox position when in Limited Mode
 
 Update 1.1.6 Hotfixes 11
 Fixed most items bugging out
+
+
+
+
+
+
+
+
+
+
+
+Update 1.1.7 Hotfixes 12
+Added /imui to force UI Buttons to show up
