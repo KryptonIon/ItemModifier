@@ -574,3 +574,4 @@ Update 1.1.8 Hotfixes 13
 Added a Toggle Item Modifier UI HotKey (C)
 Added a Toggle New Item UI HotKey (V)
 Added a Open Wiki HotKey (X)
+Removed /imui Command
