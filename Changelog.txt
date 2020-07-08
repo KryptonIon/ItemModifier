@@ -558,7 +558,7 @@ Fixed most items bugging out
 
 
 Update 1.1.7 Hotfixes 12
-Added /imui to force UI Buttons to show up
+Added imui Command
 
 
 
@@ -574,4 +574,4 @@ Update 1.1.8 Hotfixes 13
 Added a Toggle Item Modifier UI HotKey (C)
 Added a Toggle New Item UI HotKey (V)
 Added a Open Wiki HotKey (X)
-Removed /imui Command
+Removed imui Command
