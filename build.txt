@@ -1,5 +1,5 @@
 displayName = Item Modifier
 author = KryptonIon
 version = 1.1.8
-buildIgnore = docs/*, Properties/*, *.sln, *.md, Changelog.txt
+buildIgnore = Properties/*, *.sln, *.md, Changelog.txt
 homepage = https://forums.terraria.org/index.php?threads/item-modifier-mod.79985/
