@@ -1,17 +1,12 @@
 # Item Modifier
-This is a mod for tModLoader, used for modifying existing or generated modified items, currently modified values won't save upon exiting the world.
+**Item Modifier** is a mod created by KryptonIon.
+
+It offers tools to provide ease in editing the various properties of an item, whether it'd be for building, testing, or something else.
 
 ![GitHub release](https://img.shields.io/github/v/release/KryptonIon/ItemModifier?color=green)
 
-
-# Releases
-Releases are available via Mod Browser or in the [Releases](https://github.com/KryptonIon/ItemModifier/releases).
-
-# Issues
-Found a bug? Got a Suggestion? or a Question? [Create an issue](https://github.com/KryptonIon/ItemModifier/issues).
-
 # Discord
-Want to join the community? Check out the [Discord Server](https://discord.gg/UjQWNC2).
+[![Discord Banner](https://discordapp.com/api/guilds/582720712905719828/widget.png?style=banner2)](https://discord.gg/UjQWNC2)
 
 # Wiki
-Item Modifier Documentation [here](https://github.com/KryptonIon/ItemModifier/wiki).
+Item Modifier Documentation can be found [here](https://terrariamods.gamepedia.com/Item_Modifier).
