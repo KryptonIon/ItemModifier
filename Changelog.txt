@@ -587,3 +587,4 @@ Removed imui Command
 
 
 Update 1.1.9 Hotfixes 14
+"Limited" Setting now requires reload
