@@ -575,3 +575,15 @@ Added Toggle Item Modifier UI HotKey (C)
 Added Toggle New Item UI HotKey (V)
 Added Open Wiki HotKey (X)
 Removed imui Command
+
+
+
+
+
+
+
+
+
+
+
+Update 1.1.9 Hotfixes 14
