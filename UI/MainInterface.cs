@@ -7,7 +7,7 @@ using static ItemModifier.ItemModifier;
 
 namespace ItemModifier.UI
 {
-    public class MainInterface : UserInterface
+    public class MainInterface : UILayer
     {
         internal ItemModifyUIW ItemModifierWindow;
 
@@ -27,14 +27,14 @@ namespace ItemModifier.UI
             {
                 XOffset = new SizeDimension(0, 0.3f),
                 YOffset = new SizeDimension(0, 0.2f),
-                ParentUI = this
+                Parent = this
             };
 
             NewItemWindow = new NewItemUIW
             {
                 XOffset = new SizeDimension(ItemModifierWindow.OuterWidth + 10f, 0.3f),
                 YOffset = ItemModifierWindow.YOffset,
-                ParentUI = this
+                Parent = this
             };
 
             ItemModifierButton = new UIImageButton(Textures.ModifyItem)
@@ -42,7 +42,7 @@ namespace ItemModifier.UI
                 XOffset = new SizeDimension(12f)
             };
             ItemModifierButton.YOffset = new SizeDimension(Main.screenHeight - ItemModifierButton.OuterHeight - 5f);
-            ItemModifierButton.ParentUI = this;
+            ItemModifierButton.Parent = this;
             ItemModifierButton.OnLeftClick += (source, e) => ToggleItemModifierUI();
             ItemModifierButton.WhileMouseHover += (source, e) => instance.Tooltip = "Modify Items";
 
@@ -51,7 +51,7 @@ namespace ItemModifier.UI
                 XOffset = new SizeDimension(12f)
             };
             NewItemButton.YOffset = new SizeDimension(ItemModifierButton.CalculatedYOffset - NewItemButton.OuterHeight - 5f);
-            NewItemButton.ParentUI = this;
+            NewItemButton.Parent = this;
             NewItemButton.OnLeftClick += (source, e) => ToggleNewItemUI();
             NewItemButton.WhileMouseHover += (source, e) => instance.Tooltip = "New Item";
 
@@ -60,7 +60,7 @@ namespace ItemModifier.UI
                 XOffset = new SizeDimension(20f)
             };
             WikiButton.YOffset = new SizeDimension(NewItemButton.CalculatedYOffset - WikiButton.OuterHeight - 12f);
-            WikiButton.ParentUI = this;
+            WikiButton.Parent = this;
             WikiButton.OnLeftClick += (source, e) => OpenWiki();
             WikiButton.WhileMouseHover += (source, e) => instance.Tooltip = "Open Wiki";
         }

@@ -93,30 +93,7 @@ namespace ItemModifier.UIKit
                 if (Parent != null)
                 {
                     Parent.Children.Add(this);
-                    parentUI = Parent.ParentUI;
                     Parent.OnChildAdded?.Invoke(Parent, new UIEventArgs(this));
-                }
-                Recalculate();
-            }
-        }
-
-        private UserInterface parentUI;
-
-        public UserInterface ParentUI
-        {
-            get
-            {
-                return parentUI;
-            }
-
-            set
-            {
-                ParentUI?.Children.Remove(this);
-                parentUI = value;
-                ParentUI?.Children.Add(this);
-                for (int i = 0; i < Children.Count; i++)
-                {
-                    Children[i].parentUI = ParentUI;
                 }
                 Recalculate();
             }
