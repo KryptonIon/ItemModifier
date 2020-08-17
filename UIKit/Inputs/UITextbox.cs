@@ -166,6 +166,7 @@ namespace ItemModifier.UIKit.Inputs
 
         protected override void DrawSelf(SpriteBatch sb)
         {
+            ProcessInput();
             int padX = (int)PadX;
             int padY = (int)PadY;
             int padWidth = (int)PadWidth;
@@ -207,7 +208,7 @@ namespace ItemModifier.UIKit.Inputs
             }
         }
 
-        protected override void PostUpdateInputSelf()
+        protected virtual void ProcessInput()
         {
             if (Focused)
             {

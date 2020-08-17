@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.UI;
@@ -236,6 +237,8 @@ namespace ItemModifier
 
 		internal string Tooltip { get; set; }
 
+		public static string WikiURL = "https://terrariamods.gamepedia.com/Item_Modifier";
+
 		public bool MouseWheelDisabled { get; set; } = false;
 
 		public bool ItemAtCursorDisabled { get; set; } = false;
@@ -284,20 +287,6 @@ namespace ItemModifier
 			MainUI?.Update(gameTime);
 		}
 
-		public override void PostUpdateInput()
-		{
-			if (MainUI != null)
-			{
-				if (ToggleItemModifierUIHotKey.JustPressed)
-					MainUI.ToggleItemModifierUI();
-				if (ToggleNewItemUIHotKey.JustPressed)
-					MainUI.ToggleNewItemUI();
-				if (OpenWikiHotKey.JustPressed)
-					MainUI.OpenWiki();
-				MainUI.PostUpdateInput();
-			}
-		}
-
 		public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
 		{
 			if (ItemAtCursorDisabled)
@@ -329,6 +318,11 @@ namespace ItemModifier
 		{
 			MainUI.ItemModifierWindow.Visible = false;
 			MainUI.NewItemWindow.Visible = false;
+		}
+
+		public static void OpenWiki()
+		{
+			Process.Start(WikiURL);
 		}
 	}
 }

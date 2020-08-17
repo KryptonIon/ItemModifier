@@ -376,20 +376,6 @@ namespace ItemModifier.UIKit
 
         }
 
-        public void PostUpdateInput()
-        {
-            PostUpdateInputSelf();
-            for (int i = 0; i < Children.Count; i++)
-            {
-                Children[i].PostUpdateInput();
-            }
-        }
-
-        protected virtual void PostUpdateInputSelf()
-        {
-
-        }
-
         public virtual void Draw(SpriteBatch sb)
         {
             if (Visible)
