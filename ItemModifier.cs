@@ -48,8 +48,6 @@ namespace ItemModifier
 
 			public static Texture2D Checkbox { get; private set; }
 
-			public static Texture2D HorizontalLine { get; private set; }
-
 			public static Texture2D X { get; private set; }
 
 			public static Texture2D Caret { get; private set; }
@@ -137,7 +135,6 @@ namespace ItemModifier
 				Sync = ModContent.GetTexture("ItemModifier/UI/Sync");
 				Reset = ModContent.GetTexture("ItemModifier/UI/Reset");
 				Checkbox = ModContent.GetTexture("ItemModifier/UIKit/Inputs/Checkbox");
-				HorizontalLine = ModContent.GetTexture("ItemModifier/UIKit/HorizontalLine");
 				X = ModContent.GetTexture("ItemModifier/UIKit/X");
 				Caret = ModContent.GetTexture("ItemModifier/UIKit/Inputs/Caret");
 				AutoReuse = ModContent.GetTexture("ItemModifier/UI/AutoReuse");
@@ -196,7 +193,6 @@ namespace ItemModifier
 				Sync = null;
 				Reset = null;
 				Checkbox = null;
-				HorizontalLine = null;
 				X = null;
 				Caret = null;
 				AutoReuse = null;
