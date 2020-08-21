@@ -112,10 +112,10 @@ namespace ItemModifier.UIKit
             {
                 int verticalPosition = padY + BorderSize;
                 int verticalLength = padHeight - BorderSize - BorderSize;
-                sb.Draw(Textures.BlackDot, new Rectangle(padX, padY, padWidth, BorderSize), BorderColor);
-                sb.Draw(Textures.BlackDot, new Rectangle(padX, verticalPosition, BorderSize, verticalLength), BorderColor);
-                sb.Draw(Textures.BlackDot, new Rectangle((int)(PadX + PadWidth) - BorderSize, verticalPosition, BorderSize, verticalLength), BorderColor);
-                sb.Draw(Textures.BlackDot, new Rectangle(padX, (int)(PadY + PadHeight) - BorderSize, padWidth, BorderSize), BorderColor);
+                sb.Draw(Textures.WhiteDot, new Rectangle(padX, padY, padWidth, BorderSize), BorderColor);
+                sb.Draw(Textures.WhiteDot, new Rectangle(padX, verticalPosition, BorderSize, verticalLength), BorderColor);
+                sb.Draw(Textures.WhiteDot, new Rectangle((int)(PadX + PadWidth) - BorderSize, verticalPosition, BorderSize, verticalLength), BorderColor);
+                sb.Draw(Textures.WhiteDot, new Rectangle(padX, (int)(PadY + PadHeight) - BorderSize, padWidth, BorderSize), BorderColor);
             }
             sb.Draw(Textures.WhiteDot, new Rectangle(backgroundX, backgroundY, backgroundWidth, padHeight - BorderSize - BorderSize), BackgroundColor);
             if (TitleHeight != 0)

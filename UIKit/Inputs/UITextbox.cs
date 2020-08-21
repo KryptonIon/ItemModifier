@@ -175,10 +175,10 @@ namespace ItemModifier.UIKit.Inputs
             {
                 int verticalPosition = padY + BorderSize;
                 int verticalLength = padHeight - BorderSize - BorderSize;
-                sb.Draw(Textures.BlackDot, new Rectangle(padX, padY, padWidth, BorderSize), BorderColor);
-                sb.Draw(Textures.BlackDot, new Rectangle(padX, verticalPosition, BorderSize, verticalLength), BorderColor);
-                sb.Draw(Textures.BlackDot, new Rectangle((int)(PadX + PadWidth) - BorderSize, verticalPosition, BorderSize, verticalLength), BorderColor);
-                sb.Draw(Textures.BlackDot, new Rectangle(padX, (int)(PadY + PadHeight) - BorderSize, padWidth, BorderSize), BorderColor);
+                sb.Draw(Textures.WhiteDot, new Rectangle(padX, padY, padWidth, BorderSize), BorderColor);
+                sb.Draw(Textures.WhiteDot, new Rectangle(padX, verticalPosition, BorderSize, verticalLength), BorderColor);
+                sb.Draw(Textures.WhiteDot, new Rectangle((int)(PadX + PadWidth) - BorderSize, verticalPosition, BorderSize, verticalLength), BorderColor);
+                sb.Draw(Textures.WhiteDot, new Rectangle(padX, (int)(PadY + PadHeight) - BorderSize, padWidth, BorderSize), BorderColor);
             }
             sb.Draw(TextboxTexture, InnerRect, BackgroundColor);
             DrawText(sb);

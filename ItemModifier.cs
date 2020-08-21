@@ -112,8 +112,6 @@ namespace ItemModifier
 
 			public static Texture2D SquareSelect { get; private set; }
 
-			public static Texture2D BlackDot { get; private set; }
-
 			public static Texture2D Globe { get; private set; }
 
 			public static void Load()
@@ -168,8 +166,6 @@ namespace ItemModifier
 				OpaqueWindowBackground.SetData(new Color[] { new Color(44, 57, 105) });
 				WhiteDot = new Texture2D(Main.spriteBatch.GraphicsDevice, 1, 1);
 				WhiteDot.SetData(new Color[] { Color.White });
-				BlackDot = new Texture2D(Main.spriteBatch.GraphicsDevice, 1, 1);
-				BlackDot.SetData(new Color[] { Color.Black });
 				SquareSelect = ModContent.GetTexture("ItemModifier/UIKit/Inputs/SquareSelect");
 				Globe = ModContent.GetTexture("ItemModifier/UI/Globe");
 			}
