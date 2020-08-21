@@ -78,10 +78,5 @@ namespace ItemModifier.UI
                 Main.playerInventory = true;
             }
         }
-
-        internal void OpenWiki()
-		{
-            Process.Start("https://terrariamods.gamepedia.com/Item_Modifier");
-        }
     }
 }
