@@ -588,4 +588,6 @@ Removed imui Command
 
 Update 1.1.9 Hotfixes 14
 "Limited" Setting now requires reload
+Input Element is now below the label in Item Modifier Window
 Border Dragging is removed
+Remove ":" from all labels in Item Modifier Window

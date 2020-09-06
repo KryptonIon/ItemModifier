@@ -261,17 +261,17 @@ namespace ItemModifier.UI
             AutoReuse = new UIBool();
             AutoReuse.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.autoReuse = e.Value;
             AutoReuse.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.autoReuse = DefaultItem.autoReuse;
-            PAutoReuse = new UICategory.UIProperty(Textures.AutoReuse, "Auto Use:", AutoReuse);
+            PAutoReuse = new UICategory.UIProperty(Textures.AutoReuse, "Auto Use", AutoReuse);
 
             Consumable = new UIBool();
             Consumable.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.consumable = e.Value;
             Consumable.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.consumable = DefaultItem.consumable;
-            PConsumable = new UICategory.UIProperty(Textures.Consumable, "Consumable:", Consumable);
+            PConsumable = new UICategory.UIProperty(Textures.Consumable, "Consumable", Consumable);
 
             Potion = new UIBool();
             Potion.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.potion = e.Value;
             Potion.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.potion = DefaultItem.potion;
-            PPotion = new UICategory.UIProperty(Textures.PotionSickness, "Potion Sickness:", Potion);
+            PPotion = new UICategory.UIProperty(Textures.PotionSickness, "Potion Sickness", Potion);
 
             DamageType = new UIRadioButtonContainer();
             RMelee = new UIRadioButton("Melee") { Parent = DamageType };
@@ -304,48 +304,47 @@ namespace ItemModifier.UI
                 Main.LocalPlayer.HeldItem.summon = DefaultItem.summon;
                 Main.LocalPlayer.HeldItem.thrown = DefaultItem.thrown;
             };
-            PDamageType = new UICategory.UIProperty(Textures.DamageType, "Damage Type:", DamageType);
+            PDamageType = new UICategory.UIProperty(Textures.DamageType, "Damage Type", DamageType);
 
             Accessory = new UIBool();
             Accessory.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.accessory = e.Value;
             Accessory.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.accessory = DefaultItem.accessory;
-            PAccessory = new UICategory.UIProperty(Textures.Accessory, "Accessory:", Accessory);
+            PAccessory = new UICategory.UIProperty(Textures.Accessory, "Accessory", Accessory);
 
             Damage = limited ? new UIIntTextbox(-1) : new UIIntTextbox();
             Damage.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.damage = e.Value;
             Damage.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.damage = DefaultItem.damage;
-            PDamage = new UICategory.UIProperty(Textures.Damage, "Damage:", Damage);
+            PDamage = new UICategory.UIProperty(Textures.Damage, "Damage", Damage);
 
             Critical = limited ? new UIIntTextbox(ushort.MinValue, ushort.MaxValue) : new UIIntTextbox();
             Critical.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.crit = e.Value;
             Critical.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.crit = DefaultItem.crit;
-            PCritical = new UICategory.UIProperty(Textures.CritChance, "Crit Chance:", Critical);
+            PCritical = new UICategory.UIProperty(Textures.CritChance, "Crit Chance", Critical);
 
             KnockBack = new UIFloatTextbox();
             KnockBack.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.knockBack = e.Value;
             KnockBack.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.knockBack = DefaultItem.knockBack;
-            PKnockBack = new UICategory.UIProperty(Textures.Knockback, "KnockBack:", KnockBack);
+            PKnockBack = new UICategory.UIProperty(Textures.Knockback, "KnockBack", KnockBack);
 
             Shoot = new UIIntTextbox(0, ProjectileLoader.ProjectileCount - 1);
             Shoot.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.shoot = e.Value;
             Shoot.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.shoot = DefaultItem.shoot;
-            PShoot = new UICategory.UIProperty(Textures.ProjectileShot, "Projectile Shot:", Shoot);
+            PShoot = new UICategory.UIProperty(Textures.ProjectileShot, "Projectile Shot", Shoot);
 
             ShootSpeed = new UIFloatTextbox();
             ShootSpeed.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.shootSpeed = e.Value;
             ShootSpeed.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.shootSpeed = DefaultItem.shootSpeed;
-            PShootSpeed = new UICategory.UIProperty(Textures.ProjectileSpeed, "Shoot Speed:", ShootSpeed);
+            PShootSpeed = new UICategory.UIProperty(Textures.ProjectileSpeed, "Shoot Speed", ShootSpeed);
 
             Tile = new UIIntTextbox(-1, TileLoader.TileCount - 1);
             Tile.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.createTile = e.Value;
             Tile.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.createTile = DefaultItem.createTile;
-            PTile = new UICategory.UIProperty(Textures.CreateTile, "Place Tile:", Tile);
+            PTile = new UICategory.UIProperty(Textures.CreateTile, "Place Tile", Tile);
 
             TileBoost = limited ? new UIIntTextbox(sbyte.MinValue, sbyte.MaxValue) : new UIIntTextbox();
             TileBoost.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.tileBoost = e.Value;
             TileBoost.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.tileBoost = DefaultItem.tileBoost;
-            PTileBoost = new UICategory.UIProperty(Textures.AddedRange, "Added Range:", TileBoost);
-            PTileBoost.Recalculate();
+            PTileBoost = new UICategory.UIProperty(Textures.AddedRange, "Added Range", TileBoost);
 
             BuffContainer = new UIContainer()
             {
@@ -387,67 +386,67 @@ namespace ItemModifier.UI
                 BuffTimes[i].OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.GetGlobalItem<CustomProperties>().BuffTimes[id] = e.Value;
                 BuffTimes[i].OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.GetGlobalItem<CustomProperties>().BuffTimes[id] = DefaultItem.GetGlobalItem<CustomProperties>().BuffTimes[id];
             }
-            PBuff = new UICategory.UIProperty(Textures.BuffType, "Buff:", BuffContainer);
+            PBuff = new UICategory.UIProperty(Textures.BuffType, "Buff", BuffContainer);
 
             HealHP = limited ? new UIIntTextbox(ushort.MinValue, ushort.MaxValue) : new UIIntTextbox();
             HealHP.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.healLife = e.Value;
             HealHP.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.healLife = DefaultItem.healLife;
-            PHealHP = new UICategory.UIProperty(Textures.HPHealed, "HP Healed:", HealHP);
+            PHealHP = new UICategory.UIProperty(Textures.HPHealed, "HP Healed", HealHP);
 
             HealMP = limited ? new UIIntTextbox(ushort.MinValue, ushort.MaxValue) : new UIIntTextbox();
             HealMP.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.healMana = e.Value;
             HealMP.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.healMana = DefaultItem.healMana;
-            PHealMP = new UICategory.UIProperty(Textures.MPHealed, "Mana Healed:", HealMP);
+            PHealMP = new UICategory.UIProperty(Textures.MPHealed, "Mana Healed", HealMP);
 
             AxePower = limited ? new UIIntTextbox(ushort.MinValue, ushort.MaxValue) : new UIIntTextbox();
             AxePower.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.axe = e.Value;
             AxePower.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.axe = DefaultItem.axe;
-            PAxePower = new UICategory.UIProperty(Textures.AxePower, "Axe Power:", AxePower);
+            PAxePower = new UICategory.UIProperty(Textures.AxePower, "Axe Power", AxePower);
 
             PickaxePower = limited ? new UIIntTextbox(ushort.MinValue, ushort.MaxValue) : new UIIntTextbox();
             PickaxePower.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.pick = e.Value;
             PickaxePower.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.pick = DefaultItem.pick;
-            PPickaxePower = new UICategory.UIProperty(Textures.PickaxePower, "Pickaxe Power:", PickaxePower);
+            PPickaxePower = new UICategory.UIProperty(Textures.PickaxePower, "Pickaxe Power", PickaxePower);
 
             HammerPower = limited ? new UIIntTextbox(ushort.MinValue, ushort.MaxValue) : new UIIntTextbox();
             HammerPower.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.hammer = e.Value;
             HammerPower.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.hammer = DefaultItem.hammer;
-            PHammerPower = new UICategory.UIProperty(Textures.HammerPower, "Hammer Power:", HammerPower);
+            PHammerPower = new UICategory.UIProperty(Textures.HammerPower, "Hammer Power", HammerPower);
 
             Stack = limited ? new UIIntTextbox(1) : new UIIntTextbox();
             Stack.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.stack = e.Value;
             Stack.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.stack = DefaultItem.stack;
-            PStack = new UICategory.UIProperty(Textures.Stack, "Amount:", Stack);
+            PStack = new UICategory.UIProperty(Textures.Stack, "Amount", Stack);
 
             MaxStack = limited ? new UIIntTextbox(1) : new UIIntTextbox();
             MaxStack.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.maxStack = e.Value;
             MaxStack.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.maxStack = DefaultItem.maxStack;
-            PMaxStack = new UICategory.UIProperty(Textures.MaxStack, "Max Stack:", MaxStack);
+            PMaxStack = new UICategory.UIProperty(Textures.MaxStack, "Max Stack", MaxStack);
 
             UseAnimation = limited ? new UIIntTextbox(ushort.MinValue, ushort.MaxValue) : new UIIntTextbox();
             UseAnimation.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.useAnimation = e.Value;
             UseAnimation.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.useAnimation = DefaultItem.useAnimation;
-            PUseAnimation = new UICategory.UIProperty(Textures.UseAnimation, "Animation Span:", UseAnimation);
+            PUseAnimation = new UICategory.UIProperty(Textures.UseAnimation, "Animation Span", UseAnimation);
 
             UseTime = limited ? new UIIntTextbox(ushort.MinValue, ushort.MaxValue) : new UIIntTextbox();
             UseTime.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.useTime = e.Value;
             UseTime.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.useTime = DefaultItem.useTime;
-            PUseTime = new UICategory.UIProperty(Textures.UseTime, "Use Span:", UseTime);
+            PUseTime = new UICategory.UIProperty(Textures.UseTime, "Use Span", UseTime);
 
             Defense = new UIIntTextbox();
             Defense.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.defense = e.Value;
             Defense.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.defense = DefaultItem.defense;
-            PDefense = new UICategory.UIProperty(Textures.Defense, "Defense:", Defense);
+            PDefense = new UICategory.UIProperty(Textures.Defense, "Defense", Defense);
 
             FishingPower = limited ? new UIIntTextbox(ushort.MinValue, ushort.MaxValue) : new UIIntTextbox();
             FishingPower.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.fishingPole = e.Value;
             FishingPower.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.fishingPole = DefaultItem.fishingPole;
-            PFishingPower = new UICategory.UIProperty(Textures.FishingPower, "Fishing Power:", FishingPower);
+            PFishingPower = new UICategory.UIProperty(Textures.FishingPower, "Fishing Power", FishingPower);
 
             Scale = new UIFloatTextbox();
             Scale.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.scale = e.Value;
             Scale.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.scale = DefaultItem.scale;
-            PScale = new UICategory.UIProperty(Textures.ItemScale, "Item Scale:", Scale);
+            PScale = new UICategory.UIProperty(Textures.ItemScale, "Item Scale", Scale);
 
             UseStyleRadio = new UIRadioButtonContainer();
             RSwing = new UIRadioButton("Swing") { Parent = UseStyleRadio };
@@ -511,12 +510,10 @@ namespace ItemModifier.UI
                     heldItem.useStyle = 0;
                 }
             };
-            UseStyleRadio.Recalculate();
             UseStyle = limited ? new UIIntTextbox(0) : new UIIntTextbox();
-            UseStyle.YOffset = new SizeDimension(UseStyleRadio.OuterHeight);
             UseStyle.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.useStyle = e.Value;
             UseStyle.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.useStyle = DefaultItem.useStyle;
-            PUseStyle = new UICategory.UIProperty(Textures.UseStyle, "Use Style:", UseStyleRadio, UseStyle);
+            PUseStyle = new UICategory.UIProperty(Textures.UseStyle, "Use Style", UseStyleRadio, UseStyle);
 
             ToggleLiveSync = new UIImageButton(Textures.Sync, false, new Color(20, 255, 20))
             {
@@ -670,18 +667,6 @@ namespace ItemModifier.UI
                 YOffset = new SizeDimension(30f),
                 OverflowHidden = true,
                 Parent = this
-            };
-            CategoryContainer.OnChildAdded += (source, e) =>
-            {
-                if (source.ChildrenCount == 1)
-                {
-                    source[0].YOffset = new SizeDimension(0f);
-                }
-                else
-                {
-                    UIElement lastChild = source[source.ChildrenCount - 2];
-                    source[source.ChildrenCount - 1].YOffset = new SizeDimension(lastChild.CalculatedYOffset + lastChild.OuterHeight);
-                }
             };
 
             GrayBG = new UIContainer(new Color(47, 79, 79, 150))

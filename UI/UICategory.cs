@@ -1,33 +1,29 @@
 ﻿using ItemModifier.UIKit;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using System.Collections.Generic;
-using static Terraria.Utils;
 
 namespace ItemModifier.UI
 {
     public class UICategory
     {
-        public class UIProperty : UIElement
+        public class UIProperty
         {
-            private string label;
+            internal UIText label;
 
             public string Label
             {
                 get
                 {
-                    return label;
+                    return label.Text;
                 }
 
                 set
                 {
-                    label = value;
-                    RecalculateSelf();
+                    label.Text = value;
                 }
             }
 
-            private UIImage imageLabel;
+            internal UIImage imageLabel;
 
             public Texture2D ImageLabel
             {
@@ -42,49 +38,49 @@ namespace ItemModifier.UI
                 }
             }
 
-            public SizeDimension ChildXOffset { get; private set; }
+            internal readonly List<UIElement> children = new List<UIElement>();
 
-            public Color TextColor { get; set; } = Color.White;
+            public IEnumerable<UIElement> Children
+            {
+                get
+                {
+                    for (int i = 0; i < children.Count; i++)
+                    {
+                        yield return children[i];
+                    }
+                }
+            }
 
             public UIProperty(Texture2D imageLabel, string label, params UIElement[] children)
             {
                 this.imageLabel = new UIImage(imageLabel)
                 {
-                    Parent = this
+                    AutoScale = false,
+                    Width = new SizeDimension(16),
+                    Height = new SizeDimension(16)
                 };
-                Label = label;
-                OnChildAdded += (source, child) => child.Target.XOffset = ChildXOffset;
-                for (int i = 0; i < children.Length; i++)
-                {
-                    children[i].Parent = this;
-                }
+                this.label = new UIText(label);
+                this.children.AddRange(children);
             }
 
-            protected override void DrawSelf(SpriteBatch sb)
+            public void Append(params UIElement[] elements)
             {
-                DrawBorderString(sb, Label, new Vector2(InnerX + 20, InnerY), TextColor);
+                children.AddRange(elements);
             }
 
-            protected internal override void RecalculateSelf()
+            public void AppendTo(UIElement parent)
             {
-                Vector2 labelSize = Utils.MeasureString2(Label, true);
-                float width = labelSize.X + 20f;
-                float height = labelSize.Y;
-                ChildXOffset = new SizeDimension(width + 4f);
-                float furthest = 0f;
-                float deepest = 0f;
-                for (int i = 0; i < ChildrenCount; i++)
+                label.Parent = parent;
+                imageLabel.Parent = parent;
+                AppendChildren(parent);
+            }
+
+            public void AppendChildren(UIElement parent)
+            {
+                for (int i = 0; i < children.Count; i++)
                 {
-                    UIElement child = Children[i];
-                    float dX = child.XOffset.Pixels + child.OuterWidth;
-                    float dY = child.YOffset.Pixels + child.OuterHeight;
-                    if (dX > furthest) furthest = dX;
-                    if (dY > deepest) deepest = dY;
+                    children[i].Parent = parent;
                 }
-                width += furthest;
-                Width = new SizeDimension(width);
-                Height = new SizeDimension(Math.Max(height, deepest));
-                base.RecalculateSelf();
             }
         }
 
@@ -98,11 +94,45 @@ namespace ItemModifier.UI
             Properties = properties ?? new List<UIProperty>();
         }
 
+        public int PropertyDistance { get; set; } = 5;
+
+        public int InputElementDistance { get; set; } = 3;
+
         public void AppendProperties(UIContainer container)
         {
+            // Make sure there isnt distance between
+            // top and first element
+            float yOffset = PropertyDistance * -1;
+
             for (int i = 0; i < Properties.Count; i++)
             {
-                Properties[i].Parent = container;
+                UIProperty property = Properties[i];
+                // Give XY Positioning to image and label
+                property.imageLabel.XOffset = SizeDimension.Empty;
+                property.imageLabel.YOffset = new SizeDimension(yOffset + PropertyDistance);
+                // Force recalculate
+                property.imageLabel.Parent = container;
+                property.label.XOffset = new SizeDimension(property.imageLabel.OuterWidth + 2);
+                property.label.YOffset = property.imageLabel.YOffset;
+                // Force recalculate
+                property.label.Parent = container;
+                
+                yOffset = property.imageLabel.YOffset.Pixels + property.label.OuterHeight;
+                
+                // Remove spacing between label and first element
+                if (property.children.Count > 0)
+                    yOffset -= InputElementDistance;
+
+                // Give XY positioning to children
+                for (int j = 0; j < property.children.Count; j++)
+                {
+                    UIElement child = property.children[j];
+                    child.XOffset = property.label.XOffset;
+                    child.YOffset = new SizeDimension(yOffset + InputElementDistance);
+                    // Force recalculate
+                    child.Parent = container;
+                    yOffset = child.YOffset.Pixels + child.OuterHeight;
+                }
             }
         }
     }
