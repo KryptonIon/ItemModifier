@@ -33,7 +33,7 @@ namespace ItemModifier.UIKit.Inputs
 
         public Color TextColor { get; set; } = Color.Black;
 
-        public Color BackgroundColor { get; set; } = UIBackgroundColor;
+        public Color BackgroundColor { get; set; } = UIContainer.UIBackgroundColor;
 
         public Color BorderColor { get; set; } = Color.Black;
 

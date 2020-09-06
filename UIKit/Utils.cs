@@ -13,14 +13,6 @@ namespace ItemModifier.UIKit
 {
     public static class Utils
     {
-        public static Color UIBackgroundColor
-        {
-            get
-            {
-                return new Color(44, 57, 105, 190);
-            }
-        }
-
         public static Vector2 MeasureString2(string text, bool skipDescenderScaling = false)
         {
             Vector2 Size = fontMouseText.MeasureString(text);

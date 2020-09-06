@@ -8,15 +8,9 @@ using static Terraria.Utils;
 
 namespace ItemModifier.UIKit
 {
-    public class UIWindow : UIElement
+    public class UIWindow : UIPanel
     {
         public string Title { get; set; } = string.Empty;
-
-        public Color BorderColor { get; set; } = Color.Black;
-
-        public Color BackgroundColor { get; set; } = Utils.UIBackgroundColor;
-
-        public int BorderSize { get; protected set; } = 2;
 
         private bool dragging;
 
@@ -69,15 +63,6 @@ namespace ItemModifier.UIKit
         protected internal override void RecalculateSelf()
         {
             base.RecalculateSelf();
-            if (BorderSize > 0)
-            {
-                OuterWidth += BorderSize + BorderSize;
-                OuterHeight += BorderSize + BorderSize;
-                PadWidth += BorderSize + BorderSize;
-                PadHeight += BorderSize + BorderSize;
-                InnerX += BorderSize;
-                InnerY += BorderSize;
-            }
             if (TitleHeight != 0)
             {
                 TitleX = InnerX;
@@ -101,26 +86,10 @@ namespace ItemModifier.UIKit
                 YOffset = new SizeDimension(Main.mouseY - localDragPosition.Y, YOffset.Percent);
                 Recalculate();
             }
-            int padX = (int)PadX;
-            int padY = (int)PadY;
-            int padWidth = (int)PadWidth;
-            int padHeight = (int)PadHeight;
-            int backgroundX = padX + BorderSize;
-            int backgroundY = padY + BorderSize;
-            int backgroundWidth = padWidth - BorderSize - BorderSize;
-            if (BorderSize > 0)
-            {
-                int verticalPosition = padY + BorderSize;
-                int verticalLength = padHeight - BorderSize - BorderSize;
-                sb.Draw(Textures.WhiteDot, new Rectangle(padX, padY, padWidth, BorderSize), BorderColor);
-                sb.Draw(Textures.WhiteDot, new Rectangle(padX, verticalPosition, BorderSize, verticalLength), BorderColor);
-                sb.Draw(Textures.WhiteDot, new Rectangle((int)(PadX + PadWidth) - BorderSize, verticalPosition, BorderSize, verticalLength), BorderColor);
-                sb.Draw(Textures.WhiteDot, new Rectangle(padX, (int)(PadY + PadHeight) - BorderSize, padWidth, BorderSize), BorderColor);
-            }
-            sb.Draw(Textures.WhiteDot, new Rectangle(backgroundX, backgroundY, backgroundWidth, padHeight - BorderSize - BorderSize), BackgroundColor);
+            base.DrawSelf(sb);
             if (TitleHeight != 0)
             {
-                sb.Draw(Textures.WhiteDot, new Rectangle(backgroundX, backgroundY, backgroundWidth, (int)TitleHeight), Utils.UIBackgroundColor);
+                sb.Draw(Textures.WhiteDot, new Rectangle((int)PadX + BorderSize, (int)PadY + BorderSize, (int)PadWidth - BorderSize - BorderSize, (int)TitleHeight), UIBackgroundColor);
                 DrawBorderString(sb, Title, new Vector2(PadX + BorderSize + 2f, PadY + BorderSize + 1f), Color.White);
             }
         }

@@ -7,6 +7,8 @@ namespace ItemModifier.UIKit
 {
     public class UIContainer : UIElement
     {
+        public static Color UIBackgroundColor => new Color(44, 57, 105, 190);
+
         public Color BackgroundColor { get; set; } = Color.Transparent;
 
         private float scrollValue;
