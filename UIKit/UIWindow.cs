@@ -20,39 +20,28 @@ namespace ItemModifier.UIKit
 
         protected UIImageButton CloseButton { get; private set; }
 
+        public bool HasTitle { get; set; }
+
         public float TitleX { get; protected set; }
 
         public float TitleY { get; protected set; }
 
-        private float titleHeight;
+        public float TitleWidth { get; protected set; }
 
-        public float TitleHeight
+        public const int TitleHeight = 21;
+
+        public Rectangle TitleRect => new Rectangle((int)TitleX, (int)TitleY, (int)TitleWidth, (int)TitleHeight);
+
+        public UIWindow() : base(UIBackgroundColor, Color.Black)
         {
-            get
-            {
-                return titleHeight;
-            }
-
-            protected set
-            {
-                if (titleHeight != value)
-                {
-                    titleHeight = value;
-                    Recalculate();
-                }
-            }
-        }
-
-        public UIWindow(bool draggable = true)
-        {
-            Draggable = draggable;
             Width = new SizeDimension(300f);
             Height = new SizeDimension(200f);
         }
 
-        public UIWindow(string title, bool hasCloseButton = true, bool draggable = true) : this(draggable)
+        public UIWindow(string title, bool hasCloseButton = true, bool draggable = true) : this()
         {
-            titleHeight = 21f;
+            HasTitle = true;
+            Draggable = draggable;
             Title = title;
             if (hasCloseButton)
             {
@@ -63,18 +52,23 @@ namespace ItemModifier.UIKit
         protected internal override void RecalculateSelf()
         {
             base.RecalculateSelf();
-            if (TitleHeight != 0)
+            if (HasTitle)
             {
-                TitleX = InnerX;
-                TitleY = InnerY;
+                // Make sure title doesn't overlap borders
+                // Not derived from InnerX/Y so that padding doesn't affect title
+                TitleX = PadX + BorderSize;
+                TitleY = PadY + BorderSize;
+                TitleWidth = PadWidth - BorderSize - BorderSize;
                 OuterHeight += TitleHeight;
                 PadHeight += TitleHeight;
+                // Shift InnerRect down
                 InnerY += TitleHeight;
             }
             else
             {
                 TitleX = -1;
                 TitleY = -1;
+                TitleWidth = -1;
             }
         }
 
@@ -87,16 +81,16 @@ namespace ItemModifier.UIKit
                 Recalculate();
             }
             base.DrawSelf(sb);
-            if (TitleHeight != 0)
+            if (HasTitle)
             {
-                sb.Draw(Textures.WhiteDot, new Rectangle((int)PadX + BorderSize, (int)PadY + BorderSize, (int)PadWidth - BorderSize - BorderSize, (int)TitleHeight), UIBackgroundColor);
-                DrawBorderString(sb, Title, new Vector2(PadX + BorderSize + 2f, PadY + BorderSize + 1f), Color.White);
+                sb.Draw(Textures.WhiteDot, TitleRect, UIBackgroundColor);
+                DrawBorderString(sb, Title, new Vector2(TitleX + 2f, TitleY + 1f), Color.White);
             }
         }
 
         public override void LeftMouseDown(UIMouseEventArgs e)
         {
-            if (Draggable && (TitleHeight != 0 && e.MousePosition.X >= TitleX && e.MousePosition.Y >= TitleY && e.MousePosition.X <= TitleX + PadWidth - BorderSize - BorderSize && e.MousePosition.Y <= TitleY + TitleHeight || e.MousePosition.X >= PadX && e.MousePosition.Y >= PadY && e.MousePosition.X <= PadX + PadWidth - BorderSize && e.MousePosition.Y <= PadY + BorderSize))
+            if (Draggable && HasTitle && TitleRect.Contains(e.MousePosition.ToPoint()))
             {
                 localDragPosition = new Vector2(e.MousePosition.X - XOffset.Pixels, e.MousePosition.Y - YOffset.Pixels);
                 dragging = true;
@@ -119,7 +113,7 @@ namespace ItemModifier.UIKit
             if (CloseButton != null)
             {
                 CloseButton.XOffset = new SizeDimension(-CloseButton.Width.Pixels - 3f, 1f);
-                CloseButton.YOffset = new SizeDimension(TitleHeight != 0 ? -19f : 2f);
+                CloseButton.YOffset = new SizeDimension(HasTitle ? -19f : 2f);
                 CloseButton.OnLeftClick += (source, e) => Visible = false;
                 CloseButton.WhileMouseHover += (source, e) => ModContent.GetInstance<ItemModifier>().Tooltip = "Close";
                 CloseButton.Parent = this;
