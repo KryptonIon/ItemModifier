@@ -712,6 +712,24 @@ namespace ItemModifier.UIKit
 
         }
 
+        public override string ToString()
+        {
+            return $"{GetType().Name} P:{PadX},{PadY} S:{PadWidth},{PadHeight} {Visible}";
+        }
+
+        public string ToTreeString(string indent = "")
+        {
+            string result = $"\n{indent}{ToString()}";
+            indent += "\t";
+
+            for (int i = 0; i < Children.Count; i++)
+            {
+                result += Children[i].ToTreeString(indent);
+            }
+
+            return result;
+        }
+
         public IEnumerator<UIElement> GetEnumerator()
         {
             return Children.GetEnumerator();

@@ -260,6 +260,8 @@ namespace ItemModifier
 			if (!Main.dedServ)
 			{
 				(MainUI = new MainInterface()).Activate();
+				if(UIConfig.Instance.DebugLogs) 
+					Logger.Info(MainUI.ToTreeString());
 			}
 		}
 

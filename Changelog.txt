@@ -587,6 +587,7 @@ Removed imui Command
 
 
 Update 1.1.9 Hotfixes 14
+Added "DebugLogs" Setting
 "Limited" Setting now requires reload
 Input Element is now below the label in Item Modifier Window
 Border Dragging is removed

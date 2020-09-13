@@ -23,5 +23,11 @@ namespace ItemModifier
         [ReloadRequired]
         [DefaultValue(true)]
         public bool Limited { get; set; }
+
+        [Label("DebugLogs")]
+        [Tooltip("If true, the current state of the UI will be logged every time the mod loads")]
+        [ReloadRequired]
+        [DefaultValue(false)]
+        public bool DebugLogs { get; set; }
     }
 }
