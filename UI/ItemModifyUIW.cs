@@ -689,6 +689,7 @@ namespace ItemModifier.UI
 
         protected override void UpdateSelf(GameTime gameTime)
         {
+            base.UpdateSelf(gameTime);
             if (Visible)
             {
                 Item heldItem = Main.mouseItem.IsAir ? Main.LocalPlayer.HeldItem : Main.mouseItem;

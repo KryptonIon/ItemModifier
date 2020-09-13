@@ -39,6 +39,7 @@ namespace ItemModifier.UIKit
 
         protected override void DrawSelf(SpriteBatch sb)
         {
+            base.DrawSelf(sb);
             sb.Draw(Image, InnerRect, ColorTint);
         }
     }

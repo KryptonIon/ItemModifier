@@ -62,6 +62,7 @@ namespace ItemModifier.UIKit
 
         protected override void DrawSelf(SpriteBatch sb)
         {
+            base.DrawSelf(sb);
             DrawBorderString(sb, Text, InnerPosition, TextColor, Scale, Anchor.X, Anchor.Y);
         }
     }

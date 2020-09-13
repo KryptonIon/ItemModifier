@@ -21,6 +21,7 @@ namespace ItemModifier.UI
 
         public override void OnInitialize()
         {
+            base.OnInitialize();
             ItemModifier instance = ModContent.GetInstance<ItemModifier>();
 
             ItemModifierWindow = new ItemModifyUIW

@@ -147,7 +147,7 @@ namespace ItemModifier.UIKit.Inputs
         public override void MouseOver(UIMouseEventArgs e)
         {
             Main.PlaySound(SoundID.MenuTick);
-            base.MouseHover(e);
+            base.MouseOver(e);
         }
 
         protected internal override void RecalculateSelf()
@@ -167,6 +167,7 @@ namespace ItemModifier.UIKit.Inputs
         protected override void DrawSelf(SpriteBatch sb)
         {
             ProcessInput();
+            base.DrawSelf(sb);
             int padX = (int)PadX;
             int padY = (int)PadY;
             int padWidth = (int)PadWidth;

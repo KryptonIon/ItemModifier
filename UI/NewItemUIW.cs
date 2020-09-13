@@ -198,6 +198,7 @@ namespace ItemModifier.UI
 
         protected override void UpdateSelf(GameTime gameTime)
         {
+            base.UpdateSelf(gameTime);
             if (Visible)
             {
                 if (!Main.playerInventory)

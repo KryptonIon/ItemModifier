@@ -53,6 +53,7 @@ namespace ItemModifier.UIKit
 
         protected override void DrawSelf(SpriteBatch sb)
         {
+            base.DrawSelf(sb);
             if (BackgroundColor.A > 0)
             {
                 sb.Draw(ItemModifier.Textures.WhiteDot, PadRect, new Rectangle(2, 2, 24, 24), BackgroundColor);
@@ -125,7 +126,7 @@ namespace ItemModifier.UIKit
         public override void LeftMouseUp(UIMouseEventArgs e)
         {
             DraggingScrollInner = false;
-            base.LeftMouseDown(e);
+            base.LeftMouseUp(e);
         }
     }
 }

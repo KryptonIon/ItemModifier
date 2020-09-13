@@ -110,6 +110,7 @@ namespace ItemModifier.UIKit
 
         public override void OnInitialize()
         {
+            base.OnInitialize();
             if (CloseButton != null)
             {
                 CloseButton.XOffset = new SizeDimension(-CloseButton.Width.Pixels - 3f, 1f);

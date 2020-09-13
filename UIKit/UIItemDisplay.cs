@@ -24,6 +24,7 @@ namespace ItemModifier.UIKit
 
         protected override void DrawSelf(SpriteBatch sb)
         {
+            base.DrawSelf(sb);
             if (Item.IsAir)
             {
                 return;
