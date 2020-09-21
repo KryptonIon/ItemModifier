@@ -326,14 +326,27 @@ namespace ItemModifier.UIKit
             return Children.Contains(child);
         }
 
+        // ┌─┐
+        // │ │
+        // └─┘←
+        // DO NOT use Rectangle.Contains
+        // Rectangle.Contains uses < instead of <= for X + W and Y + H
+        // If the mouse is located at the point(arrow) it returns false
+
         public virtual bool ContainsPoint(Vector2 point)
         {
-            return point.X >= PadX && point.Y >= PadY && point.X <= PadX + PadWidth && point.Y <= PadY + PadHeight;
+            return point.X >= PadX
+                && point.X <= PadX + PadWidth
+                && point.Y >= PadY
+                && point.Y <= PadY + PadHeight;
         }
 
         public virtual bool ContainsPoint(Point point)
         {
-            return point.X >= PadX && point.Y >= PadY && point.X <= PadX + PadWidth && point.Y <= PadY + PadHeight;
+            return point.X >= PadX
+                && point.X <= PadX + PadWidth
+                && point.Y >= PadY
+                && point.Y <= PadY + PadHeight;
         }
 
         public UIElement GetElementAt(Vector2 point)
