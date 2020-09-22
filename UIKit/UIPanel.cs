@@ -54,8 +54,6 @@ namespace ItemModifier.UIKit
             int lrYPos = padY + BorderSize;
             // Y length left and right border will be
             int lrYLength = padHeight - BorderSize - BorderSize;
-            // Draw background
-            sb.Draw(Textures.WhiteDot, new Rectangle(padX, padY, padWidth, padHeight), BackgroundColor);
             // Draw borders
             if (HasBorder)
             {
