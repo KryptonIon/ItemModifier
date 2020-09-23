@@ -50,8 +50,6 @@ namespace ItemModifier
 
 			public static Texture2D X { get; private set; }
 
-			public static Texture2D Caret { get; private set; }
-
 			public static Texture2D AutoReuse { get; private set; }
 
 			public static Texture2D Consumable { get; private set; }
@@ -134,7 +132,6 @@ namespace ItemModifier
 				Reset = ModContent.GetTexture("ItemModifier/UI/Reset");
 				Checkbox = ModContent.GetTexture("ItemModifier/UIKit/Inputs/Checkbox");
 				X = ModContent.GetTexture("ItemModifier/UIKit/X");
-				Caret = ModContent.GetTexture("ItemModifier/UIKit/Inputs/Caret");
 				AutoReuse = ModContent.GetTexture("ItemModifier/UI/AutoReuse");
 				Consumable = ModContent.GetTexture("ItemModifier/UI/Consumable");
 				PotionSickness = ModContent.GetTexture("ItemModifier/UI/PotionSickness");
@@ -190,7 +187,6 @@ namespace ItemModifier
 				Reset = null;
 				Checkbox = null;
 				X = null;
-				Caret = null;
 				AutoReuse = null;
 				Consumable = null;
 				PotionSickness = null;

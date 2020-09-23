@@ -200,7 +200,7 @@ namespace ItemModifier.UIKit.Inputs
             {
                 if (caretDelta < 20)
                 {
-                    sb.Draw(Textures.Caret, new Vector2(textPos.X + Font.MeasureString(Text.Substring(0, CaretPosition)).X, textPos.Y), CaretColor);
+                    sb.Draw(Textures.WhiteDot, new Rectangle((int)(textPos.X + Font.MeasureString(Text.Substring(0, CaretPosition)).X), (int)textPos.Y, 2, 20), CaretColor);
                 }
                 if (++caretDelta > 39)
                 {
