@@ -61,8 +61,12 @@ namespace ItemModifier.UIKit.Inputs
 
         protected override void DrawSelf(SpriteBatch sb)
         {
+            var colorTint = ColorTint;
+            ColorTint *= MouseHovering
+                    ? ActiveTransparency
+                    : InactiveTransparency;
             base.DrawSelf(sb);
-            sb.Draw(Image, InnerRect, ColorTint * (MouseHovering ? ActiveTransparency : InactiveTransparency));
+            ColorTint = colorTint;
         }
     }
 }
