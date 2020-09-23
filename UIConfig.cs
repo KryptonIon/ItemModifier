@@ -20,7 +20,6 @@ namespace ItemModifier
 
         [Label("Limited")]
         [Tooltip("If true, Item Modifier will set boundaries for some properties")]
-        [ReloadRequired]
         [DefaultValue(true)]
         public bool Limited { get; set; }
 
@@ -29,5 +28,13 @@ namespace ItemModifier
         [ReloadRequired]
         [DefaultValue(false)]
         public bool DebugLogs { get; set; }
+
+        public override void OnChanged()
+        {
+            base.OnChanged();
+
+            ItemModifier instance = ModContent.GetInstance<ItemModifier>();
+            instance.MainUI?.ItemModifierWindow.SetLimits();
+        }
     }
 }

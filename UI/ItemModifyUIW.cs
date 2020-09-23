@@ -225,7 +225,6 @@ namespace ItemModifier.UI
         {
             base.OnInitialize();
             ItemModifier instance = ModContent.GetInstance<ItemModifier>();
-            bool limited = UIConfig.Instance.Limited;
 
             CategoryName = new UIText("There's a problem")
             {
@@ -311,12 +310,12 @@ namespace ItemModifier.UI
             Accessory.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.accessory = DefaultItem.accessory;
             PAccessory = new UICategory.UIProperty(Textures.Accessory, "Accessory", Accessory);
 
-            Damage = limited ? new UIIntTextbox(-1) : new UIIntTextbox();
+            Damage = new UIIntTextbox();
             Damage.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.damage = e.Value;
             Damage.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.damage = DefaultItem.damage;
             PDamage = new UICategory.UIProperty(Textures.Damage, "Damage", Damage);
 
-            Critical = limited ? new UIIntTextbox(ushort.MinValue, ushort.MaxValue) : new UIIntTextbox();
+            Critical = new UIIntTextbox();
             Critical.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.crit = e.Value;
             Critical.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.crit = DefaultItem.crit;
             PCritical = new UICategory.UIProperty(Textures.CritChance, "Crit Chance", Critical);
@@ -341,7 +340,7 @@ namespace ItemModifier.UI
             Tile.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.createTile = DefaultItem.createTile;
             PTile = new UICategory.UIProperty(Textures.CreateTile, "Place Tile", Tile);
 
-            TileBoost = limited ? new UIIntTextbox(sbyte.MinValue, sbyte.MaxValue) : new UIIntTextbox();
+            TileBoost = new UIIntTextbox();
             TileBoost.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.tileBoost = e.Value;
             TileBoost.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.tileBoost = DefaultItem.tileBoost;
             PTileBoost = new UICategory.UIProperty(Textures.AddedRange, "Added Range", TileBoost);
@@ -362,7 +361,7 @@ namespace ItemModifier.UI
             };
             BuffTypes[0].OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.buffType = e.Value;
             BuffTypes[0].OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.buffType = DefaultItem.buffType;
-            BuffTimes[0] = limited ? new UIIntTextbox(0) : new UIIntTextbox();
+            BuffTimes[0] = new UIIntTextbox();
             BuffTimes[0].XOffset = new SizeDimension(BuffTypes[0].OuterWidth + 4);
             BuffTimes[0].Parent = BuffContainer;
             BuffTimes[0].OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.buffTime = e.Value;
@@ -379,7 +378,7 @@ namespace ItemModifier.UI
                 };
                 BuffTypes[i].OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.GetGlobalItem<CustomProperties>().BuffTypes[id] = e.Value;
                 BuffTypes[i].OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.GetGlobalItem<CustomProperties>().BuffTypes[id] = DefaultItem.GetGlobalItem<CustomProperties>().BuffTypes[id];
-                BuffTimes[i] = limited ? new UIIntTextbox(0) : new UIIntTextbox();
+                BuffTimes[i] = new UIIntTextbox();
                 BuffTimes[i].XOffset = new SizeDimension(BuffTypes[i].OuterWidth + 4);
                 BuffTimes[i].YOffset = new SizeDimension(i * 26f);
                 BuffTimes[i].Parent = BuffContainer;
@@ -388,47 +387,47 @@ namespace ItemModifier.UI
             }
             PBuff = new UICategory.UIProperty(Textures.BuffType, "Buff", BuffContainer);
 
-            HealHP = limited ? new UIIntTextbox(ushort.MinValue, ushort.MaxValue) : new UIIntTextbox();
+            HealHP = new UIIntTextbox();
             HealHP.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.healLife = e.Value;
             HealHP.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.healLife = DefaultItem.healLife;
             PHealHP = new UICategory.UIProperty(Textures.HPHealed, "HP Healed", HealHP);
 
-            HealMP = limited ? new UIIntTextbox(ushort.MinValue, ushort.MaxValue) : new UIIntTextbox();
+            HealMP = new UIIntTextbox();
             HealMP.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.healMana = e.Value;
             HealMP.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.healMana = DefaultItem.healMana;
             PHealMP = new UICategory.UIProperty(Textures.MPHealed, "Mana Healed", HealMP);
 
-            AxePower = limited ? new UIIntTextbox(ushort.MinValue, ushort.MaxValue) : new UIIntTextbox();
+            AxePower = new UIIntTextbox();
             AxePower.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.axe = e.Value;
             AxePower.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.axe = DefaultItem.axe;
             PAxePower = new UICategory.UIProperty(Textures.AxePower, "Axe Power", AxePower);
 
-            PickaxePower = limited ? new UIIntTextbox(ushort.MinValue, ushort.MaxValue) : new UIIntTextbox();
+            PickaxePower = new UIIntTextbox();
             PickaxePower.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.pick = e.Value;
             PickaxePower.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.pick = DefaultItem.pick;
             PPickaxePower = new UICategory.UIProperty(Textures.PickaxePower, "Pickaxe Power", PickaxePower);
 
-            HammerPower = limited ? new UIIntTextbox(ushort.MinValue, ushort.MaxValue) : new UIIntTextbox();
+            HammerPower = new UIIntTextbox();
             HammerPower.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.hammer = e.Value;
             HammerPower.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.hammer = DefaultItem.hammer;
             PHammerPower = new UICategory.UIProperty(Textures.HammerPower, "Hammer Power", HammerPower);
 
-            Stack = limited ? new UIIntTextbox(1) : new UIIntTextbox();
+            Stack = new UIIntTextbox();
             Stack.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.stack = e.Value;
             Stack.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.stack = DefaultItem.stack;
             PStack = new UICategory.UIProperty(Textures.Stack, "Amount", Stack);
 
-            MaxStack = limited ? new UIIntTextbox(1) : new UIIntTextbox();
+            MaxStack = new UIIntTextbox();
             MaxStack.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.maxStack = e.Value;
             MaxStack.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.maxStack = DefaultItem.maxStack;
             PMaxStack = new UICategory.UIProperty(Textures.MaxStack, "Max Stack", MaxStack);
 
-            UseAnimation = limited ? new UIIntTextbox(ushort.MinValue, ushort.MaxValue) : new UIIntTextbox();
+            UseAnimation = new UIIntTextbox();
             UseAnimation.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.useAnimation = e.Value;
             UseAnimation.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.useAnimation = DefaultItem.useAnimation;
             PUseAnimation = new UICategory.UIProperty(Textures.UseAnimation, "Animation Span", UseAnimation);
 
-            UseTime = limited ? new UIIntTextbox(ushort.MinValue, ushort.MaxValue) : new UIIntTextbox();
+            UseTime = new UIIntTextbox();
             UseTime.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.useTime = e.Value;
             UseTime.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.useTime = DefaultItem.useTime;
             PUseTime = new UICategory.UIProperty(Textures.UseTime, "Use Span", UseTime);
@@ -438,7 +437,7 @@ namespace ItemModifier.UI
             Defense.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.defense = DefaultItem.defense;
             PDefense = new UICategory.UIProperty(Textures.Defense, "Defense", Defense);
 
-            FishingPower = limited ? new UIIntTextbox(ushort.MinValue, ushort.MaxValue) : new UIIntTextbox();
+            FishingPower = new UIIntTextbox();
             FishingPower.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.fishingPole = e.Value;
             FishingPower.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.fishingPole = DefaultItem.fishingPole;
             PFishingPower = new UICategory.UIProperty(Textures.FishingPower, "Fishing Power", FishingPower);
@@ -510,7 +509,7 @@ namespace ItemModifier.UI
                     heldItem.useStyle = 0;
                 }
             };
-            UseStyle = limited ? new UIIntTextbox(0) : new UIIntTextbox();
+            UseStyle = new UIIntTextbox();
             UseStyle.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.useStyle = e.Value;
             UseStyle.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.useStyle = DefaultItem.useStyle;
             PUseStyle = new UICategory.UIProperty(Textures.UseStyle, "Use Style", UseStyleRadio, UseStyle);
@@ -685,6 +684,59 @@ namespace ItemModifier.UI
             LockImage.Parent = GrayBG;
 
             CategoryIndex = 0;
+
+            SetLimits();
+        }
+
+        internal void SetLimits()
+        {
+            if (UIConfig.Instance.Limited)
+            {
+                Damage.MinValue = -1;
+                Critical.MinValue = ushort.MinValue;
+                Critical.MaxValue = ushort.MaxValue;
+                TileBoost.MinValue = sbyte.MinValue;
+                TileBoost.MaxValue = sbyte.MaxValue;
+                for (int i = 0; i < BuffTypes.Length; i++)
+                {
+                    // BuffTypes is type BuffTextbox, which already sets its Min and Max.
+                    BuffTimes[i].MinValue = 0;
+                }
+                HealHP.MinValue = ushort.MinValue;
+                HealHP.MaxValue = ushort.MaxValue;
+                HealMP.MinValue = ushort.MinValue;
+                HealMP.MaxValue = ushort.MaxValue;
+                AxePower.MinValue = ushort.MinValue;
+                AxePower.MaxValue = ushort.MaxValue;
+                PickaxePower.MinValue = ushort.MinValue;
+                PickaxePower.MaxValue = ushort.MaxValue;
+                HammerPower.MinValue = ushort.MinValue;
+                HammerPower.MaxValue = ushort.MaxValue;
+                Stack.MinValue = 1;
+                MaxStack.MinValue = 1;
+                UseAnimation.MinValue = ushort.MinValue;
+                UseAnimation.MaxValue = ushort.MaxValue;
+                UseTime.MinValue = ushort.MinValue;
+                UseTime.MaxValue = ushort.MaxValue;
+                FishingPower.MinValue = ushort.MinValue;
+                FishingPower.MaxValue = ushort.MaxValue;
+                UseStyle.MinValue = 0;
+            }
+            else
+            {
+                for (int i = 0; i < AllCategory.Properties.Count; i++)
+                {
+                    List<UIElement> propChildren = AllCategory.Properties[i].children;
+                    for (int j = 0; j < propChildren.Count; j++)
+                    {
+                        if (propChildren[j] is UIIntTextbox intTextbox)
+                        {
+                            intTextbox.MinValue = int.MinValue;
+                            intTextbox.MaxValue = int.MaxValue;
+                        }
+                    }
+                }
+            }
         }
 
         protected override void UpdateSelf(GameTime gameTime)
