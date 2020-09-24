@@ -10,3 +10,6 @@ It offers tools to provide ease in editing the various properties of an item, wh
 
 # Wiki
 Item Modifier Documentation can be found [here](https://terrariamods.gamepedia.com/Item_Modifier).
+
+# Credits
+[@blushiemagic](https://github.com/blushiemagic) - [MagicStorage](https://github.com/blushiemagic/MagicStorage), [Textbox Caret Handling Concept and Code](https://github.com/blushiemagic/MagicStorage/blob/ebe98740f6d72e645f00634a6e5d298fe89c2bf4/UISearchBar.cs#L104)

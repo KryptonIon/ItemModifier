@@ -215,7 +215,14 @@ namespace ItemModifier.UIKit.Inputs
             {
                 PlayerInput.WritingText = true;
                 Main.instance.HandleIME();
-                // Thanks to Magic Storage
+                /*
+                 * Title: Magic Storage
+                 * Author: blushiemagic | Kaylee Minsuh Kim
+                 * Date: October 25 2019
+                 * Code version: v0.4.3.5
+                 * Availability: https://github.com/blushiemagic/MagicStorage
+                 * Based on: https://uark.libguides.com/CSCE/CitingCode
+                 */
                 string frontHalf = Text.Substring(0, CaretPosition);
                 string newText = Main.GetInputText(frontHalf);
                 if (frontHalf != newText)
