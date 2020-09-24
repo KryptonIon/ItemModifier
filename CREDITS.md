@@ -2,5 +2,7 @@
 
 # [Magic Storage](https://github.com/blushiemagic/MagicStorage)
 [@blushiemagic](https://github.com/blushiemagic)
+
 Copyright (c) 2017 Kaylee Minsuh Kim
+
 [License](https://github.com/blushiemagic/MagicStorage/blob/master/LICENSE)
