@@ -43,7 +43,7 @@ namespace ItemModifier.UIKit.Inputs
 
         public DynamicSpriteFont Font { get; set; } = Main.fontMouseText;
 
-        public int CharacterLimit { get; set; }
+        public int CharacterLimit { get; set; } = int.MaxValue;
 
         protected virtual Rectangle ScissorRectangle
         {
@@ -73,7 +73,7 @@ namespace ItemModifier.UIKit.Inputs
 
             set
             {
-                if (CharacterLimit > 0 && value.Length > CharacterLimit)
+                if (value.Length > CharacterLimit)
                 {
                     text = value.Substring(0, CharacterLimit);
                 }
