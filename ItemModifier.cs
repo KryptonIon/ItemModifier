@@ -112,6 +112,8 @@ namespace ItemModifier
 
 			public static Texture2D Globe { get; private set; }
 
+			public static Texture2D MPCost { get; private set; }
+
 			public static void Load()
 			{
 				ModifyItem = ModContent.GetTexture("ItemModifier/UI/ModifyItem");
@@ -165,6 +167,7 @@ namespace ItemModifier
 				WhiteDot.SetData(new Color[] { Color.White });
 				SquareSelect = ModContent.GetTexture("ItemModifier/UIKit/Inputs/SquareSelect");
 				Globe = ModContent.GetTexture("ItemModifier/UI/Globe");
+				MPCost = ModContent.GetTexture("ItemModifier/UI/CostMP");
 			}
 
 			public static void Unload()
@@ -218,6 +221,7 @@ namespace ItemModifier
 				WhiteDot = null;
 				SquareSelect = null;
 				Globe = null;
+				MPCost = null;
 			}
 		}
 

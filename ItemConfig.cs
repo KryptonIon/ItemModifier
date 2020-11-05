@@ -53,6 +53,7 @@ namespace ItemModifier
                     writer.Write((ushort)changes.FishingPole);
                     writer.Write(changes.Scale);
                     writer.Write((byte)changes.UseStyle);
+                    writer.Write((ushort)changes.CostMP);
                 }
             }
         }
@@ -94,7 +95,8 @@ namespace ItemModifier
                             Defense = reader.ReadInt32(),
                             FishingPole = reader.ReadUInt16(),
                             Scale = reader.ReadSingle(),
-                            UseStyle = reader.ReadByte()
+                            UseStyle = reader.ReadByte(),
+                            CostMP = reader.ReadUInt16()
                         };
                         ItemChanges.Add(changes);
                     }

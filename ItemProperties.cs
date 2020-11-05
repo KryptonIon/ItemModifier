@@ -59,6 +59,8 @@ namespace ItemModifier
 
         public int UseStyle { get; set; }
 
+        public int CostMP { get; set; }
+
         public ItemProperties(int type)
         {
             Type = type;
@@ -92,6 +94,7 @@ namespace ItemModifier
             FishingPole = item.fishingPole;
             Scale = item.scale;
             UseStyle = item.useStyle;
+            CostMP = item.mana;
         }
     }
 }

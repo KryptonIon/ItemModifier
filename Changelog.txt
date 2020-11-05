@@ -588,6 +588,7 @@ Removed imui Command
 
 Update 1.1.9 Bugfixes 14
 Added "DebugLogs" Setting
+Added "Mana Cost" Property
 Input Element is now below the label in Item Modifier Window
 Border Dragging is removed
 Remove ":" from all labels in Item Modifier Window

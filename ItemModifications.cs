@@ -132,6 +132,10 @@ namespace ItemModifier
             {
                 flags5[1] = true;
             }
+            if (item.mana != defaultItem.mana)
+            {
+                flags5[2] = true;
+            }
             if (flags2 != 0)
             {
                 flags1[0] = true;
@@ -270,6 +274,10 @@ namespace ItemModifier
                     {
                         writer.Write((byte)item.useStyle);
                     }
+                    if (flags5[2])
+                    {
+                        writer.Write((ushort)item.mana);
+                    }
                 }
             }
         }
@@ -400,6 +408,10 @@ namespace ItemModifier
                 {
                     item.useStyle = reader.ReadByte();
                 }
+                if (flags5[2])
+                {
+                    item.mana = reader.ReadUInt16();
+                }
             }
         }
 
@@ -517,6 +529,10 @@ namespace ItemModifier
             if (item.useStyle != defaultItem.useStyle)
             {
                 tag.Add("UseStyle", (byte)item.useStyle);
+            }
+            if(item.mana != defaultItem.mana)
+            {
+                tag.Add("CostMP", (ushort)item.mana);
             }
             CustomProperties cItem = item.GetGlobalItem<CustomProperties>();
             bool save = false;
@@ -641,6 +657,10 @@ namespace ItemModifier
             if (tag.ContainsKey("UseStyle"))
             {
                 item.useStyle = tag.GetByte("UseStyle");
+            }
+            if (tag.ContainsKey("CostMP"))
+            {
+                item.mana = tag.Get<ushort>("CostMP");
             }
             if (tag.ContainsKey("BuffTypes"))
             {

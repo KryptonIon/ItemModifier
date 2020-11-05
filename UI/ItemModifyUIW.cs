@@ -97,6 +97,8 @@ namespace ItemModifier.UI
 
         internal UIRadioButton RHeld;
 
+        internal UIIntTextbox CostMP;
+
         internal UICategory.UIProperty PAutoReuse;
 
         internal UICategory.UIProperty PConsumable;
@@ -152,6 +154,8 @@ namespace ItemModifier.UI
         internal UICategory.UIProperty PUseStyle;
 
         //internal UICategory.UIProperty PUseSound;
+
+        internal UICategory.UIProperty PCostMP;
 
         #endregion
 
@@ -514,6 +518,11 @@ namespace ItemModifier.UI
             UseStyle.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.useStyle = DefaultItem.useStyle;
             PUseStyle = new UICategory.UIProperty(Textures.UseStyle, "Use Style", UseStyleRadio, UseStyle);
 
+            CostMP = new UIIntTextbox();
+            CostMP.OnValueChanged += (source, e) => Main.LocalPlayer.HeldItem.mana = e.Value;
+            CostMP.OnRightClick += (source, e) => Main.LocalPlayer.HeldItem.mana = DefaultItem.mana;
+            PCostMP = new UICategory.UIProperty(Textures.MPCost, "Mana Cost", CostMP);
+
             ToggleLiveSync = new UIImageButton(Textures.Sync, false, new Color(20, 255, 20))
             {
                 Width = new SizeDimension(16f),
@@ -591,6 +600,7 @@ namespace ItemModifier.UI
                 PBuff,
                 PHealHP,
                 PHealMP,
+                PCostMP,
                 PStack,
                 PMaxStack,
                 PUseAnimation,
@@ -606,6 +616,7 @@ namespace ItemModifier.UI
                 PAxePower,
                 PPickaxePower,
                 PHammerPower,
+                PCostMP,
                 PUseAnimation,
                 PUseTime,
                 PUseStyle,
@@ -622,6 +633,7 @@ namespace ItemModifier.UI
                 PConsumable,
                 PShoot,
                 PShootSpeed,
+                PCostMP,
                 PUseAnimation,
                 PUseAnimation,
                 PUseStyle
@@ -721,6 +733,8 @@ namespace ItemModifier.UI
                 FishingPower.MinValue = ushort.MinValue;
                 FishingPower.MaxValue = ushort.MaxValue;
                 UseStyle.MinValue = 0;
+                CostMP.MinValue = ushort.MinValue;
+                CostMP.MaxValue = ushort.MaxValue;
             }
             else
             {
@@ -875,6 +889,10 @@ namespace ItemModifier.UI
                         UseStyleRadio.DeselectAllRadio();
                     }
                     UseStyle.Value = heldItem.useStyle;
+                    if(!CostMP.Focused)
+                    {
+                        CostMP.Value = heldItem.mana;
+                    }
                 }
             }
         }
@@ -912,6 +930,7 @@ namespace ItemModifier.UI
             item.fishingPole = FishingPower.Value;
             item.scale = Scale.Value;
             item.useStyle = UseStyle.Value;
+            item.mana = CostMP.Value;
             CustomProperties cItem = item.GetGlobalItem<CustomProperties>();
             for (int i = 1; i < BuffTypes.Length; i++)
             {
