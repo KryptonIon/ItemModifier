@@ -25,7 +25,8 @@ namespace ItemModifier.UIKit
             set
             {
                 scrollValue = value < 0 ? 0 : value > MaxScrollValue ? MaxScrollValue : value;
-                RecalculateChildren();
+                if (MaxScrollValue > 0)
+                    RecalculateChildren();
             }
         }
 
@@ -90,10 +91,32 @@ namespace ItemModifier.UIKit
                         }
                     }
                 }
-                MaxScrollValue = Math.Max(0, lowestPoint - InnerHeight);
-                scrollPerPixel = lowestPoint / (InnerHeight - 4f);
-                scrollInnerSize = Math.Max((int)((InnerHeight - 4f) * (InnerHeight / (InnerHeight + MaxScrollValue))), 1);
-                ScrollValue = ScrollValue;
+
+                // Only calculate values if lowestPoint is past viewable area
+                if (lowestPoint > InnerHeight)
+                {
+                    MaxScrollValue = lowestPoint - InnerHeight;
+                    if (MaxScrollValue > 0)
+                    {
+                        // scroll value per scroll bar pixel, used to determine where scroll interior begins
+                        scrollPerPixel = lowestPoint / (InnerHeight - 4f);
+
+                        // Scroll bar size * Viewable:Entire Area(ratio) = Size of scroll interior
+                        // Minimum 1 pixel in size
+                        scrollInnerSize = Math.Max((int)((InnerHeight - 4f) * (InnerHeight / lowestPoint)), 1);
+                    }
+                }
+                else
+                {
+                    MaxScrollValue = 0;
+                }
+
+                // Property's setter stops it being <0. <0 check is skipped
+                if (ScrollValue > MaxScrollValue)
+                {
+                    // RecalculateChildren is called after, no need to call it again
+                    scrollValue = MaxScrollValue;
+                }
             }
         }
 
