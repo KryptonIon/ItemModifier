@@ -38,7 +38,10 @@ namespace ItemModifier.UI
             set
             {
                 maxValue = value;
-                Value = Value;
+                if (Value > maxValue)
+                {
+                    Value = maxValue;
+                }
             }
         }
 
@@ -54,7 +57,10 @@ namespace ItemModifier.UI
             set
             {
                 minValue = value;
-                Value = Value;
+                if (Value < minValue)
+                {
+                    Value = minValue;
+                }
             }
         }
 
