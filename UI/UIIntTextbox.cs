@@ -92,7 +92,7 @@ namespace ItemModifier.UI
             }
         }
 
-        protected override void ProcessInput(string input)
+        protected override string ProcessInput(string input)
         {
             if (!string.IsNullOrEmpty(input))
             {
@@ -108,9 +108,9 @@ namespace ItemModifier.UI
                         newText += input[i];
                     }
                 }
-                input = newText;
+                return base.ProcessInput(newText);
             }
-            base.ProcessInput(input);
+            return base.ProcessInput(input);
         }
     }
 }

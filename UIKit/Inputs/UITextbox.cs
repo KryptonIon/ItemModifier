@@ -173,7 +173,17 @@ namespace ItemModifier.UIKit.Inputs
                 // Handle if there is input
                 if (frontHalf != newText)
                 {
-                    ProcessInput(newText);
+                    newText = ProcessInput(newText);
+                    
+                    CaretPosition = newText.Length;
+                    
+                    // Append back half if Caret isn't at the end
+                    if (frontHalf.Length != Text.Length)
+                    {
+                        newText += Text.Substring(frontHalf.Length);
+                    }
+
+                    Text = newText;
                 }
                 if (Main.keyState.IsKeyDown(Keys.Left))
                 {
@@ -261,20 +271,9 @@ namespace ItemModifier.UIKit.Inputs
             }
         }
 
-        protected virtual void ProcessInput(string input)
+        protected virtual string ProcessInput(string input)
         {
-            // Append backHalf if CaretPosition isn't at the end
-            if (CaretPosition != Text.Length)
-            {
-                string backHalf = Text.Substring(CaretPosition);
-                CaretPosition = input.Length;
-                Text = input + backHalf;
-            }
-            else
-            {
-                CaretPosition = input.Length;
-                Text = input;
-            }
+            return input;
         }
 
         public override void MiddleClick(UIMouseEventArgs e)
