@@ -21,8 +21,7 @@ namespace ItemModifier.UI
                 if (_value != value)
                 {
                     _value = value > MaxValue ? MaxValue : value < MinValue ? MinValue : value;
-                    RawText = Value.ToString();
-                    CaretPosition = RawText.Length;
+                    Text = _value.ToString();
                     OnValueChanged?.Invoke(this, new EventArgs<float>(Value));
                 }
             }
@@ -61,76 +60,51 @@ namespace ItemModifier.UI
 
         public UIFloatTextbox(float maxValue = float.MaxValue, float minValue = float.MinValue) : base(11)
         {
-            MaxValue = maxValue;
-            MinValue = minValue;
             _value = 0f > MaxValue ? MaxValue : 0f < MinValue ? MinValue : 0f;
-            RawText = Value.ToString();
-            CaretPosition = RawText.Length;
-            OnUnfocused += (source) =>
-            {
-                if (string.IsNullOrEmpty(Text))
-                {
-                    Value = 0f;
-                }
-                else if (Text.Length == 1 && Text[0] == '-')
-                {
-                    Value = 0f;
-                }
-                else
-                {
-                    if (float.TryParse(Text, out float val))
-                    {
-                        Value = val;
-                    }
-                    else
-                    {
-                        Value = Text.StartsWith("-") ? MinValue : MaxValue;
-                    }
-                }
-            };
+            this.maxValue = maxValue;
+            this.minValue = minValue;
+            Text = _value.ToString();
+            OnUnfocused += (source) => ParseText();
             OnTextChanged += (source, e) =>
             {
-                string value = e.Value;
-                string newText = "";
-                if (string.IsNullOrEmpty(e.Value))
+                if (!Focused)
                 {
-                    return;
+                    ParseText();
                 }
-                if (char.IsDigit(value[0]) || value[0] == '-')
-                {
-                    newText += value[0];
-                }
-                int i = 1;
-                bool dot = false;
-                while (i < CaretPosition)
-                {
-                    if (char.IsDigit(value[i]))
-                    {
-                        newText += value[i];
-                    }
-                    else if (!dot && value[i] == '.')
-                    {
-                        newText += value[i];
-                        dot = true;
-                    }
-                    i++;
-                }
-                CaretPosition = newText.Length;
-                while (i < value.Length)
-                {
-                    if (char.IsDigit(value[i]))
-                    {
-                        newText += value[i];
-                    }
-                    else if (!dot && value[i] == '.')
-                    {
-                        newText += value[i];
-                        dot = true;
-                    }
-                    i++;
-                }
-                RawText = newText;
             };
+        }
+
+        private void ParseText()
+        {
+            if (float.TryParse(Text, out float val))
+            {
+                Value = val;
+            }
+            else
+            {
+                Text = Value.ToString();
+            }
+        }
+
+        protected override void ProcessInput(string input)
+        {
+            if (!string.IsNullOrEmpty(input))
+            {
+                string newText = "";
+                if (input[0] == '-')
+                {
+                    newText += input[0];
+                }
+                for (int i = 0; i < input.Length; i++)
+                {
+                    if (input[i].IsHADigit() || input[i] == '.')
+                    {
+                        newText += input[i];
+                    }
+                }
+                input = newText;
+            }
+            base.ProcessInput(input);
         }
     }
 }

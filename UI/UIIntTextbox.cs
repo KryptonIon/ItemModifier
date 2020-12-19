@@ -21,8 +21,7 @@ namespace ItemModifier.UI
                 if (_value != value)
                 {
                     _value = value > MaxValue ? MaxValue : value < MinValue ? MinValue : value;
-                    RawText = Value.ToString();
-                    CaretPosition = RawText.Length;
+                    Text = _value.ToString();
                     OnValueChanged?.Invoke(this, new EventArgs<int>(Value));
                 }
             }
@@ -61,67 +60,51 @@ namespace ItemModifier.UI
 
         public UIIntTextbox(int minValue = int.MinValue, int maxValue = int.MaxValue) : base(11)
         {
-            MaxValue = maxValue;
-            MinValue = minValue;
             _value = 0 > MaxValue ? MaxValue : 0 < MinValue ? MinValue : 0;
-            RawText = Value.ToString();
-            CaretPosition = RawText.Length;
-            OnUnfocused += (source) =>
-            {
-                if (string.IsNullOrEmpty(Text))
-                {
-                    Value = 0;
-                }
-                else if (Text.Length == 1 && Text[0] == '-')
-                {
-                    Value = 0;
-                }
-                else
-                {
-                    if (int.TryParse(Text, out int val))
-                    {
-                        Value = val;
-                    }
-                    else
-                    {
-                        Value = Text.StartsWith("-") ? MinValue : MaxValue;
-                    }
-                }
-            };
+            this.maxValue = maxValue;
+            this.minValue = minValue;
+            Text = _value.ToString();
+            OnUnfocused += (source) => ParseText();
             OnTextChanged += (source, e) =>
             {
-                string value = e.Value;
-                string newText = "";
-                if (string.IsNullOrEmpty(value))
+                if (!Focused)
                 {
-                    return;
+                    ParseText();
                 }
-                if (char.IsDigit(value[0]) || value[0] == '-')
-                {
-                    newText += value[0];
-                }
-                int i = 1;
-                while (i < CaretPosition)
-                {
-                    if (char.IsDigit(value[i]))
-                    {
-                        newText += value[i];
-                    }
-
-                    i++;
-                }
-                CaretPosition = newText.Length;
-                while (i < value.Length)
-                {
-                    if (char.IsDigit(value[i]))
-                    {
-                        newText += value[i];
-                    }
-
-                    i++;
-                }
-                RawText = newText;
             };
+        }
+
+        private void ParseText()
+        {
+            if (int.TryParse(Text, out int val))
+            {
+                Value = val;
+            }
+            else
+            {
+                Text = Value.ToString();
+            }
+        }
+
+        protected override void ProcessInput(string input)
+        {
+            if (!string.IsNullOrEmpty(input))
+            {
+                string newText = "";
+                if (input[0] == '-')
+                {
+                    newText += input[0];
+                }
+                for (int i = 0; i < input.Length; i++)
+                {
+                    if (input[i].IsHADigit())
+                    {
+                        newText += input[i];
+                    }
+                }
+                input = newText;
+            }
+            base.ProcessInput(input);
         }
     }
 }

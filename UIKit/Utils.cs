@@ -111,5 +111,14 @@ namespace ItemModifier.UIKit
             }
             return matches.ToArray();
         }
+
+        /// <summary>
+        /// Indicates if the specified character is a Hindu/Indo-Arabic Digit(0-9)
+        /// </summary>
+        /// <returns><see langword="true"/> if <paramref name="c"/> is a Hindu-Arabic Digit; otherwise, <see langword="false"/>.</returns>
+        public static bool IsHADigit(this char c)
+        {
+            return c >= 0 && c <= 9;
+        }
     }
 }

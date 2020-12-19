@@ -27,8 +27,6 @@ namespace ItemModifier.UIKit.Inputs
             }
         }
 
-        public event UIEventHandler<EventArgs<string>> OnTextChangedByUser;
-
         protected Texture2D TextboxTexture { get; set; } = Textures.WhiteDot;
 
         public Color TextColor { get; set; } = Color.Black;
@@ -64,26 +62,6 @@ namespace ItemModifier.UIKit.Inputs
 
         private string text = string.Empty;
 
-        protected string RawText
-        {
-            get
-            {
-                return text;
-            }
-
-            set
-            {
-                if (value.Length > CharacterLimit)
-                {
-                    text = value.Substring(0, CharacterLimit);
-                }
-                else
-                {
-                    text = value;
-                }
-            }
-        }
-
         public string Text
         {
             get
@@ -95,8 +73,20 @@ namespace ItemModifier.UIKit.Inputs
             {
                 if (text != value)
                 {
-                    RawText = value;
-                    CaretPosition = RawText.Length;
+                    if (value.Length > CharacterLimit)
+                    {
+                        text = value.Substring(0, CharacterLimit);
+                    }
+                    else
+                    {
+                        text = value;
+                    }
+
+                    if (CaretPosition > text.Length)
+                    {
+                        CaretPosition = text.Length;
+                    }
+
                     OnTextChanged?.Invoke(this, new EventArgs<string>(Text));
                 }
             }
@@ -166,51 +156,6 @@ namespace ItemModifier.UIKit.Inputs
 
         protected override void DrawSelf(SpriteBatch sb)
         {
-            ProcessInput();
-            base.DrawSelf(sb);
-            int padX = (int)PadX;
-            int padY = (int)PadY;
-            int padWidth = (int)PadWidth;
-            int padHeight = (int)PadHeight;
-            if (BorderSize > 0)
-            {
-                int verticalPosition = padY + BorderSize;
-                int verticalLength = padHeight - BorderSize - BorderSize;
-                sb.Draw(Textures.WhiteDot, new Rectangle(padX, padY, padWidth, BorderSize), BorderColor);
-                sb.Draw(Textures.WhiteDot, new Rectangle(padX, verticalPosition, BorderSize, verticalLength), BorderColor);
-                sb.Draw(Textures.WhiteDot, new Rectangle((int)(PadX + PadWidth) - BorderSize, verticalPosition, BorderSize, verticalLength), BorderColor);
-                sb.Draw(Textures.WhiteDot, new Rectangle(padX, (int)(PadY + PadHeight) - BorderSize, padWidth, BorderSize), BorderColor);
-            }
-            sb.Draw(TextboxTexture, InnerRect, BackgroundColor);
-            DrawText(sb);
-        }
-
-        protected virtual void DrawText(SpriteBatch sb)
-        {
-            Rectangle originalScissorRect = sb.GraphicsDevice.ScissorRectangle;
-            sb.End();
-            sb.GraphicsDevice.ScissorRectangle = Rectangle.Intersect(GetClippingRectangle(sb, ScissorRectangle), originalScissorRect);
-            sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, OverflowHiddenRasterizerState, null, Main.UIScaleMatrix);
-            Vector2 textPos = TextPosition;
-            sb.DrawString(Font, Text, textPos, TextColor);
-            sb.End();
-            sb.GraphicsDevice.ScissorRectangle = originalScissorRect;
-            sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, sb.GraphicsDevice.RasterizerState, null, Main.UIScaleMatrix);
-            if (Focused)
-            {
-                if (caretDelta < 20)
-                {
-                    sb.Draw(Textures.WhiteDot, new Rectangle((int)(textPos.X + Font.MeasureString(Text.Substring(0, CaretPosition)).X), (int)textPos.Y, 2, 20), CaretColor);
-                }
-                if (++caretDelta > 39)
-                {
-                    caretDelta = 0;
-                }
-            }
-        }
-
-        protected virtual void ProcessInput()
-        {
             if (Focused)
             {
                 PlayerInput.WritingText = true;
@@ -225,20 +170,10 @@ namespace ItemModifier.UIKit.Inputs
                  */
                 string frontHalf = Text.Substring(0, CaretPosition);
                 string newText = Main.GetInputText(frontHalf);
+                // Handle if there is input
                 if (frontHalf != newText)
                 {
-                    if (frontHalf.Length != Text.Length)
-                    {
-                        string backHalf = Text.Substring(CaretPosition);
-                        CaretPosition = newText.Length;
-                        RawText = newText + backHalf;
-                    }
-                    else
-                    {
-                        CaretPosition = newText.Length;
-                        Text = newText;
-                    }
-                    OnTextChangedByUser?.Invoke(this, new EventArgs<string>(Text));
+                    ProcessInput(newText);
                 }
                 if (Main.keyState.IsKeyDown(Keys.Left))
                 {
@@ -282,6 +217,63 @@ namespace ItemModifier.UIKit.Inputs
                     }
                     caretDelta = 0;
                 }
+            }
+
+            base.DrawSelf(sb);
+            int padX = (int)PadX;
+            int padY = (int)PadY;
+            int padWidth = (int)PadWidth;
+            int padHeight = (int)PadHeight;
+            if (BorderSize > 0)
+            {
+                int verticalPosition = padY + BorderSize;
+                int verticalLength = padHeight - BorderSize - BorderSize;
+                sb.Draw(Textures.WhiteDot, new Rectangle(padX, padY, padWidth, BorderSize), BorderColor);
+                sb.Draw(Textures.WhiteDot, new Rectangle(padX, verticalPosition, BorderSize, verticalLength), BorderColor);
+                sb.Draw(Textures.WhiteDot, new Rectangle((int)(PadX + PadWidth) - BorderSize, verticalPosition, BorderSize, verticalLength), BorderColor);
+                sb.Draw(Textures.WhiteDot, new Rectangle(padX, (int)(PadY + PadHeight) - BorderSize, padWidth, BorderSize), BorderColor);
+            }
+            sb.Draw(TextboxTexture, InnerRect, BackgroundColor);
+            DrawText(sb);
+        }
+
+        protected virtual void DrawText(SpriteBatch sb)
+        {
+            Rectangle originalScissorRect = sb.GraphicsDevice.ScissorRectangle;
+            sb.End();
+            sb.GraphicsDevice.ScissorRectangle = Rectangle.Intersect(GetClippingRectangle(sb, ScissorRectangle), originalScissorRect);
+            sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, OverflowHiddenRasterizerState, null, Main.UIScaleMatrix);
+            Vector2 textPos = TextPosition;
+            sb.DrawString(Font, Text, textPos, TextColor);
+            sb.End();
+            sb.GraphicsDevice.ScissorRectangle = originalScissorRect;
+            sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, sb.GraphicsDevice.RasterizerState, null, Main.UIScaleMatrix);
+            if (Focused)
+            {
+                if (caretDelta < 20)
+                {
+                    sb.Draw(Textures.WhiteDot, new Rectangle((int)(textPos.X + Font.MeasureString(Text.Substring(0, CaretPosition)).X), (int)textPos.Y, 2, 20), CaretColor);
+                }
+                if (++caretDelta > 39)
+                {
+                    caretDelta = 0;
+                }
+            }
+        }
+
+        protected virtual void ProcessInput(string input)
+        {
+            // Append backHalf if CaretPosition isn't at the end
+            if (CaretPosition != Text.Length)
+            {
+                string backHalf = Text.Substring(CaretPosition);
+                CaretPosition = input.Length;
+                Text = input + backHalf;
+            }
+            else
+            {
+                CaretPosition = input.Length;
+                Text = input;
             }
         }
 
