@@ -118,7 +118,7 @@ namespace ItemModifier.UIKit
         /// <returns><see langword="true"/> if <paramref name="c"/> is a Hindu-Arabic Digit; otherwise, <see langword="false"/>.</returns>
         public static bool IsHADigit(this char c)
         {
-            return c >= 0 && c <= 9;
+            return c >= '0' && c <= '9';
         }
     }
 }
