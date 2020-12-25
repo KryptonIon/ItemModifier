@@ -3,6 +3,7 @@ using System.ComponentModel;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
+using System.Collections.Generic;
 
 namespace ItemModifier
 {
@@ -29,12 +30,25 @@ namespace ItemModifier
         [DefaultValue(false)]
         public bool DebugLogs { get; set; }
 
+        [Label("Show Property Icons")]
+        [Tooltip("If false, property icons will be hidden")]
+        [DefaultValue(true)]
+        public bool ShowPropertyIcons { get; set; }
+
         public override void OnChanged()
         {
             base.OnChanged();
 
             ItemModifier instance = ModContent.GetInstance<ItemModifier>();
-            instance.MainUI?.ItemModifierWindow.SetLimits();
+            MainInterface mainUI = instance.MainUI;
+            if (mainUI != null)
+            {
+                mainUI.ItemModifierWindow.SetLimits();
+
+                List<UICategory.UIProperty> properties = mainUI.ItemModifierWindow.AllCategory.Properties;
+                for (int i = 0; i < properties.Count; i++)
+                    properties[i].imageLabel.Visible = ShowPropertyIcons;
+            }
         }
     }
 }
