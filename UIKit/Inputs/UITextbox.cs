@@ -273,7 +273,11 @@ namespace ItemModifier.UIKit.Inputs
 
         protected virtual string ProcessInput(string input)
         {
-            return input;
+            int inputLimit = CaretPosition + (CharacterLimit - Text.Length);
+
+            return input.Length > inputLimit
+                ? input.Substring(0, inputLimit)
+                : input;
         }
 
         public override void MiddleClick(UIMouseEventArgs e)

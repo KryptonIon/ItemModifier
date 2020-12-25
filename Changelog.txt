@@ -594,3 +594,4 @@ Border Dragging is removed
 Remove ":" from all labels in Item Modifier Window
 Number Textboxes remain same given invalid input
 Dots(.) can now be typed anywhere in a Float Textbox
+Fixed overwritting bug in textbox
