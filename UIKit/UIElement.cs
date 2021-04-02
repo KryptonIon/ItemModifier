@@ -267,8 +267,6 @@ namespace ItemModifier.UIKit
             ScissorTestEnable = true
         };
 
-        protected bool UseImmediateMode { get; set; }
-
         public bool Initialized { get; private set; }
 
         public bool MouseHovering { get; protected set; }
@@ -397,19 +395,6 @@ namespace ItemModifier.UIKit
         {
             if (Visible)
             {
-                if (UseImmediateMode)
-                {
-                    sb.End();
-                    sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, OverflowHiddenRasterizerState, null, Main.UIScaleMatrix);
-                    DrawSelf(sb);
-                    sb.End();
-                    sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, OverflowHiddenRasterizerState, null, Main.UIScaleMatrix);
-                }
-                else
-                {
-                    DrawSelf(sb);
-                }
-
                 if (OverflowHidden)
                 {
                     Rectangle scissorRectangle = sb.GraphicsDevice.ScissorRectangle;
