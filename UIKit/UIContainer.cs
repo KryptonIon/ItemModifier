@@ -56,7 +56,7 @@ namespace ItemModifier.UIKit
         protected override void DrawSelf(SpriteBatch sb)
         {
             base.DrawSelf(sb);
-            
+
             Texture2D whiteDot = new Texture2D(Main.spriteBatch.GraphicsDevice, 1, 1);
             whiteDot.SetData(new[] { new Color(255, 255, 255) });
 
@@ -130,7 +130,7 @@ namespace ItemModifier.UIKit
         public override void ScrollWheel(UIScrollWheelEventArgs e)
         {
             UIElement target = e.Target;
-            while(!(target is UIContainer))
+            while (!(target is UIContainer))
             {
                 target = target.Parent;
             }

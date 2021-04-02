@@ -72,7 +72,7 @@ namespace ItemModifier.UI
         }
 
         internal void ToggleNewItemUI()
-		{
+        {
             NewItemWindow.Visible = !NewItemWindow.Visible;
             if (NewItemWindow.Visible)
             {

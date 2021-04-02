@@ -889,7 +889,7 @@ namespace ItemModifier.UI
                         UseStyleRadio.DeselectAllRadio();
                     }
                     UseStyle.Value = heldItem.useStyle;
-                    if(!CostMP.Focused)
+                    if (!CostMP.Focused)
                     {
                         CostMP.Value = heldItem.mana;
                     }

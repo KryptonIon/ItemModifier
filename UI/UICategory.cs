@@ -116,9 +116,9 @@ namespace ItemModifier.UI
                 property.label.YOffset = property.imageLabel.YOffset;
                 // Force recalculate
                 property.label.Parent = container;
-                
+
                 yOffset = property.imageLabel.YOffset.Pixels + property.label.OuterHeight;
-                
+
                 // Remove spacing between label and first element
                 if (property.children.Count > 0)
                     yOffset -= InputElementDistance;

@@ -176,9 +176,9 @@ namespace ItemModifier.UIKit.Inputs
                 if (frontHalf != newText)
                 {
                     newText = ProcessInput(newText);
-                    
+
                     CaretPosition = newText.Length;
-                    
+
                     // Append back half if Caret isn't at the end
                     if (frontHalf.Length != Text.Length)
                     {

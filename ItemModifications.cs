@@ -530,7 +530,7 @@ namespace ItemModifier
             {
                 tag.Add("UseStyle", (byte)item.useStyle);
             }
-            if(item.mana != defaultItem.mana)
+            if (item.mana != defaultItem.mana)
             {
                 tag.Add("CostMP", (ushort)item.mana);
             }
