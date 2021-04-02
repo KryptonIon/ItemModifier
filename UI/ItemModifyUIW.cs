@@ -508,7 +508,7 @@ namespace ItemModifier.UI
             UseStyleRadio.OnDeselected += (source, e) =>
             {
                 Item heldItem = Main.LocalPlayer.HeldItem;
-                if (UseStyleRadio.Selected.Length < 1 && heldItem.useStyle <= ItemUseStyleID.HoldingOut)
+                if (UseStyleRadio.Selected.Count < 1 && heldItem.useStyle <= ItemUseStyleID.HoldingOut)
                 {
                     heldItem.useStyle = 0;
                 }
