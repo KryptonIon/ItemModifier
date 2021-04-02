@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace ItemModifier.UIKit.Inputs
 {
@@ -63,7 +64,7 @@ namespace ItemModifier.UIKit.Inputs
         protected override void DrawSelf(SpriteBatch sb)
         {
             base.DrawSelf(sb);
-            sb.Draw(ItemModifier.Textures.Checkbox, InnerRect, new Rectangle(Check ? 20 : 0, 0, 18, 18), Color.White);
+            sb.Draw(ModContent.GetTexture("ItemModifier/UIKit/Inputs/Checkbox"), InnerRect, new Rectangle(Check ? 20 : 0, 0, 18, 18), Color.White);
         }
     }
 }

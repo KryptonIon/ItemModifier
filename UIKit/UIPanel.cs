@@ -1,7 +1,6 @@
 ﻿using Terraria;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using static ItemModifier.ItemModifier;
 
 namespace ItemModifier.UIKit
 {
@@ -57,10 +56,12 @@ namespace ItemModifier.UIKit
             // Draw borders
             if (HasBorder)
             {
-                sb.Draw(Textures.WhiteDot, new Rectangle(padX, padY, padWidth, BorderSize), BorderColor);
-                sb.Draw(Textures.WhiteDot, new Rectangle(padX, lrYPos, BorderSize, lrYLength), BorderColor);
-                sb.Draw(Textures.WhiteDot, new Rectangle(padX + padWidth - BorderSize, lrYPos, BorderSize, lrYLength), BorderColor);
-                sb.Draw(Textures.WhiteDot, new Rectangle(padX, padY + padHeight - BorderSize, padWidth, BorderSize), BorderColor);
+                Texture2D whiteDot = new Texture2D(Main.spriteBatch.GraphicsDevice, 1, 1);
+                whiteDot.SetData(new[] { new Color(255, 255, 255) });
+                sb.Draw(whiteDot, new Rectangle(padX, padY, padWidth, BorderSize), BorderColor);
+                sb.Draw(whiteDot, new Rectangle(padX, lrYPos, BorderSize, lrYLength), BorderColor);
+                sb.Draw(whiteDot, new Rectangle(padX + padWidth - BorderSize, lrYPos, BorderSize, lrYLength), BorderColor);
+                sb.Draw(whiteDot, new Rectangle(padX, padY + padHeight - BorderSize, padWidth, BorderSize), BorderColor);
             }
         }
     }

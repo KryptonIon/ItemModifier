@@ -152,7 +152,7 @@ namespace ItemModifier.UI
 
             NoMatches = new UIText("No items found.");
 
-            Generate = new UIImageButton(ItemModifier.Textures.NewItem)
+            Generate = new UIImageButton(ModContent.GetTexture("ItemModifier/UI/NewItem"))
             {
                 Width = new SizeDimension(22f),
                 Height = new SizeDimension(22f),

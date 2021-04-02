@@ -5,7 +5,6 @@ using ReLogic.Graphics;
 using Terraria;
 using Terraria.GameInput;
 using Terraria.ID;
-using static ItemModifier.ItemModifier;
 using static ItemModifier.UIKit.Utils;
 
 namespace ItemModifier.UIKit.Inputs
@@ -27,7 +26,7 @@ namespace ItemModifier.UIKit.Inputs
             }
         }
 
-        protected Texture2D TextboxTexture { get; set; } = Textures.WhiteDot;
+        protected Texture2D TextboxTexture { get; set; }
 
         public Color TextColor { get; set; } = Color.Black;
 
@@ -113,6 +112,9 @@ namespace ItemModifier.UIKit.Inputs
 
         public UITextbox() : base()
         {
+            TextboxTexture = new Texture2D(Main.spriteBatch.GraphicsDevice, 1, 1);
+            TextboxTexture.SetData(new[] { new Color(255, 255, 255) });
+
             Width = new SizeDimension(100f);
             Height = new SizeDimension(22f);
             OnUnfocused += (source) =>
@@ -238,10 +240,12 @@ namespace ItemModifier.UIKit.Inputs
             {
                 int verticalPosition = padY + BorderSize;
                 int verticalLength = padHeight - BorderSize - BorderSize;
-                sb.Draw(Textures.WhiteDot, new Rectangle(padX, padY, padWidth, BorderSize), BorderColor);
-                sb.Draw(Textures.WhiteDot, new Rectangle(padX, verticalPosition, BorderSize, verticalLength), BorderColor);
-                sb.Draw(Textures.WhiteDot, new Rectangle((int)(PadX + PadWidth) - BorderSize, verticalPosition, BorderSize, verticalLength), BorderColor);
-                sb.Draw(Textures.WhiteDot, new Rectangle(padX, (int)(PadY + PadHeight) - BorderSize, padWidth, BorderSize), BorderColor);
+                Texture2D whiteDot = new Texture2D(Main.spriteBatch.GraphicsDevice, 1, 1);
+                whiteDot.SetData(new[] { new Color(255, 255, 255) });
+                sb.Draw(whiteDot, new Rectangle(padX, padY, padWidth, BorderSize), BorderColor);
+                sb.Draw(whiteDot, new Rectangle(padX, verticalPosition, BorderSize, verticalLength), BorderColor);
+                sb.Draw(whiteDot, new Rectangle((int)(PadX + PadWidth) - BorderSize, verticalPosition, BorderSize, verticalLength), BorderColor);
+                sb.Draw(whiteDot, new Rectangle(padX, (int)(PadY + PadHeight) - BorderSize, padWidth, BorderSize), BorderColor);
             }
             sb.Draw(TextboxTexture, InnerRect, BackgroundColor);
             DrawText(sb);
@@ -262,7 +266,9 @@ namespace ItemModifier.UIKit.Inputs
             {
                 if (caretDelta < 20)
                 {
-                    sb.Draw(Textures.WhiteDot, new Rectangle((int)(textPos.X + Font.MeasureString(Text.Substring(0, CaretPosition)).X), (int)textPos.Y, 2, 20), CaretColor);
+                    Texture2D whiteDot = new Texture2D(Main.spriteBatch.GraphicsDevice, 1, 1);
+                    whiteDot.SetData(new[] { new Color(255, 255, 255) });
+                    sb.Draw(whiteDot, new Rectangle((int)(textPos.X + Font.MeasureString(Text.Substring(0, CaretPosition)).X), (int)textPos.Y, 2, 20), CaretColor);
                 }
                 if (++caretDelta > 39)
                 {

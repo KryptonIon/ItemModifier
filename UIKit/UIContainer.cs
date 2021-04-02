@@ -55,21 +55,27 @@ namespace ItemModifier.UIKit
         protected override void DrawSelf(SpriteBatch sb)
         {
             base.DrawSelf(sb);
+            
+            Texture2D whiteDot = new Texture2D(Main.spriteBatch.GraphicsDevice, 1, 1);
+            whiteDot.SetData(new[] { new Color(255, 255, 255) });
+
             if (BackgroundColor.A > 0)
             {
-                sb.Draw(ItemModifier.Textures.WhiteDot, PadRect, new Rectangle(2, 2, 24, 24), BackgroundColor);
+                sb.Draw(whiteDot, PadRect, new Rectangle(2, 2, 24, 24), BackgroundColor);
             }
             if (OverflowHidden)
             {
                 Point scrollBarPos = new Point((int)(InnerX + InnerWidth - 4f), (int)(InnerY + 2f));
-                sb.Draw(ItemModifier.Textures.OpaqueWindowBackground, new Rectangle(scrollBarPos.X, scrollBarPos.Y, 4, (int)(InnerHeight - 4f)), Color.White);
+                Color scrollBarColor = UIBackgroundColor;
+                scrollBarColor.A = 255;
+                sb.Draw(whiteDot, new Rectangle(scrollBarPos.X, scrollBarPos.Y, 4, (int)(InnerHeight - 4f)), scrollBarColor);
                 if (DraggingScrollInner)
                 {
                     ScrollValue = tempScrollValue + (Main.mouseY - DragOrigin.Y) * scrollPerPixel;
                     RecalculateChildren();
                 }
                 scrollInnerPos = new Rectangle(scrollBarPos.X, scrollBarPos.Y + Math.Max((int)(ScrollValue / scrollPerPixel), 0), 4, scrollInnerSize);
-                sb.Draw(ItemModifier.Textures.WhiteDot, scrollInnerPos, Color.White);
+                sb.Draw(whiteDot, scrollInnerPos, Color.White);
             }
         }
 

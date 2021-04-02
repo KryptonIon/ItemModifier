@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader;
 using static ItemModifier.UIKit.Utils;
 using static Terraria.Utils;
 
@@ -97,7 +98,7 @@ namespace ItemModifier.UIKit.Inputs
         protected override void DrawSelf(SpriteBatch sb)
         {
             base.DrawSelf(sb);
-            sb.Draw(ItemModifier.Textures.SquareSelect, new Vector2(InnerX, InnerY + 5), new Rectangle(Selected ? 12 : 0, 0, 10, 10), Color.White);
+            sb.Draw(ModContent.GetTexture("ItemModifier/UIKit/Inputs/SquareSelect"), new Vector2(InnerX, InnerY + 5), new Rectangle(Selected ? 12 : 0, 0, 10, 10), Color.White);
             DrawBorderString(sb, Label, new Vector2(InnerX + 14f, InnerY), LabelColor);
         }
     }

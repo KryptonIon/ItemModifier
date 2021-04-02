@@ -38,7 +38,7 @@ namespace ItemModifier.UI
                 Parent = this
             };
 
-            ItemModifierButton = new UIImageButton(Textures.ModifyItem)
+            ItemModifierButton = new UIImageButton(ModContent.GetTexture("ItemModifier/UI/ModifyItem"))
             {
                 XOffset = new SizeDimension(12f)
             };
@@ -47,7 +47,7 @@ namespace ItemModifier.UI
             ItemModifierButton.OnLeftClick += (source, e) => ToggleItemModifierUI();
             ItemModifierButton.WhileMouseHover += (source, e) => instance.Tooltip = "Modify Items";
 
-            NewItemButton = new UIImageButton(Textures.NewItem)
+            NewItemButton = new UIImageButton(ModContent.GetTexture("ItemModifier/UI/NewItem"))
             {
                 XOffset = new SizeDimension(12f)
             };
@@ -56,7 +56,7 @@ namespace ItemModifier.UI
             NewItemButton.OnLeftClick += (source, e) => ToggleNewItemUI();
             NewItemButton.WhileMouseHover += (source, e) => instance.Tooltip = "New Item";
 
-            WikiButton = new UIImageButton(Textures.Wiki)
+            WikiButton = new UIImageButton(ModContent.GetTexture("ItemModifier/UI/Wiki"))
             {
                 XOffset = new SizeDimension(20f)
             };

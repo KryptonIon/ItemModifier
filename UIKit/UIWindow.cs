@@ -45,7 +45,7 @@ namespace ItemModifier.UIKit
             Title = title;
             if (hasCloseButton)
             {
-                CloseButton = new UIImageButton(Textures.X);
+                CloseButton = new UIImageButton(ModContent.GetTexture("ItemModifier/UIKit/X"));
             }
         }
 
@@ -83,7 +83,9 @@ namespace ItemModifier.UIKit
             base.DrawSelf(sb);
             if (HasTitle)
             {
-                sb.Draw(Textures.WhiteDot, TitleRect, UIBackgroundColor);
+                Texture2D whiteDot = new Texture2D(Main.spriteBatch.GraphicsDevice, 1, 1);
+                whiteDot.SetData(new[] { new Color(255, 255, 255) });
+                sb.Draw(whiteDot, TitleRect, UIBackgroundColor);
                 DrawBorderString(sb, Title, new Vector2(TitleX + 2f, TitleY + 1f), Color.White);
             }
         }
