@@ -90,10 +90,10 @@ namespace ItemModifier.UIKit
                     UIElement child = Children[i];
                     if (child.Visible)
                     {
-                        float ySize = child.OuterY + child.OuterHeight + ScrollValue - InnerY;
-                        if (lowestPoint < ySize)
+                        float bottom = child.OuterY + child.OuterHeight;
+                        if (lowestPoint < bottom)
                         {
-                            lowestPoint = ySize;
+                            lowestPoint = bottom;
                         }
                     }
                 }
