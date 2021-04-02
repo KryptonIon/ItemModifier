@@ -7,7 +7,7 @@ namespace ItemModifier.UIKit.Inputs
 {
     public class UICheckbox : UIElement, IInput<bool>
     {
-        public event UIEventHandler<EventArgs<bool>> OnValueChanged;
+        public event UIValueChangedEventHandler<bool> OnValueChanged;
 
         private bool check;
 

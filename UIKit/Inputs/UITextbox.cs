@@ -12,9 +12,9 @@ namespace ItemModifier.UIKit.Inputs
 {
     public class UITextbox : UIElement, IInput<string>
     {
-        public event UIEventHandler<EventArgs<string>> OnTextChanged;
+        public event UIValueChangedEventHandler<string> OnTextChanged;
 
-        event UIEventHandler<EventArgs<string>> IInput<string>.OnValueChanged
+        event UIValueChangedEventHandler<string> IInput<string>.OnValueChanged
         {
             add
             {

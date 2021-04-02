@@ -688,7 +688,7 @@ namespace ItemModifier.UI
                 YOffset = CategoryContainer.YOffset,
                 Parent = this
             };
-            GrayBG.OnVisibilityChanged += (source, e) => LockImage.Visible = e.Value;
+            GrayBG.OnVisibilityChanged += (source) => LockImage.Visible = source.Visible;
 
             LockImage = new UIImage(Textures.Lock);
             LockImage.XOffset = new SizeDimension((GrayBG.InnerWidth - LockImage.OuterWidth) * 0.5f);

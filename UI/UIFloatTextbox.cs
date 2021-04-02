@@ -5,7 +5,7 @@ namespace ItemModifier.UI
 {
     public class UIFloatTextbox : UITextbox, IInput<float>
     {
-        public event UIEventHandler<EventArgs<float>> OnValueChanged;
+        public event UIValueChangedEventHandler<float> OnValueChanged;
 
         private float _value;
 

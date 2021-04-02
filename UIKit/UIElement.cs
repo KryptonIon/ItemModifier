@@ -7,69 +7,73 @@ using static ItemModifier.UIKit.Utils;
 
 namespace ItemModifier.UIKit
 {
+    public delegate void UIEventHandler(UIElement sender);
+
+    public delegate void UITargetEventHandler(UIElement sender, UIEventArgs e);
+
+    public delegate void UIMouseEventHandler(UIElement sender, UIMouseEventArgs e);
+
+    public delegate void UIScrollEventHandler(UIElement sender, UIScrollWheelEventArgs e);
+
     public class UIElement : IEnumerable<UIElement>
     {
-        public delegate void UIEventHandler(UIElement sender);
+        public event UITargetEventHandler OnMouseOver;
 
-        public delegate void UIEventHandler<T>(UIElement sender, T e);
+        public event UITargetEventHandler WhileMouseHover;
 
-        public event UIEventHandler<UIMouseEventArgs> OnMouseOver;
+        public event UITargetEventHandler OnMouseOut;
 
-        public event UIEventHandler<UIMouseEventArgs> WhileMouseHover;
+        public event UITargetEventHandler OnLeftDown;
 
-        public event UIEventHandler<UIMouseEventArgs> OnMouseOut;
+        public event UITargetEventHandler OnLeftUp;
 
-        public event UIEventHandler<UIMouseEventArgs> OnLeftDown;
+        public event UITargetEventHandler OnLeftClick;
 
-        public event UIEventHandler<UIMouseEventArgs> OnLeftUp;
+        public event UITargetEventHandler OnLeftDoubleClick;
 
-        public event UIEventHandler<UIMouseEventArgs> OnLeftClick;
+        public event UITargetEventHandler OnRightDown;
 
-        public event UIEventHandler<UIMouseEventArgs> OnLeftDoubleClick;
+        public event UITargetEventHandler OnRightUp;
 
-        public event UIEventHandler<UIMouseEventArgs> OnRightDown;
+        public event UITargetEventHandler OnRightClick;
 
-        public event UIEventHandler<UIMouseEventArgs> OnRightUp;
+        public event UITargetEventHandler OnRightDoubleClick;
 
-        public event UIEventHandler<UIMouseEventArgs> OnRightClick;
+        public event UITargetEventHandler OnMiddleDown;
 
-        public event UIEventHandler<UIMouseEventArgs> OnRightDoubleClick;
+        public event UITargetEventHandler OnMiddleUp;
 
-        public event UIEventHandler<UIMouseEventArgs> OnMiddleDown;
+        public event UITargetEventHandler OnMiddleClick;
 
-        public event UIEventHandler<UIMouseEventArgs> OnMiddleUp;
+        public event UITargetEventHandler OnMiddleDoubleClick;
 
-        public event UIEventHandler<UIMouseEventArgs> OnMiddleClick;
+        public event UITargetEventHandler OnBackDown;
 
-        public event UIEventHandler<UIMouseEventArgs> OnMiddleDoubleClick;
+        public event UITargetEventHandler OnBackUp;
 
-        public event UIEventHandler<UIMouseEventArgs> OnBackDown;
+        public event UITargetEventHandler OnBackClick;
 
-        public event UIEventHandler<UIMouseEventArgs> OnBackUp;
+        public event UITargetEventHandler OnBackDoubleClick;
 
-        public event UIEventHandler<UIMouseEventArgs> OnBackClick;
+        public event UITargetEventHandler OnForwardDown;
 
-        public event UIEventHandler<UIMouseEventArgs> OnBackDoubleClick;
+        public event UITargetEventHandler OnForwardUp;
 
-        public event UIEventHandler<UIMouseEventArgs> OnForwardDown;
+        public event UITargetEventHandler OnForwardClick;
 
-        public event UIEventHandler<UIMouseEventArgs> OnForwardUp;
+        public event UITargetEventHandler OnForwardDoubleClick;
 
-        public event UIEventHandler<UIMouseEventArgs> OnForwardClick;
+        public event UITargetEventHandler OnScrollWheel;
 
-        public event UIEventHandler<UIMouseEventArgs> OnForwardDoubleClick;
-
-        public event UIEventHandler<UIScrollWheelEventArgs> OnScrollWheel;
-
-        public event UIEventHandler<EventArgs<bool>> OnVisibilityChanged;
+        public event UIEventHandler OnVisibilityChanged;
 
         public event UIEventHandler OnFocused;
 
         public event UIEventHandler OnUnfocused;
 
-        public event UIEventHandler<UIEventArgs> OnChildAdded;
+        public event UITargetEventHandler OnChildAdded;
 
-        public event UIEventHandler<UIEventArgs> OnChildRemoved;
+        public event UITargetEventHandler OnChildRemoved;
 
         protected List<UIElement> Children { get; } = new List<UIElement>();
 
@@ -293,7 +297,7 @@ namespace ItemModifier.UIKit
                 if (Visible != value)
                 {
                     visible = value;
-                    OnVisibilityChanged?.Invoke(this, new EventArgs<bool>(Visible));
+                    OnVisibilityChanged?.Invoke(this);
                 }
             }
         }

@@ -5,7 +5,7 @@ namespace ItemModifier.UIKit.Inputs
 {
     public class UIBool : UIText, IInput<bool>
     {
-        public event UIEventHandler<EventArgs<bool>> OnValueChanged;
+        public event UIValueChangedEventHandler<bool> OnValueChanged;
 
         private bool _value;
 

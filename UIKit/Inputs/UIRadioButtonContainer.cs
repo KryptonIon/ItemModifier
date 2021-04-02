@@ -2,11 +2,13 @@
 
 namespace ItemModifier.UIKit.Inputs
 {
+    public delegate void UIRadioButtonEventHandler(UIRadioButtonContainer sender, UIRadioButtonEventArgs e);
+
     public class UIRadioButtonContainer : UIElement
     {
-        public event UIEventHandler<EventArgs<UIRadioButton>> OnSelected;
+        public event UIRadioButtonEventHandler OnSelected;
 
-        public event UIEventHandler<EventArgs<UIRadioButton>> OnDeselected;
+        public event UIRadioButtonEventHandler OnDeselected;
 
         public bool AlwaysSelected { get; set; }
 
@@ -57,7 +59,7 @@ namespace ItemModifier.UIKit.Inputs
             {
                 UIRadioButton radio = (UIRadioButton)source;
                 selected.Add(radio);
-                OnSelected?.Invoke(this, new EventArgs<UIRadioButton>(radio));
+                OnSelected?.Invoke(this, new UIRadioButtonEventArgs(radio));
                 if (!Multiselect)
                 {
                     for (int i = 0; i < selected.Count; i++)
@@ -73,7 +75,7 @@ namespace ItemModifier.UIKit.Inputs
             {
                 UIRadioButton radio = (UIRadioButton)source;
                 selected.Remove(radio);
-                OnDeselected?.Invoke(this, new EventArgs<UIRadioButton>(radio));
+                OnDeselected?.Invoke(this, new UIRadioButtonEventArgs(radio));
                 if (AlwaysSelected && selected.Count < 1)
                 {
                     radio.Selected = true;

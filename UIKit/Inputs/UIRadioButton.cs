@@ -9,7 +9,7 @@ namespace ItemModifier.UIKit.Inputs
 {
     public class UIRadioButton : UIElement, IInput<bool>
     {
-        public event UIEventHandler<EventArgs<bool>> OnValueChanged;
+        public event UIValueChangedEventHandler<bool> OnValueChanged;
 
         private string label;
 

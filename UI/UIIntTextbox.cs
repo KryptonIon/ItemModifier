@@ -5,7 +5,7 @@ namespace ItemModifier.UI
 {
     public class UIIntTextbox : UITextbox, IInput<int>
     {
-        public event UIEventHandler<EventArgs<int>> OnValueChanged;
+        public event UIValueChangedEventHandler<int> OnValueChanged;
 
         private int _value;
 
