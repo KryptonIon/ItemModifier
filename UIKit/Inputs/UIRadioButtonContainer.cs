@@ -16,11 +16,11 @@ namespace ItemModifier.UIKit.Inputs
 
         private List<UIRadioButton> selected = new List<UIRadioButton>();
 
-        public UIRadioButton[] Selected
+        public IReadOnlyCollection<UIRadioButton> Selected
         {
             get
             {
-                return selected.ToArray();
+                return selected.AsReadOnly();
             }
         }
 
