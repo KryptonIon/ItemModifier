@@ -50,6 +50,7 @@ namespace ItemModifier.UIKit
         public UIContainer(Color backgroundColor)
         {
             BackgroundColor = backgroundColor;
+            OnChildAdded += (source, e) => RecalculateSelf();
         }
 
         protected override void DrawSelf(SpriteBatch sb)
@@ -79,9 +80,9 @@ namespace ItemModifier.UIKit
             }
         }
 
-        public override void Recalculate()
+        protected internal override void RecalculateSelf()
         {
-            base.Recalculate();
+            base.RecalculateSelf();
             if (OverflowHidden)
             {
                 float lowestPoint = 0f;
